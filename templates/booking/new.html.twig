@@ -1,0 +1,14 @@
+{% extends 'Dashboard/layout.html.twig' %}
+
+{% block content_title %}
+    {{ 'dashboard.ev_ajouter'|trans({}, 'dashboard') }}
+{% endblock %}
+
+{% block content_bundle %}
+    
+    <a href="{{ path('booking_index') }}" class="pull-right btn btn-primary">{{ 'dashboard.ev_voir'|trans({}, 'dashboard') }}</a>
+    
+    {{ include('booking/_form.html.twig') }}
+
+    
+{% endblock %}

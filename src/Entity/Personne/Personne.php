@@ -475,6 +475,20 @@ class Personne extends Adressable implements AnonymizableInterface
         return $this->estAbonneNewsletter;
     }
 
+    public function getGenre()
+    {
+        return $this->sexe == 'Madame' ? 'e' : '';
+    }
+
+    public function getPronom()
+    {
+        return $this->sexe == 'Madame' ? 'elle' : 'il';
+    }
+
+    public function getArticle() {
+        return $this->sexe == 'Madame' ? 'une' : 'un';
+    }
+
     public function __toString()
     {
         return $this->getPrenom() . ' ' . $this->getNom();

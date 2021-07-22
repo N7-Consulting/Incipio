@@ -14,7 +14,7 @@ namespace App\Form\Treso;
 use App\Entity\Personne\Prospect;
 use App\Entity\Project\Etude;
 use App\Entity\Treso\Facture;
-use Genemu\Bundle\FormBundle\Form\JQuery\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\Select2EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;

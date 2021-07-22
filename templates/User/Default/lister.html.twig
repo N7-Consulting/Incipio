@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="{{ asset('css/datatables/responsive.bootstrap.min.css') }}">
 {% endblock %}
 
-{% block title %}    
-    {{ 'user.utilisateurs_lister'|trans({}, 'user') }} - {{ parent() }}
+{% block title %}
+    {{ 'user.utilisateurs_lister'|trans({}, 'user') }} {{ parent() }}
 {% endblock %}
 
 {% block content_title %}
@@ -29,7 +29,7 @@
             <th>Droit</th>
             <th>Dernière connexion</th>
             {% if is_granted('ROLE_ADMIN') %}
-                <th>Action</th>
+                <th>{{ 'suivi.action' | trans({}, 'project') }}</th>
             {% endif %}
         </tr>
         </thead>

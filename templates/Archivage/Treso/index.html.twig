@@ -1,0 +1,133 @@
+{% extends 'Archivage/layout.html.twig' %}
+
+{% block title %}
+    {{ 'dashboard.tresorerie'|trans({}, 'dashboard') }} {{ parent() }}
+{% endblock %}
+
+{% block content_title %}
+    {{ 'dashboard.tresorerie'|trans({}, 'dashboard') }}
+{% endblock %}
+
+{% block breadcrumb_active %}
+	{{ 'dashboard.tresorerie'|trans({}, 'dashboard') }}
+{% endblock %}
+
+{% block content_bundle %}
+
+        <p>{{ 'treso.facture_achat'|trans({}, 'treso') }}</p>
+        <table class="display dataTable table table-bordered table-striped dt-responsive" id="FAtable">
+            <thead>
+            <tr>
+                <th>{{ 'treso.date_emission'|trans({}, 'treso') }}</th>
+                <th>{{ 'treso.reference'|trans({}, 'treso') }}</th>
+            </tr>
+            </thead>
+            {% for facture in factures | filter(facture => facture.type == 1) %}
+                {% set delai = (((facture.dateVersement ? facture.dateVersement |date('U') : 'now' | date('U')) - facture.dateEmission| date('U')) / 86400 ) |round %}
+                <tr class="{{ facture.dateVersement ? 'success' : ( delai > 31 ? 'danger' : 'warning') }}">
+                    <td>{{ facture.dateEmission | date('d/m/Y') }}</td>
+                    <td>
+                        <a href="{{ path('treso_Facture_voir', {'id': facture.id}) }}">{{ facture.reference }}</a>
+                    </td>
+
+                </tr>
+            {% endfor %}
+        </table>
+
+            <p>{{ 'treso.facture_vente'|trans({}, 'treso') }}</p>
+                <table class="display dataTable table table-bordered table-striped dt-responsive" id="FVtable">
+                    <thead>
+                    <tr>
+                        <th>{{ 'treso.date_emission'|trans({}, 'treso') }}</th>
+                        <th>{{ 'treso.reference'|trans({}, 'treso') }}</th>
+                    </tr>
+                    </thead>
+                    {% set totalDelai = 0 %}
+                    {% for facture in factures | filter(facture => facture.type > 1) %}
+                        {% set delai = (((facture.dateVersement ? facture.dateVersement |date('U') : 'now' | date('U')) - facture.dateEmission| date('U')) / 86400 ) |round %}
+                        {% set totalDelai = delai + totalDelai %}
+                        <tr class="{{ facture.dateVersement ? 'success' : ( delai > 31 ? 'danger' : 'warning') }}">
+                            <td>{{ facture.dateEmission | date('d/m/Y') }}</td>
+                            <td>
+                                <a href="{{ path('treso_Facture_voir', {'id': facture.id}) }}">{{ facture.reference }}</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+
+            <p>Déclaratifs sociaux</p>
+            <div id="myTabContent" class="tab-content">
+                <table class="display dataTable table table-bordered table-striped dt-responsive" id="FAtable">
+                    <tr>
+                        <th>{{ 'suivi.date_upload' | trans({}, 'project') }}</th>
+                        <th>{{ 'suivi.mis_en_ligne_par' | trans({}, 'project') }}</th>
+                        <th>{{ 'suivi.titre' | trans({}, 'project') }}</th>
+                        <th>{{ 'suivi.taille' | trans({}, 'project') }}</th>
+                        <th>{{ 'suivi.action' | trans({}, 'project') }}</th>
+                    </tr>
+                    {% for doc in docs |filter(doc => doc.type =="sociaux")| reverse %}
+                        <tr>
+                            <td>{{ doc.uptime ? doc.uptime | date('d/m/Y - H:i:s') }}</td>
+                            <td>{{ doc.author ? doc.author.prenomNom }}</td>
+                            <td>
+                                <a href="{{ path('publish_document_voir', {'id': doc.id}) }}">{{ doc.name }}</a>
+                            </td>
+                            <td>{{ (doc.size / 1024) | number_format(2, ',', ' ') }} Ko</td>
+                            <td><a href="{{ path('publish_document_delete', {'id' : doc.id }) }}"><i
+                                            class="fa fa-times text-danger"></i></a></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <p>Déclaratifs fiscaux</p>
+            <div id="myTabContent" class="tab-content">
+                <table class="display dataTable table table-bordered table-striped dt-responsive" id="FAtable">
+                    <tr>
+                        <th>{{ 'suivi.date_upload' | trans({}, 'project') }}</th>
+                        <th>{{ 'suivi.mis_en_ligne_par' | trans({}, 'project') }}</th>
+                        <th>{{ 'suivi.titre' | trans({}, 'project') }}</th>
+                        <th>{{ 'suivi.taille' | trans({}, 'project') }}</th>
+                        <th>{{ 'suivi.action' | trans({}, 'project') }}</th>
+                    </tr>
+                    {% for doc in docs | filter(doc => doc.type =="fiscaux")| reverse %}
+                        <tr>
+                            <td>{{ doc.uptime ? doc.uptime | date('d/m/Y - H:i:s') }}</td>
+                            <td>{{ doc.author ? doc.author.prenomNom }}</td>
+                            <td>
+                                <a href="{{ path('publish_document_voir', {'id': doc.id}) }}">{{ doc.name }}</a>
+                            </td>
+                            <td>{{ (doc.size / 1024) | number_format(2, ',', ' ') }} Ko</td>
+                            <td><a href="{{ path('publish_document_delete', {'id' : doc.id }) }}"><i
+                                            class="fa fa-times text-danger"></i></a></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+
+
+
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script src="{{ asset('js/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('js/datatables/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ asset('js/datatables/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('js/datatables/responsive.bootstrap.min.js') }}"></script>
+
+
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function () {
+            $('#FAtable').dataTable({
+                "bPaginate": true,
+                "iDisplayLength": 50,
+                "aaSorting": [[1, 'desc']],
+            });
+            $('#FVtable').dataTable({
+                "bPaginate": true,
+                "iDisplayLength": 50,
+                "aaSorting": [[1, 'desc']],
+            });
+        });
+    </script>
+{% endblock %}

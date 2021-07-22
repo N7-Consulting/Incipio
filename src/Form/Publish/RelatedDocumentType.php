@@ -14,6 +14,7 @@ namespace App\Form\Publish;
 use App\Entity\Formation\Formation;
 use App\Entity\Personne\Membre;
 use App\Entity\Personne\Prospect;
+use App\Entity\Processus\Processus;
 use App\Entity\Project\Etude;
 use App\Entity\Publish\RelatedDocument;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\Select2EntityType;
@@ -65,6 +66,16 @@ class RelatedDocumentType extends AbstractType
                 'attr' => ['style' => 'min-width: 300px'],
                 'configs' => ['placeholder' => 'Sélectionnez un étudiant', 'allowClear' => true], ]);
         }
+        if ($options['processus']) {
+            $builder->add('processus', Select2EntityType::class, [
+                'class' => Processus::class,
+                'choice_label' => 'nom',
+                'required' => false,
+                'label' => 'Fiche de processus',
+                'attr' => ['style' => 'min-width: 300px'],
+                'configs' => ['placeholder' => 'Sélectionnez un fichier', 'allowClear' => true],
+            ]);
+        }
     }
 
     public function getBlockPrefix()
@@ -79,6 +90,7 @@ class RelatedDocumentType extends AbstractType
             'etude' => null,
             'etudiant' => null,
             'prospect' => null,
+            'processus' => null,
             'formation' => null,
         ]);
     }

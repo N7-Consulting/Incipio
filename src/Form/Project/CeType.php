@@ -28,46 +28,79 @@ class CeType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('ce', SubCeType::class, ['label' => ' ', 'prospect' => $options['prospect']])
-            ->add('acompte', CheckboxType::class, ['label' => 'Acompte', 'required' => false])
-            ->add('pourcentageAcompte', PercentType::class, ['label' => 'Pourcentage acompte', 'required' => false])
-            ->add(
-                'suiveur',
-                Select2EntityType::class,
-                ['label' => 'Suiveur de projet',
-             'class' => Personne::class,
-             'choice_label' => 'prenomNom',
-             'query_builder' => function (PersonneRepository $pr) {
-                 return $pr->getByMandatNonNulQueryBuilder();
-             },
-             'required' => false,
-            ]
-            )
-            ->add('ce', SubCeType::class, ['label' => ' ', 'prospect' => $options['prospect']])
-            ->add('fraisDossier', IntegerType::class, ['label' => 'Frais de dossier', 'required' => false])
-            ->add(
-                'presentationProjet',
-                TextareaType::class,
-                ['label' => 'Présentation du projet',
-                 'required' => false,
-                 'attr' => ['cols' => '100%', 'rows' => 5],
-                ]
-            )
-            ->add(
-                'descriptionPrestation',
-                TextareaType::class,
-                ['label' => 'Description de la prestation proposée',
-                 'required' => false,
-                 'attr' => ['title' => "La phrase commence par 'N7 Consulting réalisera, pour le compte du Client, 
-                    une étude consistant en'. Il faut la continuer en décrivant la prestation proposée. 
-                    Le début de la phrase est déjà généré.",
-                            'cols' => '100%',
-                            'rows' => 5,
-                 ],
-                ]
-            )
-            ->add('competences', Select2EntityType::class, [
+        $builder
+        ->add(
+            'ce',
+            SubCeType::class,
+            [
+                'prospect' => $options['prospect'],
+            ])
+        ->add(
+            'acompte',
+            CheckboxType::class,
+            [
+                'label' => 'suivi.acompte',
+                'translation_domain' => 'project',
+                'required' => false
+            ])
+        ->add(
+            'pourcentageAcompte',
+            PercentType::class,
+            [
+                'label' => 'suivi.pourcentage_acompte',
+                'translation_domain' => 'project',
+                'required' => false
+            ])
+        ->add(
+            'suiveur',
+            Select2EntityType::class,
+            [
+                'label' => "suivi.etude_form.suiveur",
+                'translation_domain' => 'project',
+                'class' => Personne::class,
+                'choice_label' => 'prenomNom',
+                'query_builder' => function (PersonneRepository $pr) {
+                    return $pr->getByMandatNonNulQueryBuilder();
+                },
+                'required' => false,
+            ])
+        ->add(
+            'fraisDossier',
+            IntegerType::class,
+            [
+                'label' => "suivi.etude_form.frais_dossier",
+                'translation_domain' => 'project',
+                'required' => false
+            ])
+        ->add(
+            'presentationProjet',
+            TextareaType::class,
+            [
+                'label' => "suivi.etude_form.presentation",
+                'translation_domain' => 'project',
+                'required' => false,
+                'attr' => ['cols' => '100%', 'rows' => 5],
+            ])
+        ->add(
+            'descriptionPrestation',
+            TextareaType::class,
+            [
+                'label' => "suivi.etude_form.description_prestation",
+                'translation_domain' => 'project',
+                'required' => false,
+                'attr' => [
+                    'title' => "suivi.etude_form.description_prestation_title",
+                    'cols' => '100%',
+                    'rows' => 5,
+                ],
+            ])
+        ->add(
+            'competences',
+            Select2EntityType::class,
+            [
                 'class' => Competence::class,
+                'label' => "suivi.competences",
+                'translation_domain' => 'project',
                 'by_reference' => false,
                 'multiple' => true,
             ]);

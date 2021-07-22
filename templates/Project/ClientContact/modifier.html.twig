@@ -1,15 +1,7 @@
 {% extends "Project/layout.html.twig" %}
 
 {% block title %}
-    {{ 'suivi.contact_client_modifier'|trans({}, 'project') }} - {{ parent() }}
-{% endblock %}
-
-{% block breadcrumb_items %}
-    <li>
-        <a href="{{ path('project_clientcontact_voir', {'id': clientcontact.id}) }}">
-            {{ 'suivi.contact_client'|trans({}, 'project') }} {{ clientcontact.id }}
-        </a>
-    </li>
+    {{ 'suivi.contact_client_modifier'|trans({}, 'project') }} {{ parent() }}
 {% endblock %}
 
 {% block breadcrumb_active %}
@@ -30,5 +22,3 @@
     {{ parent() }}
     {{ form_javascript(form) }}
 {% endblock %}
-
-

@@ -47,11 +47,18 @@ services:
         class:        Webmozart\KeyValueStore\JsonFileStore
         arguments:    ["%app.json_stats.path%"]
 
+    App\Twig\UtilitiesExtension:
+        tags:
+            - { name: twig.extension }
     App\Twig\KeyValueExtension:
-          arguments:
+        arguments:
             - "@app.json_key_value_store"
-          tags:
-              - { name: twig.extension }
+        tags:
+            - { name: twig.extension }
 
     Monolog\Processor\WebProcessor:
         tags: ['monolog.processor']
+
+    App\Service\EventListener\FullCalendarListener:
+        tags:
+            - { name: 'kernel.event_listener', event: 'fullcalendar.set_data', method: loadEvents }

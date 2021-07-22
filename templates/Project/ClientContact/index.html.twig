@@ -1,91 +1,93 @@
 {% extends "Project/layout.html.twig" %}
 
 {% block stylesheets %}
-    {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/datatables/dataTables.bootstrap.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/datatables/dataTables.fontAwesome.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/datatables/responsive.bootstrap.min.css') }}">
+	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset('css/datatables/dataTables.bootstrap.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/datatables/dataTables.fontAwesome.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/datatables/responsive.bootstrap.min.css') }}">
 {% endblock %}
 
 {% block title %}
-    {{ 'suivi.contacts_clients_affichage'|trans({}, 'project') }} - {{ parent() }}
+	{{ 'suivi.contacts_clients_affichage'|trans({}, 'project') }}
+	{{ parent() }}
 {% endblock %}
 
 {% block content_title %}
-    {{ 'suivi.contacts_clients_affichage'|trans({}, 'project') }}
+	{{ 'suivi.contacts_clients_affichage'|trans({}, 'project') }}
+{% endblock %}
+
+{% block breadcrumb_active %}
+	{{ 'suivi.contacts_clients_affichage'|trans({}, 'project') }}
 {% endblock %}
 
 {% block content_bundle %}
-    <table class="table table-bordered table-striped dataTable dt-responsive" id="contactsClients" role="grid">
-        <thead>
-        <tr>
-            <th>{{ 'suivi.contacts'|trans({}, 'project') }}</th>
-            <th>{{ 'suivi.date'|trans({}, 'project') }}</th>
-            <th>{{ 'suivi.fait_par'|trans({}, 'project') }}</th>
-            <th>{{ 'suivi.etude.etude'|trans({}, 'project') }}</th>
-            <th>{{ 'suivi.objet'|trans({}, 'project') }}</th>
-            <th>{{ 'suivi.contenu'|trans({}, 'project') }}</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for contact in contactsClient | reverse %}
-            <tr>
-                <td>
-                    {{ contactsClient | length - loop.index0 }}
-                </td>
-                <td>
-                    {{ contact.date | date("d/m/Y") }}
-                </td>
-                <td>
-                    {{ contact.faitPar.PrenomNom }}
-                </td>
-                <td>
-                    <b>{{ contact.etude.nom }}</b>
-                </td>
-                <td>
-                    <a href="{{ path('project_clientcontact_voir', {'id': contact.id}) }}">
-                        {% if contact.moyenContact == 'telephone' %}
-                            <i title="{{ contact.date | date("d/m/Y - ") ~ contact.faitPar.PrenomNom }}"
-                               class="fa fa-headphones"></i>
-                        {% elseif contact.moyenContact == 'mail' %}
-                            <i title="{{ contact.date | date("d/m/Y - ") ~ contact.faitPar.PrenomNom }}"
-                               class="fa fa-envelope"></i>
-                        {% else %}
-                            <i title="{{ contact.date | date("d/m/Y - ") ~ contact.faitPar.PrenomNom }}"
-                               class="fa fa-eye"></i>
-                        {% endif %}
-                        {{ contact.objet }}
-                    </a>
-                </td>
-                <td>
-                    {{ contact.contenu | nl2br }}
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
+	{% if contactsClient is not empty %}
+		<table class="table table-bordered table-striped dataTable dt-responsive" id="contactsClients" role="grid">
+			<thead>
+				<tr>
+					<th>{{ 'suivi.contact'|trans({}, 'project') }}</th>
+					<th>{{ 'suivi.etude.etude'|trans({}, 'project') }}</th>
+					<th>{{ 'suivi.date'|trans({}, 'project') }}</th>
+					<th>{{ 'suivi.fait_par'|trans({}, 'project') }}</th>
+					<th>{{ 'suivi.objet'|trans({}, 'project') }}</th>
+					<th>{{ 'suivi.resume'|trans({}, 'project') }}</th>
+					<th>{{ 'suivi.type'|trans({}, 'project') }}</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for contact in contactsClient | reverse %}
+					<tr>
+						<td>
+							<a href="{{ path('project_clientcontact_modifier', {'id': contact.id}) }}">{{ 'suivi.contact'|trans({}, 'project') }}
+								n°{{ contactsClient | length - loop.index0 }}</a>
+						</td>
+						<td>
+							{{contact.etude}}
+						</td>
+						<td>
+							{{contact.date | date("d/m/Y") }}
+						</td>
+						<td>
+							{{ contact.faitPar.PrenomNom }}
+						</td>
+						<td>
+							{{ contact.objet }}
+						</td>
+						<td>
+							{{ contact.contenu  | nl2br }}
+						</td>
+						<td>
+							{{contact.moyenContact}}
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	{% else %}
+		{{ 'suivi.pas_de_contact'|trans({}, 'project') }}
+	{% endif %}
 {% endblock %}
 
-
 {% block javascript %}
-    {{ parent() }}
-    <script src="{{ asset('js/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('js/datatables/dataTables.bootstrap.min.js') }}"></script>
-    <script src="{{ asset('js/datatables/dataTables.responsive.min.js') }}"></script>
-    <script src="{{ asset('js/datatables/responsive.bootstrap.min.js') }}"></script>
+	{{ parent() }}
+	<script src="{{ asset('js/datatables/jquery.dataTables.min.js') }}"></script>
+	<script src="{{ asset('js/datatables/dataTables.bootstrap.min.js') }}"></script>
+	<script src="{{ asset('js/datatables/dataTables.responsive.min.js') }}"></script>
+	<script src="{{ asset('js/datatables/responsive.bootstrap.min.js') }}"></script>
 
-    <script type="text/javascript" charset="utf-8">
-        $(document).ready(function () {
-            $('#contactsClients').DataTable({
-                "paging": true,
-                "lengthChange": true,
-                "searching": true,
-                "ordering": true,
-                "info": true,
-                "iDisplayLength": 50,
-                "aaSorting": [[0, 'desc']]
+	<script type="text/javascript" charset="utf-8">
+		$(document).ready(function () {
+        $('#contactsClients').DataTable({
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "iDisplayLength": 50,
+            "aaSorting": [
+                [0, 'desc']
+            ]
             });
         });
-    </script>
+	</script>
 {% endblock %}

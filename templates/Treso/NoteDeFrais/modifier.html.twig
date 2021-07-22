@@ -5,7 +5,7 @@
         {{ 'treso.note_frais_ajouter'|trans({}, 'treso') }}
     {% else %}
         {{ 'treso.note_frais_editer'|trans({}, 'treso') }}
-    {% endif %}- {{ parent() }}
+    {% endif %}{{ parent() }}
 {% endblock %}
 
 {% block content_title %}

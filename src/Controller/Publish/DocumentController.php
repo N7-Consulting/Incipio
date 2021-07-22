@@ -14,6 +14,8 @@ namespace App\Controller\Publish;
 use App\Entity\Formation\Formation;
 use App\Entity\Personne\Membre;
 use App\Entity\Project\Etude;
+use App\Entity\Processus\Processus;
+use App\Entity\Formation\Passation;
 use App\Entity\Publish\Document;
 use App\Entity\Publish\RelatedDocument;
 use App\Form\Publish\DocumentType;
@@ -55,7 +57,7 @@ class DocumentController extends AbstractController
     }
 
     /**
-     * @Security("has_role('ROLE_CA')")
+     * @Security("has_role('ROLE_SUIVEUR')")
      * @Route(name="publish_document_voir", path="/Documents/show/{id}", methods={"GET","HEAD"})
      *
      * @param Document $documentType (ParamConverter) The document to be downloaded
@@ -79,7 +81,7 @@ class DocumentController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="publish_document_uploadEtude", path="/Documents/Upload/Etude/{nom}", methods={"GET","HEAD","POST"})
+     * @Route(name="publish_document_uploadEtude", path="/publish_document_uploadEtudede/{nom}", methods={"GET","HEAD","POST"})
      *
      * @return Response
      */
@@ -105,6 +107,50 @@ class DocumentController extends AbstractController
 
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="publish_document_uploadPassation", path="/Documents/Upload/Passation/{id}", methods={"GET","HEAD","POST"})
+     *
+     * @return Response
+     */
+    public function uploadPassation(
+        Request $request,
+        Passation $passation,
+        DocumentManager $documentManager,
+        KernelInterface $kernel
+    ) {
+
+        if (!$response = $this->upload($request, false, ['passation' => $passation], $documentManager, $kernel)) {
+            $this->addFlash('success', 'Document mis en ligne');
+
+            return $this->redirectToRoute('passation_voir', ['id' => $passation->getId()]);
+        }
+
+        return $response;
+    }
+
+    /**
+     * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="publish_document_uploadProcessus", path="/Documents/Upload/Processus/{nom}", methods={"GET","HEAD","POST"})
+     *
+     * @return Response
+     */
+    public function uploadProcessus(
+        Request $request,
+        Processus $process,
+        DocumentManager $documentManager,
+        KernelInterface $kernel
+    ) {
+
+        if (!$response = $this->upload($request, false, ['processus' => $process], $documentManager, $kernel)) {
+            $this->addFlash('success', 'Document mis en ligne');
+
+            return $this->redirectToRoute('tab_process');
+        }
+
+        return $response;
+    }
+
+    /**
+     * @Security("has_role('ROLE_SUIVEUR')")
      * @Route(name="publish_document_uploadEtudiant", path="/Documents/Upload/Etudiant/{id}", methods={"GET","HEAD","POST"})
      *
      * @return bool|RedirectResponse|Response
@@ -123,30 +169,78 @@ class DocumentController extends AbstractController
     }
 
     /**
-     * @Security("has_role('ROLE_CA')")
-     * @Route(name="publish_document_uploadFormation", path="/Documents/Upload/Formation/{id}", methods={"GET","HEAD"})
+     * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="publish_document_uploadFormation", path="/Documents/Upload/Formation/{id}", methods={"GET","HEAD","POST"})
      *
-     * @return JsonResponse
+     * @return Response
      */
-    public function uploadFormation(Formation $formation)
-    {
-        return new JsonResponse([], Response::HTTP_NOT_IMPLEMENTED);
+    public function uploadFormation(
+        Request $request,
+        Formation $formation,
+        DocumentManager $documentManager,
+        KernelInterface $kernel
+    ) {
+
+        if (!$response = $this->upload($request, false, ['formation' => $formation], $documentManager, $kernel)) {
+            $this->addFlash('success', 'Document mis en ligne');
+
+            return $this->redirectToRoute('formations_index_admin', ['id' => $formation->getId()]);
+            }
+
+        return $response;
     }
 
+
     /**
-     * @Security("has_role('ROLE_ADMIN')")
+     * @Security("has_role('ROLE_SUIVEUR')")
      * @Route(name="publish_document_uploadDoctype", path="/Documents/Upload/Doctype", methods={"GET","HEAD","POST"})
      *
      * @return Response
      */
-    public function uploadDoctype(Request $request, DocumentManager $documentManager, KernelInterface $kernel)
-    {
-        if (!$response = $this->upload($request, true, [], $documentManager, $kernel)) {
-            // Si tout est ok
-            return $this->redirectToRoute('publish_documenttype_index');
-        } else {
-            return $response;
+
+    private function upload(
+        Request $request,
+        $deleteIfExist = false,
+        $options = [],
+        DocumentManager $documentManager,
+        KernelInterface $kernel
+    ) {
+        $document = new Document();
+        $document->setProjectDir($kernel->getProjectDir());
+        if (count($options)) {
+            $relatedDocument = new RelatedDocument();
+            $relatedDocument->setDocument($document);
+            $document->setRelation($relatedDocument);
+            if (array_key_exists('etude', $options)) {
+                $relatedDocument->setEtude($options['etude']);
+            }
+            if (array_key_exists('etudiant', $options)) {
+                $relatedDocument->setMembre($options['etudiant']);
+            }
+            if (array_key_exists('processus', $options)) {
+                $relatedDocument->setProcessus($options['processus']);
+            }
+            if (array_key_exists('formation', $options)) {
+                $relatedDocument->setFormation($options['formation']);
+            }
+            if (array_key_exists('passation', $options)) {
+                $relatedDocument->setPassation($options['passation']);
+            }
         }
+
+        $form = $this->createForm(DocumentType::class, $document, $options);
+
+        if ('POST' == $request->getMethod()) {
+            $form->handleRequest($request);
+            
+            if ($form->isValid()) {
+                $documentManager->uploadDocument($document, null, $deleteIfExist);
+
+                return false;
+            }
+        }
+        
+        return $this->render('Publish/Document/upload.html.twig', ['form' => $form->createView()]);
     }
 
     /**
@@ -173,39 +267,23 @@ class DocumentController extends AbstractController
         return $this->redirectToRoute('publish_documenttype_index');
     }
 
-    private function upload(
-        Request $request,
-        $deleteIfExist = false,
-        $options = [],
-        DocumentManager $documentManager,
-        KernelInterface $kernel
-    ) {
-        $document = new Document();
-        $document->setProjectDir($kernel->getProjectDir());
-        if (count($options)) {
-            $relatedDocument = new RelatedDocument();
-            $relatedDocument->setDocument($document);
-            $document->setRelation($relatedDocument);
-            if (array_key_exists('etude', $options)) {
-                $relatedDocument->setEtude($options['etude']);
-            }
-            if (array_key_exists('etudiant', $options)) {
-                $relatedDocument->setMembre($options['etudiant']);
-            }
+    /**
+     * @Security("has_role('ROLE_CA')")
+     * @Route(name="publish_document_related_delete", path="/Documents/Related/Supprimer/{id}", methods={"GET","HEAD","POST"})
+     *
+     * @return Response
+     */
+    public static function deleteRelated($em, Document $doc, KernelInterface $kernel)
+    {
+        $doc->setProjectDir($kernel->getProjectDir());
+
+        if ($doc->getRelation()) { // Cascade sucks
+            $relation = $doc->getRelation()->setDocument();
+            $doc->setRelation(null);
+            $em->remove($relation);
+            $em->flush();
         }
-
-        $form = $this->createForm(DocumentType::class, $document, $options);
-
-        if ('POST' == $request->getMethod()) {
-            $form->handleRequest($request);
-
-            if ($form->isValid()) {
-                $documentManager->uploadDocument($document, null, $deleteIfExist);
-
-                return false;
-            }
-        }
-
-        return $this->render('Publish/Document/upload.html.twig', ['form' => $form->createView()]);
+        $em->remove($doc);
+        $em->flush();
     }
 }

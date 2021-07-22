@@ -1,0 +1,95 @@
+{% extends 'Archivage/layout.html.twig' %}
+
+{% block title %}
+	{{ 'dashboard.actico'|trans({}, 'dashboard') }}
+	{{ parent() }}
+{% endblock %}
+
+{% block content_title %}
+	{{ 'dashboard.actico'|trans({}, 'dashboard') }}
+{% endblock %}
+
+{% block breadcrumb_active %}
+	{{ 'dashboard.actico'|trans({}, 'dashboard') }}
+{% endblock %}
+
+{% block content_bundle %}
+	<div id="myTabContent" class="tab-content">
+		<table class="display dataTable table table-bordered table-striped dt-responsive" id="acticotable">
+			<thead>
+				<tr>
+					<th>
+						{{ 'suivi.etude_nom'|trans({}, 'project') }}
+					</th>
+					{% for doc in docEtude %}
+						<th>
+							{{doc}}
+						</th>
+					{% endfor %}
+					<th>
+						{{ 'suivi.liste_doc'|trans({}, 'project') }}
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for etude in etudes | filter(etude => not confidentielRefus(etude, app.user, is_granted('ROLE_CA'))) | reverse %}
+				<tr>
+					<td>
+						<a href="{{ path('project_etude_voir', {'nom': etude.nom}) }}">{{ etude.nom }}</a>
+					</td>
+					{% for etudeAttr, nomDoc in docEtude %}
+					<td>
+						{# On récupére l'ensemble de documents (eg: l'ensemble des Avenants) #}
+						{% set docs = attribute(etude, etudeAttr) %}
+						{% for doc in docs %}
+						{% if doc != NULL %}
+							<a href="/Documents/Publiposter/{{ publipostage[etudeAttr] }}/{{doc.id}}">
+								<span class="fa fa-download">&nbsp</a>
+								<span>{{doc | soberName}}</span><br>
+							{% endif %}
+						{% else %}
+							{# On tombe dans ce cas là si on a pas une collection d'objets (eg: une unique convention) ou si la collection est vide. On évite ce dernier cas. #}
+							{% if docs is not empty %}
+								<a href="/Documents/Publiposter/{{ publipostage[etudeAttr] }}/{{docs.id}}">
+									<span class="fa fa-download">&nbsp</a>
+									<span>{{docs | soberName}}</span>
+								{% endif %}
+							{% endfor %}
+							</td>
+							{% endfor %}
+							{# On récupère tous les documents uploadés pour cette étude #}
+							<td>
+								{% for relatedDocument in etude.relatedDocuments %}
+								{% set doc = relatedDocument.document %}
+								<a href="{{ path('publish_document_voir', {'id': doc.id}) }} "><span class="fa fa-download"></span></a>
+								{{ doc.name }} - {{ doc.uptime | date('d/m/Y') }}
+								{% endfor %}
+							</td>
+					</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+		</div>
+
+	{% endblock %}
+
+	{% block javascript %}
+		{{ parent() }}
+		<script src="{{ asset('js/datatables/jquery.dataTables.min.js') }}"></script>
+		<script src="{{ asset('js/datatables/dataTables.bootstrap.min.js') }}"></script>
+		<script src="{{ asset('js/datatables/dataTables.responsive.min.js') }}"></script>
+		<script src="{{ asset('js/datatables/responsive.bootstrap.min.js') }}"></script>
+
+
+		<script type="text/javascript" charset="utf-8">
+			$(document).ready(function () {
+				$('#acticotable').dataTable({
+					"bPaginate": true,
+					"iDisplayLength": 50,
+					"aaSorting": [
+					[1, 'desc']
+					]
+				});
+			});
+		</script>
+	{% endblock %}

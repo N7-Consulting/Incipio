@@ -14,7 +14,7 @@ namespace App\Form\Treso;
 use App\Entity\Personne\Personne;
 use App\Entity\Treso\NoteDeFrais;
 use App\Repository\Personne\PersonneRepository;
-use Genemu\Bundle\FormBundle\Form\JQuery\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\Select2EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;

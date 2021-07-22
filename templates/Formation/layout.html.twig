@@ -2,7 +2,7 @@
 {% extends "base.html.twig" %}
 
 {% block title %}
-    {{ 'formation.formations'|trans({}, 'formation') }} - {{ parent() }}
+    {{ 'formation.formations'|trans({}, 'formation') }} {{ parent() }}
 {% endblock %}
 
 {% block content %}
@@ -17,7 +17,7 @@
             {% block breadcrumb %}
                 <ul class="breadcrumb no-margin pull-right">
                     <li>
-                        <a href="{{ path('formations_lister') }}">
+                        <a href="{{ path('formations_index_admin') }}">
                             {{ 'formation.formations'|trans({}, 'formation') }}
                         </a>
                     </li>

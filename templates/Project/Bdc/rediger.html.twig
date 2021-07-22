@@ -1,0 +1,172 @@
+{% extends "Project/layout.html.twig" %}
+
+{% set tab= "tab3" %}
+
+{% block title %}
+	{{ 'suivi.bdc_rediger'|trans({}, 'project') }}
+	{{ parent() }}
+{% endblock %}
+
+{% block content_title %}
+	{{ 'suivi.bdc_rediger'|trans({}, 'project') }}
+{% endblock %}
+
+{% block content_bundle %}
+
+	{{ form_start(form) }}
+	<table class="table table-bordered table-striped standard">
+		<tr>
+			<th>
+				{{ form_label(form.suiveur) }}
+				{{ form_errors(form.suiveur) }}
+				<span class="badge badge-default" data-toggle="tooltip" title="{{ 'suivi.etude_form.suiveur_tooltip'|trans({}, 'project') }}">?</span>
+			</th>
+			<td>{{ form_widget(form.suiveur) }}</td>
+		</tr>
+		<tr>
+			<th>
+				{{ form_label(form.bdc.contact) }}
+				{{ form_errors(form.bdc.contact) }}
+				<span class="badge badge-default" data-toggle="tooltip" title="{{ 'suivi.etude_form.contact_secondaire_tooltip'|trans({}, 'project') }}">?</span>
+			</th>
+			<td>{{ form_widget(form.bdc.contact) }}</td>
+		</tr>
+		<tr>
+			<th>
+				{{ form_label(form.bdc.version) }}
+				{{ form_errors(form.bdc.version) }}
+			</th>
+			<td>{{ form_widget(form.bdc.version) }}</td>
+		</tr>
+		<tr>
+			<th>
+				{{ form_label(form.bdc.signataire1) }}
+				{{ form_errors(form.bdc.signataire1) }}
+			</th>
+			<td>{{ form_widget(form.bdc.signataire1) }}</td>
+		</tr>
+		<tr>
+			<th>
+				{{ form_label(form.bdc.knownSignataire2) }}
+				{{ form_errors(form.bdc.knownSignataire2) }}
+			</th>
+			<td>{{ form_widget(form.bdc.knownSignataire2) }}</td>
+		</tr>
+		<tr>
+			<th id="{{ form.bdc.newSignataire2.vars.id }}_block" colspan="2" class="success">{{ 'suivi.signataire_client_ajouter'|trans({}, 'project') }}</th>
+		</tr>
+		<tr>
+			<th>{{ form_label(form.bdc.newSignataire2.personne.prenom) }}</th>
+			<td>{{ form_widget(form.bdc.newSignataire2.personne.prenom) }}</td>
+		</tr>
+		<tr>
+			<th>{{ form_label(form.bdc.newSignataire2.personne.nom) }}</th>
+			<td>{{ form_widget(form.bdc.newSignataire2.personne.nom) }}</td>
+		</tr>
+		<tr>
+			<th>{{ form_label(form.bdc.newSignataire2.personne.sexe) }}</th>
+			<td>{{ form_widget(form.bdc.newSignataire2.personne.sexe) }}</td>
+		</tr>
+		<tr>
+			<th>{{ form_label(form.bdc.newSignataire2.personne.mobile) }}</th>
+			<td>{{ form_widget(form.bdc.newSignataire2.personne.mobile) }}</td>
+		</tr>
+		<tr>
+			<th>{{ form_label(form.bdc.newSignataire2.personne.email) }}</th>
+			<td>{{ form_widget(form.bdc.newSignataire2.personne.email) }}</td>
+		</tr>
+		<tr>
+			<th>{{ form_label(form.bdc.newSignataire2.personne.estAbonneNewsletter) }}</th>
+			<td>{{ form_widget(form.bdc.newSignataire2.personne.estAbonneNewsletter) }}</td>
+		</tr>
+		<tr>
+			<th>{{ form_label(form.bdc.newSignataire2.personne.emailEstValide) }}</th>
+			<td>{{ form_widget(form.bdc.newSignataire2.personne.emailEstValide) }}</td>
+		</tr>
+		<tr>
+			<th>{{ form_label(form.bdc.newSignataire2.poste) }}</th>
+			<td>{{ form_widget(form.bdc.newSignataire2.poste) }}</td>
+		</tr>
+		<tr>
+			<th id="{{ form.bdc.newSignataire2.vars.id }}_block" colspan="2" class="success">{{ 'suivi.suite'|trans({}, 'project') }}</th>
+		</tr>
+		<tr>
+			<th>
+				{{ form_label(form.bdc.signataire2) }}
+				{{ form_errors(form.bdc.signataire2) }}
+			</th>
+			<td>{{ form_widget(form.bdc.signataire2) }}</td>
+		</tr>
+		<tr>
+			<th>
+				{{ form_label(form.bdc.dateSignature) }}
+				{{ form_errors(form.bdc.dateSignature) }}
+			</th>
+			<td>{{ form_widget(form.bdc.dateSignature) }}</td>
+		</tr>
+		<tr>
+			<th>
+				{{ form_label(form.acompte) }}
+				{{ form_errors(form.acompte) }}
+			</th>
+			<td>{{ form_widget(form.acompte) }}</td>
+		</tr>
+		<tr>
+			<th>
+				{{ form_label(form.pourcentageAcompte) }}
+				{{ form_errors(form.pourcentageAcompte) }}
+			</th>
+			<td>{{ form_widget(form.pourcentageAcompte) }}</td>
+		</tr>
+		<tr>
+			<th>
+				{{ form_label(form.bdc.nbrDev) }}
+				{{ form_errors(form.bdc.nbrDev) }}
+			</th>
+			<td>{{ form_widget(form.bdc.nbrDev) }}</td>
+		</tr>
+		<tr>
+			<th>
+				{{ form_label(form.fraisDossier) }}
+				{{ form_errors(form.fraisDossier) }}
+			</th>
+			<td>{{ form_widget(form.fraisDossier) }}</td>
+		</tr>
+		<tr>
+			<th>
+				{{ form_label(form.presentationProjet) }}
+				{{ form_errors(form.presentationProjet) }}
+			</th>
+			<td>{{ form_widget(form.presentationProjet) }}</td>
+		</tr>
+		<tr>
+			<th>
+				{{ form_label(form.descriptionPrestation) }}
+				{{ form_errors(form.descriptionPrestation) }}
+			</th>
+			<td>{{ form_widget(form.descriptionPrestation) }}</td>
+		</tr>
+		<tr>
+			<th>
+				{{ form_label(form.competences) }}
+				{{ form_errors(form.competences) }}
+			</th>
+			<td>{{ form_widget(form.competences, {'attr': {'class':'select2-multiple', 'style': 'width: 100%'}}) }}</td>
+		</tr>
+	</table>
+	{{ form_widget(form) }}
+
+	<input type="submit" value="{{ 'suivi.bdc_enregistrer'|trans({}, 'project') }}" class="btn btn-success"/>
+	<input type="submit" value="{{ 'suivi.bdc_enregistrer_phases_passer'|trans({}, 'project') }}" name="phases" class="btn btn-success"/>
+	{{ form_end(form) }}
+
+{% endblock %}
+
+{% block javascript %}
+	{{ parent() }}
+	{{ form_javascript(form) }}
+	<script type="text/javascript">
+		$(".select2-multiple").select2({width: '100%'});
+	</script>
+	{% include "Project/DocType/selectOrNew.html.twig" with { known: form.bdc.knownSignataire2, knowned: form.bdc.signataire2, newed: form.bdc.newSignataire2 } %}
+{% endblock %}

@@ -1,7 +1,7 @@
 {% extends "Treso/layout.html.twig" %}
 
 {% block title %}
-    {{ 'treso.note_frais_liste'|trans({}, 'treso') }} - {{ parent() }}
+    {{ 'treso.note_frais_liste'|trans({}, 'treso') }} {{ parent() }}
 {% endblock %}
 
 {% block stylesheets %}
@@ -20,17 +20,6 @@
 {% endblock %}
 
 {% block content_bundle %}
-    <div class="nav-tabs-custom">
-        <ul class="nav nav-tabs">
-            <li>
-                <a href="{{ path('treso_NoteDeFrais_ajouter') }}"> <span
-                            class="fa fa-plus"></span> {{ 'treso.note_frais_ajouter'|trans({}, 'treso') }}</a>
-            </li>
-            <li class="active">
-                <a href="#">{{ 'treso.note_frais_liste'|trans({}, 'treso') }}</a>
-            </li>
-        </ul>
-    </div>
     <table class="table table-bordered table-striped dt-responsive" id="listeNotes">
         <thead>
         <tr>
@@ -76,4 +65,3 @@
     });
 </script>
 {% endblock %}
-

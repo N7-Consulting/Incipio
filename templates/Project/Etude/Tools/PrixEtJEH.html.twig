@@ -1,0 +1,5 @@
+{# Use these templates to display information throughout all Tabs (Négociation, Acceptées, en Cours...) #}
+
+<div>{{ etude.confidentiel ? '*' : etude.montantHT | default('') }} €</div>
+
+<div>{{ etude.confidentiel ? '*' : etude.nbrJEH | default('') }} JEH</div>

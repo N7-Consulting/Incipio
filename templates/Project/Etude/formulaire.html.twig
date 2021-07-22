@@ -1,8 +1,27 @@
 {{ form_start(form, {'attr': {'id': 'project_etudetype'}}) }}
 {% form_theme form 'Project/Form/fields.html.twig' %}
 <table class="table table-bordered table-striped standard">
+    {# Sélectionner une cca ou sélectionner/créer un nouveau prospect #}
     <tr>
-        <th>{{ form_label(form.knownProspect) }} {{ form_errors(form.knownProspect) }}</th>
+        <th>
+            {{ form_label(form.boutonCcaActive) }}
+            {{ form_errors(form.boutonCcaActive) }}
+            <span class="badge badge-default" data-toggle="tooltip" title="{{ 'suivi.etude_form.cca_active_tooltip'|trans({}, 'project') }}">?</span>
+        </th>
+        <td>{{ form_widget(form.boutonCcaActive) }}</td>
+    </tr>
+    <tr>
+        <th>
+            {{ form_label(form.cca) }}
+            {{ form_errors(form.cca) }}
+        </th>
+        <td>{{ form_widget(form.cca, {'attr': {'class': 'select2'}}) }}</td>
+    </tr>
+    <tr>
+        <th>
+            {{ form_label(form.knownProspect) }}
+            {{ form_errors(form.knownProspect) }}
+        </th>
         <td>{{ form_widget(form.knownProspect) }}</td>
     </tr>
     <tr>
@@ -33,6 +52,14 @@
     <tr>
         <th>{{ form_label(form.newProspect.pays) }} {{ form_errors(form.newProspect.pays) }}</th>
         <td>{{ form_widget(form.newProspect.pays) }}</td>
+    </tr>
+    <tr>
+        <th>{{ form_label(form.newProspect.mail) }} {{ form_errors(form.newProspect.mail) }}</th>
+        <td>{{ form_widget(form.newProspect.mail) }}</td>
+    </tr>
+    <tr>
+        <th>{{ form_label(form.newProspect.secteurActivite) }} {{ form_errors(form.newProspect.secteurActivite) }}</th>
+        <td>{{ form_widget(form.newProspect.secteurActivite) }}</td>
     </tr>
     <tr>
         <th id="{{ form.newProspect.vars.id }}_block" colspan="2" class="success">
@@ -67,14 +94,6 @@
         <td>{{ form_widget(form.confidentiel) }}</td>
     </tr>
     <tr>
-        <th>
-            {{ form_label(form.ceActive) }} {{ form_errors(form.ceActive) }}
-            <span class="badge badge-default" data-toggle="tooltip"
-                  title="{{ 'suivi.etude_form.ce_active_tooltip'|trans({}, 'project') }}">?</span>
-        </th>
-        <td>{{ form_widget(form.ceActive) }}</td>
-    </tr>
-    <tr>
         <th>{{ form_label(form.suiveur) }} {{ form_errors(form.suiveur) }}</th>
         <td>{{ form_widget(form.suiveur) }}</td>
     </tr>
@@ -84,7 +103,7 @@
     </tr>
     <tr>
         <th>{{ form_label(form.domaineCompetence) }} {{ form_errors(form.domaineCompetence) }}</th>
-        <td>{{ form_widget(form.domaineCompetence) }}</td>
+        <td>{{ form_widget(form.domaineCompetence, {'attr': {'class': 'select2'}}) }}</td>
     </tr>
     <tr>
         <th>{{ form_label(form.sourceDeProspection) }} {{ form_errors(form.sourceDeProspection) }}</th>
@@ -97,7 +116,7 @@
 {{ form_end(form) }}
 
 
-<div class="row">
+    <div class="row">
     <div class="col-md-3 col-xs-6">
         <button type="submit" form="project_etudetype" class="btn btn-success">
             {{ 'suivi.etude_enregistrer'|trans({}, 'project') }}
@@ -115,4 +134,66 @@
 </div>
 
 {{ form_javascript(form) }}
-{% include "Project/DocType/selectOrNew.html.twig" with { known: form.knownProspect, knowned: form.prospect, newed: form.newProspect } %}
+
+<script>
+    {# We can't directly use selectOrNew template here. #}
+    {# We want all prospect fields hidden when BoutonCcaActive is checked. #}
+    {# We want to be able to add a new prospect (and hide existing prospect list) when both knownProspect and BoutonCcaActive is unchecked #}
+
+
+    {# CCA DOM elements #}
+    var boutonCca = $('input#{{ form.boutonCcaActive.vars.id }}');
+    var cca = $("[id^='{{ form.cca.vars.id }}']").closest('tr');
+
+    {# Prospect DOM elements #}
+    var boutonProspect = $('input#{{ form.knownProspect.vars.id }}');
+    var ligneBoutonProspect = boutonProspect.closest('tr');
+    var prospect = $("[id^='{{ form.prospect.vars.id }}']").closest('tr');
+    var newProspect = $("[id^='{{ form.newProspect.vars.id }}']").closest('tr');
+
+    function show(object) {
+            object.find('input').attr('disabled', false);
+            object.show();
+
+            // Unfortunately, it's needed for correct display...
+            // With {'attr': {'class': 'select2'}} in widget, it's better, but not
+            // until user has first selected a CCA
+            object.find('.select2').css('width', '90%');
+    }
+
+    function hide(object) {
+            object.find('input').attr('disabled', true);
+            object.hide();
+    }
+
+    {# Simple logic: Cca as the priority over anything, Prospect control the rest #}
+    function hideAndSeek(isBoutonCcaActive, isBoutonProspectActive) {
+        if (isBoutonCcaActive) {
+            show(cca);
+
+            hide(prospect);
+            hide(newProspect);
+            hide(ligneBoutonProspect);
+        } else {
+            hide(cca);
+            show(ligneBoutonProspect)
+            if (isBoutonProspectActive) {
+                show(prospect);
+                hide(newProspect);
+            } else {
+                show(newProspect);
+                hide(prospect);
+            }
+        }
+    }
+
+
+    {# Bind two buttons to their behavior #}
+    boutonCca.change(function() {
+        hideAndSeek(boutonCca.is(':checked'), boutonProspect.is(':checked'));
+    }).change();
+
+    boutonProspect.change(function() {
+        hideAndSeek(boutonCca.is(':checked'), boutonProspect.is(':checked'));
+    }).change();
+</script>

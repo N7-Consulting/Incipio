@@ -1,0 +1,32 @@
+{{ form_start(form) }}
+<table class="table table-bordered table-striped">
+	<tr>
+		<th>{{ form_label(form.title) }}</th>
+		<td>{{ form_widget(form.title) }}
+			{{ form_errors(form.title) }}</td>
+	</tr>
+	<tr>
+		<th>{{ form_label(form.commentaires) }}</th>
+		<td>{{ form_widget(form.commentaires) }}
+			{{ form_errors(form.commentaires) }}</td>
+	</tr>
+	<tr>
+		<th>{{ form_label(form.commentaires) }}</th>
+		<td>{{ form_widget(form.commentaires) }}
+			{{ form_errors(form.commentaires) }}</td>
+	</tr>
+	<tr>
+		<th>{{ form_label(form.dateDebut) }}</th>
+		<td>{{ form_widget(form.dateDebut) }}
+			{{ form_errors(form.dateDebut) }}</td>
+	</tr>
+	<tr>
+		<th>{{ form_label(form.dateFin) }}</th>
+		<td>{{ form_widget(form.dateFin) }}
+			{{ form_errors(form.dateFin) }}</td>
+	</tr>
+</table>
+<br>
+<input type="submit" class="btn btn-success" value="Enregistrer"/>
+<br>
+{{ form_end(form) }}

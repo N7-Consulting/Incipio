@@ -136,26 +136,20 @@ class EtudeRepository extends EntityRepository
     }
 
     /**
-     * Get all project according to their state. Mainly used in VuCA to display negociate and current project.
+     * Fetch negociate, accepted and current projects.
      *
-     * @param array      $states 2 states whom you want all projects in that states
-     * @param array|null $orders how should project be ordered
-     *
-     * @return array of projects
+     * @return array of projects ordered by state
      */
-    public function getTwoStates(array $states = [1, 2], array $orders = null)
+    public function findBeginningProjects()
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('e')
             ->from(Etude::class, 'e')
-            ->where('e.stateID = :stateNegociate or e.stateID= :stateCurrent')
-            ->setParameter('stateNegociate', $states[0])
-            ->setParameter('stateCurrent', $states[1]);
-        if (null !== $orders) {
-            foreach ($orders as $column => $value) {
-                $qb->orderBy('e.' . $column, $value);
-            }
-        }
+            ->where('e.stateID = :stateNegociate or e.stateID= :stateAccepted or e.stateID= :stateCurrent')
+            ->setParameter('stateNegociate', Etude::ETUDE_STATE_NEGOCIATION)
+            ->setParameter('stateAccepted', Etude::ETUDE_STATE_ACCEPTEE)
+            ->setParameter('stateCurrent', Etude::ETUDE_STATE_COURS)
+            ->OrderBy('e.stateID');
         $query = $qb->getQuery();
 
         return $query->getResult();

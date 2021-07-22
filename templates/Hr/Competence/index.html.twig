@@ -1,6 +1,6 @@
 {% extends "Hr/layout.html.twig" %}
 
-{% block title %}Liste des compétences - {{ parent() }}{% endblock %}
+{% block title %} {{ 'rh.liste_competence'|trans({}, 'rh') }} {{ parent() }}{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -15,7 +15,7 @@
 {% endblock %}
 
 {% block content_title %}
-    Liste des Compétences
+    {{ 'rh.liste_competence'|trans({}, 'rh') }}
 {% endblock %}
 
 {% block content_bundle %}
@@ -23,7 +23,7 @@
     <div class="row">
         <div class="col-md-3 col-xs-12">
             <a href="{{ path('hr_competence_ajouter') }}" class="btn btn-info">
-                Ajouter une compétence
+                {{ 'rh.ajouter_competence'|trans({}, 'rh') }}
             </a>
             <br/><br/>
             <ul>
@@ -32,13 +32,13 @@
                         <a href="{{ path('hr_competence_voir', {'id': competence.id}) }}"> {{ competence.nom }} </a>
                     </li>
                 {% else %}
-                    <li>Pas (encore !) de competences</li>
+                    <li>{{ 'rh.aucune_competence'|trans({}, 'rh') }}</li>
                 {% endfor %}
             </ul>
         </div>
         <div class="col-md-9 col-xs-12">
             <div id="graphHolder" style="border: 1px solid #e6e6e6;"></div>
-            <div class="well">Détails: <span id="nodeInfos"></span></div>
+            <div class="well">{{ 'rh.detail'|trans({}, 'rh') }}: <span id="nodeInfos"></span></div>
         </div>
     </div>
 {% endblock %}

@@ -4,7 +4,7 @@
 
 {% block title %}
     {{ 'suivi.modifier_les'|trans({}, 'project') }} {{ 'suivi.phases'|trans({}, 'project') }}
-    - {{ parent() }}
+    {{ parent() }}
 {% endblock %}
 
 {% block content_title %}
@@ -19,9 +19,6 @@
     {{ form_start(form, {'attr': {'id': 'form'}}) }}
     {# affiche l'unique champ de la tache : description #}
     {#{ form_row(form.description) }#}
-
-    <p><input type="submit" value="{{ 'suivi.phase_ajouter'|trans({}, 'project') }}" name="add" class="btn btn-info"/>
-        - <input type="submit" value="{{ 'suivi.phases_enregistrer'|trans({}, 'project') }}" class="btn btn-default"/></p>
 
     <div class="row">
         <div class="col-md-12">
@@ -96,9 +93,9 @@
         </div>
         </div>
     </div>
-    <p><input type="submit" value="{{ 'suivi.phase_ajouter'|trans({}, 'project') }}" name="add" class="btn btn-info"/>
-        - <input type="submit" value="{{ 'suivi.phases_enregistrer'|trans({}, 'project') }}" class="btn btn-default"/></p>
-
+    {# Buttons en bas #}
+    <p><input type="submit" value="{{ 'suivi.phase_ajouter'|trans({}, 'project') }}" name="add" class="btn btn-info"/> &nbsp
+        <input type="submit" value="{{ 'suivi.phases_enregistrer'|trans({}, 'project') }}" class="btn btn-default"/></p>
     {{ form_end(form) }}
 
 {% endblock %}

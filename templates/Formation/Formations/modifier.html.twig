@@ -1,0 +1,24 @@
+{% extends "Formation/layout.html.twig" %}
+
+{% block content_title %}
+    {{ 'formation.formation_modifier'|trans({}, 'formation') }}
+{% endblock %}
+
+{% block breadcrumb_items %}
+    <li>
+        <a href="{{ path('formation_voir', {'id': formation.id}) }}">{{ formation.titre }}</a>
+    </li>
+{% endblock %}
+
+{% block breadcrumb_active %}
+    {{ 'formation.modifier'|trans({}, 'formation') }}
+{% endblock %}
+
+{% block content_bundle %}
+    {% include "Formation/Formations/formulaire.html.twig" %}
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    {{ form_javascript(form) }}
+{% endblock %}

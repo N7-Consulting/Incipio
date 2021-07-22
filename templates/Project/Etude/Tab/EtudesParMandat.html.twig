@@ -1,20 +1,24 @@
 <div class="panel-group" id="accordion{{key}}">
-    {% for mandat in etudesParMandat | reverse %}
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion{{key}}" href="#collapse{{key}}{{loop.index}}" data-mandat="{{  mandatMax - loop.index0 }}" data-stateID="{{key +3}}" data-loaded="false">
-                    {{ 'suivi.mandat'|trans({}, 'project') }} {{ mandatMax - loop.index0 }}
-                </a>
-            </div>
-            <div id="collapse{{key}}{{loop.index}}" class="panel-collapse collapse">
-                <div class="panel-body mandat{{ mandatMax - loop.index0 }} stateID{{3+key}}">
+	{% for mandat in etudesParMandat | reverse %}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion{{key}}" href="#collapse{{key}}{{loop.index}}" data-mandat="{{ mandatMax - loop.index0 }}" data-stateid="{{key +3}}" data-loaded="false">
+					{{ 'suivi.mandat'|trans({}, 'project') }}
+					{{ mandatMax - loop.index0 }}
+				</a>
+			</div>
+			<div id="collapse{{key}}{{loop.index}}" class="panel-collapse collapse">
+				<div class="panel-body mandat{{ mandatMax - loop.index0 }} stateID{{3+key}}">
                 </div>
-            </div>
-        </div>
-        {% if loop.last %}
-            </div>
-
-            <p>{{ 'suivi.rien_entre'|trans({}, 'project') }} {{ mandatMax - loop.index0 }} et {{ anneeCreation }}.</p>
-        {% endif %}
-    {% endfor%}
-
+		    </div>
+	    </div>
+		{% if loop.last %}
+            <p>
+                {{ 'suivi.rien_entre'|trans({}, 'project') }}
+                {{ mandatMax - loop.index0 }}
+                {{ 'suivi.et_le_premier_mandat'|trans({}, 'project') }}
+								({{ anneeCreation }})
+            </p>
+	    {% endif %}
+    {% endfor %}
+</div>

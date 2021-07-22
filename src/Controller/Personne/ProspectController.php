@@ -11,6 +11,8 @@
 
 namespace App\Controller\Personne;
 
+use App\Entity\Personne\SecteurActivite;
+use App\Form\Personne\SecteurActiviteType;
 use App\Entity\Personne\Employe;
 use App\Entity\Personne\Prospect;
 use App\Entity\Project\Etude;
@@ -74,6 +76,113 @@ class ProspectController extends AbstractController
         ]);
     }
 
+    /**
+     * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="secteur_activite_voir", path="/prospect/secteur/activite", methods={"GET","HEAD"})
+     *
+     * @return Response
+     */
+    public function voirSecteurActivite()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $secteurActivite = $em->getRepository(SecteurActivite::class)->findAll();
+
+        return $this->render('Personne/Prospect/SecteurActivite/index.html.twig',[
+            'secteurActivite' => $secteurActivite,
+        ]);
+    }
+
+    /**
+     * @Route(name="secteur_activite_ajouter", path="/secteur/activite/add", methods={"GET","HEAD","POST"})
+     *
+     * @return RedirectResponse|Response
+     */
+    public function ajouterSecteur(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $secteur = new SecteurActivite();
+
+        $form = $this->createForm(SecteurActiviteType::class, $secteur);
+
+        if ('POST' == $request->getMethod()) {
+            $form->handleRequest($request);
+
+            if ($form->isValid()) {
+                $em->persist($secteur);
+                $em->flush();
+                $this->addFlash('success', 'Secteur ajouté');
+
+                return $this->redirectToRoute('secteur_activite_voir');
+            }
+        }
+
+        return $this->render('Personne/Prospect/SecteurActivite/ajouter.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+    /**
+     * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="secteur_activite_modifier", path="/secteur/activite/modifier/{id}", methods={"GET","HEAD","POST"})
+     *
+     * @return RedirectResponse|Response
+     *
+     * @internal param $id
+     */
+    public function modifierSecteur(Request $request, SecteurActivite $secteur, ObjectManager $em)
+    {
+        // On passe l'$article récupéré au formulaire
+        $form = $this->createForm(SecteurActiviteType::class, $secteur);
+        $deleteForm = $this->createDeleteForm($secteur->getId());
+        if ('POST' == $request->getMethod()) {
+            $form->handleRequest($request);
+
+            if ($form->isValid()) {
+                $em->persist($secteur);
+                $em->flush();
+                $this->addFlash('success', 'Secteur modifié');
+
+                return $this->redirectToRoute('secteur_activite_voir');
+            }
+            $this->addFlash('danger', 'Le formulaire contient des erreurs.');
+        }
+
+        return $this->render('Personne/Prospect/SecteurActivite/modifier.html.twig', [
+            'form' => $form->createView(),
+            'delete_form' => $deleteForm->createView(),
+        ]);
+    }
+
+    /**
+     * @Security("has_role('ROLE_SUIVEUR')")
+     * @Route(name="secteur_activite_supprimer", path="/secteur/activite/supprimer/{id}", methods={"GET","HEAD","POST"})
+     *
+     * @return RedirectResponse
+     */
+    public function deleteSecteur(Request $request, SecteurActivite $secteur, ObjectManager $em)
+    {
+        $form = $this->createDeleteForm($secteur->getId());
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $em->remove($secteur);
+            $em->flush();
+            $this->addFlash('success', 'Secteur supprimé');
+
+            return $this->redirectToRoute('secteur_activite_voir');
+        }
+
+        return $this->redirectToRoute('secteur_activite_modifier', ['id' => $secteur->getId()]);
+    }
+
+    private function createDeleteFormSecteur($id)
+    {
+        return $this->createFormBuilder(['id' => $id])
+            ->add('id', HiddenType::class)
+            ->getForm();
+    }
+
+    
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
      * @Route(name="personne_prospect_voir", path="/prospect/voir/{id}", methods={"GET","HEAD"})

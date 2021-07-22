@@ -3,8 +3,10 @@
 namespace App\Twig;
 
 use Webmozart\KeyValueStore\Api\KeyValueStore;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-class KeyValueExtension extends \Twig_Extension
+class KeyValueExtension extends AbstractExtension
 {
     protected $keyValueStore;
 
@@ -21,7 +23,7 @@ class KeyValueExtension extends \Twig_Extension
     public function getFunctions()
     {
         return [
-            'param' => new \Twig_Function('param', [$this, 'param']),
+            'param' => new TwigFunction('param', [$this, 'param']),
         ];
     }
 

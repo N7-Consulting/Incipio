@@ -1,0 +1,20 @@
+processus:
+  action : Action
+  ajouter_process :  Ajouter un processus
+  ajouter_doc :  Ajouter un Document
+  confirmation_supprimer_processus: Etes-vous sûr de vouloir supprimer définitivement ce processus ?
+  date_upload : Date du télechargement
+  description: Description
+  documents: Documents associés
+  gestion_proc: Gestion des processus
+  modifier: Modifier le processus  
+  nom_process : Nom du processus
+  pilote : Pilote
+  process : Processus
+  processus_supprimer : Supprimer le processus
+  supprimer : Supprimer 
+  supprimer_process : Supprimer le processus
+  supprimer_doc_confirm : Voulez-vous vraiment supprimer ce document?
+  supprimer_process_confirm : Voulez-vous vraiment supprimer ce processus?
+  tab_process: Tableau des processus
+  titre : Titre 

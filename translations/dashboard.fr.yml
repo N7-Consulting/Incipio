@@ -1,29 +1,65 @@
 dashboard:
-  Base_urssaf: B. URSSAF
+  aucun_commentaire : Aucun commentaire sur les études durant les 10 derniers jours.
+  book_passation : Book de passations
+  base_urssaf: Bases URSSAF
+  actico: Activité Commerciale
   administration: Administration
   administration_bdd: Administration BDD
   ajouter: Ajouter
   annuaire: Annuaire
   annuaire_global: Annuaire global
+  archive_doc : Archivage des documents
   autres: Autres
   bordereau_cotisations: Bordereau Récapitulatif des Cotisations
   brc: BRC
   bv: BV
+  bv_ajouter: Ajouter un BV
+  ca_coute_rien: Ca ne vous coute rien et ça nous fera très plaisir.
   charges: Charges
+  chiffrage: Chiffrage
   compte_utilisateur: Compte d'Utilisateur
   comptes: Comptes
+  commentaire_recent: Commentaires récents
+  commentaire_recent_titre: Commentaires récents
+  connecte: Connecté en tant que
   contacts_clients: Contacts Client
   cotisations: Cotisations
+  date: Date
   declaratif_tva: Déclaratif TVA
   deconnexion: Déconnexion
+  derniere_connection: Dernière connexion le
   doctype_ajouter: Ajouter un Doctype
   documents: Documents
   documents_gestion: Gestion des Documents
   domaine_competences: Domaines de compétence
   donnes_externes_importer: Importer données externes
   etude_creer: Créer une étude
+  info: Informations
+  ca_nego: CA en négociation
+  ca_cours: CA en cours
+  ca_cloture: CA cloturé par le mandat
+  ca_facture: CA facturé par le mandat
+  ca_paye: CA payé sur le mandat
+  cca_voir: Voir les CCa
+  cca: Convention Cadre Agile
   etudes_voir: Voir les études
+  evenement : Evénement
+  ev_liste: Liste des événements
+  ev_ajouter: Ajouter un événement
+  ev_commentaires: Description
+  ev_action: Action
+  ev_aucun: Aucun évenement prévu
+  ev_id: Id
+  ev_date_debut: Date de début
+  ev_date_fin : Date de fin
+  ev_titre : Evénement
+  ev_voir: Voir les événements
+  ev_modifier: Modifier l'événement
+  ev_supprimer: Supprimer l'événement
+  ev_confirme: Etes-vous sur de vouloir supprimer cet événement?
+  encourager_dev: Encouragez le développement en donnant une étoile sur
   factures: Factures
+  facture_ajouter: Ajouter une facture
   filiere_ajouter: Ajouter une filière
   filieres: Filieres
   filieres_lister: Lister les filières
@@ -31,13 +67,21 @@ dashboard:
   formations: Formations
   formations_gerer: Gérer les formations
   formations_voir: Voir les formations
+  github: Github
   gestion_associative: Gestion Associative
+  gestion_consultant: Gestion des consultants
+  gestion_alumni: Gestion des alumni
+  gestion_doc: Gestion des documents
   gestion_utilisateurs_clients: Gestion des Clients et des Utilisateurs
+  generation_doc: Génération de document
+  gestion_proc: Gestion des processus
   guide_utilisateur: Guide utilisateur
   impayes_lister: Lister les impayés
   indicateurs: Indicateurs
   intervenants: Intervenants
   intervenants_lister: Lister les intervenants
+  jeyser_utile: Vous trouvez Jeyser utile à votre Junior ?
+  jeyser: Jeyser
   liste_diffusion: Liste de diffusion
   lister: Lister
   lister_modifier: Lister / Modifier
@@ -47,10 +91,13 @@ dashboard:
   membres_clients: Membres & clients
   membres_lister: Lister les membres
   motdepasse_modifier: Modifier mon mot de pas
-  nf: NF
+  ndf: NDF
+  ndf_ajouter: Ajouter une NDF
   parameters: Paramètres
   particpants_voir: Voir les participants
+  passation: Passation
   pilotage_je: Pilotage de la J.E.
+  permissions: Permissions
   poste_ajouter: Ajouter un poste
   postes: Postes
   postes_filieres: Postes & Filières
@@ -61,13 +108,25 @@ dashboard:
   prospection: Prospection
   prospects_voir: Voir les prospects
   pseudo_modifier: Modifier mon pseudo
+  qualite : Qualité
   rechercher: Rechercher...
+  rapports : Rapports
+  rfp: R.F.P.
+  passation_voir : Documents de passation
+  passation_ajouter : Ajouter une passation
   rh_competences: RH & compétences
   saisie_informations: Saisie des informations
+  archivage_doc : Archivage des documents
+  secteur_activite: Secteurs d'activité
   suivi_etudes: Suivi d'Etude
+  stat:  Stats le
+  suggestion: Envoyez vos suggestion à
   tableaux_suivi: Tableaux de Suivi
+  tabProcess: Tableau des processus
   template: Template
   tresorerie: Trésorerie
   vie_privee: Vie privée
+  version: 3.1.0
   vie_privee_gestion: Gestion de la vie privée
-  vu_ca: Vu CA
+  vue_ca: Vue CA
+  voir_commentaire: Voir le fil de discussion

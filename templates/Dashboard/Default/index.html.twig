@@ -1,76 +1,81 @@
 {# Page d'accueil de Jeyser  #}
-
 {% extends "Dashboard/layout.html.twig" %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/datatables/dataTables.bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/datatables/dataTables.fontAwesome.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/datatables/responsive.bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.0/fullcalendar.min.css">
+{% endblock %}
+
 {% block content_bundle %}
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <table class="table">
                     {% if stats is not empty and (is_granted('ROLE_SUIVEUR') or is_granted('ROLE_TRESO')) %}
                         <tr>
                             <th>
                             <span class="badge badge-default" data-toggle="tooltip"
-                                  title="CA potentiel via les études actuellement en négociation">?</span>
-                                CA en négociation
+                                title="CA potentiel via les études actuellement en négociation">?</span>
+                                {{ 'dashboard.ca_nego'|trans({}, 'dashboard') }}
                             </th>
                             <td>{{ stats.ca_negociation }} €</td>
                         </tr>
                         <tr>
                             <th>
                             <span class="badge badge-default" data-toggle="tooltip"
-                                  title="CA potentiel via les études actuellement en cours de réalisation">?</span>
-                                CA en cours
+                                title="CA potentiel via les études actuellement en cours de réalisation">?</span>
+                                {{ 'dashboard.ca_cours'|trans({}, 'dashboard') }}
                             </th>
                             <td>{{ stats.ca_encours }} €</td>
                         </tr>
                         <tr>
                             <th>
                             <span class="badge badge-default" data-toggle="tooltip"
-                                  title="CA des études cloturées sur le mandat {{ 'now' | date('Y') }}">?</span>
-                                CA cloturé par le mandat {{ 'now' | date('Y') }}
+                                title="CA des études cloturées sur le mandat {{ 'now' | date('Y') }}">?</span>
+                                {{ 'dashboard.ca_cloture'|trans({}, 'dashboard') }} {{ 'now' | date('Y') }}
                             </th>
                             <td>{{ stats.ca_cloture }} €</td>
                         </tr>
                         <tr>
                             <th>
                             <span class="badge badge-default" data-toggle="tooltip"
-                                  title="Somme des factures de vente émises (associées à une étude du mandat {{ 'now' | date('Y') }})">?</span>
-                                CA facturé par le mandat {{ 'now' | date('Y') }}
+                                title="Somme des factures de vente émises (associées à une étude du mandat {{ 'now' | date('Y') }})">?</span>
+                                {{ 'dashboard.ca_facture'|trans({}, 'dashboard') }} {{ 'now' | date('Y') }}
                             </th>
                             <td>{{ stats.ca_facture ? stats.ca_facture : 0 }} €</td>
                         </tr>
                         <tr>
                             <th>
                             <span class="badge badge-default" data-toggle="tooltip"
-                                  title="Somme des factures de vente payées par le client (associées à une étude du mandat {{ 'now' | date('Y') }})">?</span>
-                                CA payé sur le mandat {{ 'now' | date('Y') }}
+                                title="Somme des factures de vente payées par le client (associées à une étude du mandat {{ 'now' | date('Y') }})">?</span>
+                                {{ 'dashboard.ca_paye'|trans({}, 'dashboard') }} {{ 'now' | date('Y') }} {{ 'now' | date('Y') }}
                             </th>
                             <td>{{ stats.ca_paye ? stats.ca_paye : 0 }} €</td>
                         </tr>
                         <tr>
                             <td colspan="2">
-                                Stats le {{ stats.expiration|date('d/m/Y H:i') }}
+                                {{ 'dashboard.stat'|trans({}, 'dashboard') }} {{ stats.expiration|date('d/m/Y H:i') }}
                             </td>
                         </tr>
                     {% endif %}
                     <tr>
-                        <th>Envoyez vos suggestions à <br><a href="mailto:{{ technical_to }}">{{ technical_to }}</a>
+                        <th> {{ 'dashboard.suggestion'|trans({}, 'dashboard') }} <br><a href="mailto:{{ technical_to }}">{{ technical_to }}</a>
                         </th>
                         <td></td>
                     </tr>
 
                 </table>
             </div>
-            <div class="col-md-4 xs-hidden">
-                <!-- One day, maybe, a calendar ... -->
-            </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <table class="table">
                     <tr>
-                        <th colspan="2">Informations</th>
+                        <th colspan="2">{{ 'dashboard.info'|trans({}, 'dashboard') }}</th>
                     </tr>
                     <tr>
-                        <td>Connecté en tant que</td>
+                        <td>{{ 'dashboard.connecte'|trans({}, 'dashboard') }}</td>
                         <th>
                             {{ app.user.username }}
                             <a href="{{ path('fos_user_security_logout') }}" class="pull-right">
@@ -79,11 +84,11 @@
                         </th>
                     </tr>
                     <tr>
-                        <td>Dernière connexion le</td>
+                        <td>{{ 'dashboard.derniere_connection'|trans({}, 'dashboard') }}</td>
                         <th>{{ app.user.lastLogin ? app.user.lastLogin | date ('d M Y') }}</th>
                     </tr>
                     <tr>
-                        <td>Permissions</td>
+                        <td>{{ 'dashboard.permissions'|trans({}, 'dashboard') }}</td>
                         <th>
                             {% for role in app.user.roles %}
                                 <span class="badge badge-default">{{ role }}</span>
@@ -91,34 +96,263 @@
                         </th>
                     </tr>
                 </table>
-                <hr/>
-                <table class="table">
-                    <tr>
-                        <td colspan="2">
-                            <p>
-                                <strong>Vous trouvez Jeyser utile à votre Junior ?</strong><br/>
-                                Encouragez le développement en donnant une étoile sur
-                                <a href="https://github.com/n7consulting/Incipio">Github</a>.<br/>
-                                Ca ne vous coute rien et ça nous fera très plaisir.
-                            </p>
-                        </td>
-                    </tr>
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <tr>
-                            <td colspan="2">
-                                Jeyser <span id="version">3.1.0</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" id="version-info">
-                            </td>
-                        </tr>
-                    {% endif %}
-
-                </table>
             </div>
         </div>
-    </div>
+        <div class="row">
+            <div class="col-md-6">
+                {% include '@FullCalendar/Calendar/calendar.html.twig' %}
+            <br>
+            <a href="{{ path('booking_new')}}" class="btn btn-primary">{{ 'dashboard.ev_ajouter'|trans({}, 'dashboard') }}</a>
+            </div>
+            <div class="col-md-6">
+                <h4>{{ 'dashboard.commentaire_recent_titre' | trans({}, 'dashboard') }}</h4>
+                {% for etude, comments in commentsParEtude %}
+                    <table class="display dataTable table table-bordered table-striped dt-responsive ">
+                    <thead>
+                        <tr>
+                                <th colspan="2">{{ 'suivi.etude.etude'|trans({}, 'project') }} {{ etude }}</th>
+                                <th><a href="{{ path('project_etude_voir', {'nom': etude, '_fragment': 'tab6'}) }}">{{ 'dashboard.voir_commentaire'|trans({}, 'dashboard') }}</a></th>
+                        </tr>
+                        <tr>
+                            <th>{{ 'dashboard.membres'|trans({}, 'dashboard') }}</th>
+                            <th>{{ 'dashboard.commentaire_recent'|trans({}, 'dashboard') }}</th>
+                            <th>{{ 'dashboard.date'|trans({}, 'dashboard') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for comment in comments | reverse %}
+                            <tr>
+                                <td>{{ comment.getAuthorName() }}</td>
+                                <td>{{ comment.body }}</td>
+                                <td>{{ comment.createdAt | date("d/m/y") }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                    </table>
+                {% else %}
+                    <h>{{ 'dashboard.aucun_commentaire' | trans({}, 'dashboard') }}</h>
+                {% endfor %}
+            </div>
+        </div>
+{% include '@FullCalendar/Calendar/calendar.html.twig' %}
+
+<br>
+
+<table class="table">
+	<tr>
+		<td colspan="2">
+			<p>
+				<strong>{{ 'dashboard.jeyser_utile'|trans({}, 'dashboard') }}</strong><br/>
+				{{ 'dashboard.encourager_dev'|trans({}, 'dashboard') }}
+				<a href="https://github.com/n7consulting/Incipio">{{ 'dashboard.github'|trans({}, 'dashboard') }}</a>.<br/>
+				{{ 'dashboard.ca_coute_rien'|trans({}, 'dashboard') }}
+			</p>
+		</td>
+	</tr>
+	{% if is_granted('ROLE_ADMIN') %}
+		<tr>
+			<td colspan="2">
+				{{ 'dashboard.jeyser'|trans({}, 'dashboard') }}
+				<span id="version">{{ 'dashboard.version'|trans({}, 'dashboard') }}</span>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" id="version-info"></td>
+		</tr>
+	{% endif %}
+</table>
+
+{# DEBUT BLOC CHANGELOG #}
+
+<h1 id="changelog-jeyser-crm">Changelog ─ Jeyser CRM</h1>
+<h2 id="preview-jeyser-4-0-0-mis-jour-le-2021-07-10-">Preview Jeyser 4.0.0 (Mis à jour le 2021-07-10)</h2>
+<p>Cette release s&#39;inscrit dans une volontée de N7 Consulting de redynamiser Jeyser CRM après plusieures années d&#39;inactivité.
+		Logiciel libre
+	<a href="https://jeyser-crm.n7consulting.fr/docs/dev/about/">lourd d&#39;histoire</a>, l&#39;objectif de cette nouvelle version est d&#39;apporter son lot de mises à jour et d&#39;améliorations tout en maintenant un haut niveau de rétrocompatibilité.</p>
+<h3 data-toggle="collapse" href="#dashboard"><span class="fa fa-chevron-down"></span> Dashboard</h3>
+<div class="collapse" id="dashboard">
+<p>Le dashboard a connu deux nouvelles fonctionnalités majeures, ainsi qu&#39;une update concernant le chiffre d&#39;affaire suite à l&#39;ajout des nouveaux états d&#39;une étude (voir Suivi d&#39;étude pour plus de détails).</p>
+<h4 id="calendrier">Calendrier</h4>
+<ul>
+	<li>Ajout d&#39;un calendrier commun à la Junior ;</li>
+	<li>Possibilitité d&#39;ajouter/modifier/supprimer des événements.</li>
+</ul>
+<h4 id="commentaires">Commentaires</h4>
+<ul>
+	<li>Reprise de tous les commentaires associés aux études et affichage des plus récents (&lt; 10 jours) ;</li>
+	<li>Accès direct à un fil de discussion.</li>
+</ul>
+<p>
+	<em>NB: La structure (réponse, réponse de réponse, etc) des fils de discussion est perdue au rechargement de la page, ceci sera réglé si le temps le permet.</em>
+</p>
+<h4 id="chiffres-cl-s">Chiffres clés</h4>
+<ul>
+	<li>CA en cours = études acceptées + études en cours ;</li>
+	<li>CA clôturé = études finies + études terminées ;</li>
+	<li>L&#39;heure d&#39;actualisation affichée est celle de Paris.</li>
+</ul>
+</div>
+<h3 data-toggle="collapse" href="#suivi-d-tude">
+	<span class="fa fa-chevron-down"></span>Suivi d&#39;étude</h3>
+<div class="collapse" id="suivi-d-tude">
+<p>Le suivi d&#39;étude étant le fer de lance d&#39;une junior, un soin particulier a été apporté à cette onglet.</p>
+<p>Tout d&#39;abord, de nouveaux documents ont fait leur apparition (Convention Cadre Agile et Bon de Commande) depuis la dernière mise à jour de Jeyser. De plus pour davantage d&#39;organisation deux nouveaux états associés à une étude sont apparus:</p>
+<h4 id="nouveaux-tats-associ-s-une-tude">Nouveaux états associés à une étude</h4>
+<ul>
+	<li>Etude acceptée -&gt; Le client a signé l&#39;étude mais cette dernière n&#39;a pas encore commencé ;</li>
+	<li>Etude finie (≠ clôturée) -&gt; L&#39;étude à proprement parler est terminée, mais elle n&#39;a pas encore reçu d&#39;audit en interne par la qualité. Une fois l&#39;audit réalisé l&#39;étude peut-être &quot;clôturée&quot;.</li>
+</ul>
+<h4 id="voir-les-tudes">Voir les études</h4>
+<ul>
+	<li>Ajout de deux onglets associés aux nouveaux états (acceptée et finies). Ces onglets sont cachés par défaut sauf si des études dans ces états existent ;</li>
+	<li>Uniformisation de l&#39;affichage des onglets, notamment les études des mandats précédents, qui utilisaient encore un ancien affichage ;</li>
+	<li>Nombre de contacts client réalisé dans cette étude.</li>
+</ul>
+<h4 id="cr-er-une-tude">Créer une étude</h4>
+<ul>
+	<li>Possibilité d&#39;utiliser une CCa ajoutée précédemment (le prospect sera donc déduit de ce document). La date de fin de cette CCa ne doit pas être passée ;</li>
+	<li>Meilleure déduction du numéro de l&#39;étude. Pour les juniors qui n&#39;ont jamais utilisé de numéro de l&#39;étude, ce champ ne sera laissé vide.</li>
+</ul>
+<h4 id="voir-les-cca">Voir les CCa</h4>
+<p>Ceci est un nouvel onglet permettant de gérer les Conventions Cadre Agile de la junior.</p>
+<p>Il se compose:</p>
+<ul>
+	<li>D&#39;un bouton permettant d&#39;ajouter une Cca ;</li>
+	<li>D&#39;un tableau affichant l&#39;ensemble des CCa, surlignées ou non ;<ul>
+			<li>La couleur jaune signifie qu&#39;elle se termine bientôt (&lt; 1 mois) ;</li>
+			<li>La couleur rouge signifie que cette CCa est terminée.</li>
+		</ul>
+	</li>
+	<li>D&#39;un bouton avec le nombre de BDC associés à cette CCa. Ce bouton mène vers un tableau détaillant les études associées à ces BdC ;</li>
+	<li>D&#39;un bouton permettant de modifier les informations de la CCa (sauf prospect) et de la supprimer.</li>
+</ul>
+<h4 id="vue-d-une-tude">Vue d&#39;une étude</h4>
+<h5 id="r-capitulatif">Récapitulatif</h5>
+<p>Harmonisation de la couleur d&#39;affichage selon l&#39;état d&#39;une étude (avec l&#39;onglet Vue CA par exemple).</p>
+<h5 id="phases">Phases</h5>
+<p>Lors de l&#39;ajout d&#39;une phase, le prix d&#39;un JEH est automatiquement reporté et la date de début de la phase suivante est automatiquement calculée avec le délai.</p>
+<h5 id="r-daction-et-g-n-ration">Rédaction et Génération</h5>
+<ul>
+	<li>Pour une étude avec une CCa, on peut rédiger un BdC puis le générer. On peut aussi générer la CCa ;</li>
+	<li>Lors de l&#39;ajout d&#39;un RM, la répartition des JEH doit faire référence à des phases de l&#39;étude.</li>
+</ul>
+<h5 id="suivi">Suivi</h5>
+<ul>
+	<li>Ajout des nouveaux états pour une étude ;</li>
+	<li>Ajout des nouveaux documents d&#39;étude ;</li>
+	<li>Documents non générés sont désormais cachés dans le tableau récapitulatif ;</li>
+	<li>Les audits se font désormais dans l&#39;onglet Qualité (voir Qualité).</li>
+</ul>
+<h5 id="contacts">Contacts</h5>
+<p>Cet onglet existait auparavant mais il était moins accessible.</p>
+<ul>
+	<li>Harmonisation de l&#39;affichage ;</li>
+	<li>Modification/suppression d&#39;un contact client directement en cliquant dessus.</li>
+</ul>
+<h4 id="contacts-client">Contacts Client</h4>
+<p>Harmonisation de cet onglet avec l&#39;onglet par étude &quot;Contacts&quot;</p>
+<h4 id="vue-ca">Vue CA</h4>
+<p>La vue CA permet d&#39;avoir un condensé d&#39;informations pour chaque étude non terminée.</p>
+<ul>
+	<li>Ajout des études acceptées à l&#39;accès rapide ;</li>
+	<li>Ajout des nouveaux documents (BdC) ;</li>
+	<li>Réorganisation de l&#39;affichage ;</li>
+	<li>Utilisation des templates (voir le Coin des développeurs).</li>
+</ul>
+<h4 id="boutons-interactifs-client-suiveur">Boutons interactifs Client/Suiveur</h4>
+<p>Ces boutons ne marchaient pas tous, ils sont désormais opérationnels.</p>
+<h4 id="suivi-des-probl-mes">Suivi des problèmes</h4>
+<p>Déplacé dans l&#39;onglet Qualité (voir Qualité).</p>
+</div>
+<h3 data-toggle="collapse" href="#r-f-p-anciennement-formation-">
+	<span class="fa fa-chevron-down"></span>
+R.F.P. (Anciennement Formation)</h3>
+<div class="collapse" id="r-f-p-anciennement-formation-">
+<p>Cet onglet, plus complet, permet d&#39;ajouter des documents de passation et les formations liées au R.F.P. afin d&#39;avoir un archivage uniforme entre tous les pôles.</p>
+<ul>
+	<li>Ajout de passations liés à un pôle ;<ul>
+			<li>Upload de documents liés à une passation.</li>
+		</ul>
+	</li>
+	<li>Ajout de formations ;<ul>
+			<li>Ajout de formations/participants ;</li>
+			<li>Date de début/date de fin ;</li>
+			<li>Upload de documents liés à une formation.</li>
+		</ul>
+	</li>
+	<li>Monitoring des participants aux formations dispensées.</li>
+</ul>
+</div>
+<h3 data-toggle="collapse" href="#qualit-">
+
+	<span class="fa fa-chevron-down"></span>
+Qualité</h3>
+
+<div class="collapse" id="qualit-">
+<h4 id="indicateurs">Indicateurs</h4>
+<ul>
+	<li>Affichage de données brutes récupérées automatiquement, soit mensuellement (12 derniers mois) soit par année (3 dernières années) ;</li>
+	<li>Les graphiques, classés par pôles, ont été déplacés ici.</li>
+</ul>
+<h4 id="gestion-des-processus">Gestion des processus</h4>
+<p>Nouvel onglet permettant au pôle qualité une gestion plus centrale des processus.</p>
+<ul>
+	<li>Ajout d&#39;un processus (Nom du processus / Pilote).<ul>
+			<li>Ajout de documents liés à ce processus.</li>
+		</ul>
+	</li>
+</ul>
+<h4 id="suivi-des-probl-mes">Suivi des problèmes</h4>
+<p>C&#39;est ici que la qualité va pouvoir auditer une étude lorsque cette dernière passe dans l&#39;état &quot;Finie&quot;.</p>
+<ul>
+	<li>Ajout d&#39;un tableau (affiché par défaut) qui permet d&#39;auditer les études finies (bouton Audit Etudes Finies) ;</li>
+	<li>Ajout d&#39;un tableau qui affiche les études finies (bonton Etudes Finies).</li>
+</ul>
+</div>
+<h3 data-toggle="collapse" href="#archivage">
+	<span class="fa fa-chevron-down"></span>
+Archivage des documents</h3>
+<div class="collapse" id="archivage">
+<p>
+    C'est sur ce nouvel onglet qu'on peut télécharger tous les documents (si les doctypes existent) de toutes les études.<br>
+	<em>NB: Cet onglet n&#39;est pas terminé.</em>
+</p>
+</div>
+<h3 data-toggle="collapse" href="#divers">
+	<span class="fa fa-chevron-down"></span>
+	Divers</h3>
+<div class="collapse" id="divers">
+<h4 id="esth-tique">Esthétique</h4>
+<ul>
+	<li>Affichage du nom de la junior en entier en haut à gauche. Ceci est remplacé par son logo lorsque le panneau latéral est minimisé.</li>
+</ul>
+</div>
+<h3 data-toggle="collapse" href="#veloppeurs">
+	<span class="fa fa-chevron-down"></span>
+	Le coin des développeurs</h3>
+<div class="collapse" id="veloppeurs">
+<ul>
+	<li>Travail important pour améliorer l&#39;i18n sur l&#39;ensemble des pages sur lesquelles nous avons travaillé pour une meilleure portabilité dans d&#39;autres langages ;</li>
+	<li>Factorisation de code pour les études (extensions Twig/templates).<ul>
+			<li>Voir EtudeExtension.php :<ul>
+					<li>Ajout d&#39;une fonction unique qui renvoie la couleur du bandeau d&#39;une étude selon son état (en négociation, en pause, etc) ;</li>
+					<li>Ajout d&#39;une fonction unique qui renvoie la couleur d&#39;un document selon son état (s&#39;utilise indifféremment avec un document d&#39;étude ou une facture).</li>
+				</ul>
+			</li>
+			<li>Voir Project/Etude/Tools/* (liste non exhaustive) :<ul>
+					<li>AffichageAvancement.html.twig, affiche l&#39;avancement d&#39;une étude ;</li>
+					<li>EtatDocument.html.twig, affiche l&#39;état d&#39;un document ;</li>
+					<li>EtatDocuments.html.twig, affiche l&#39;état d&#39;une liste de documents ;</li>
+					<li>Intervenants.html.twig, affiche sous forme de boutons l&#39;ensemble des intervenants d&#39;une étude ;</li>
+					<li>Et bien d&#39;autres.</li>
+				</ul>
+			</li>
+		</ul>
+	</li>
+</ul>
+</div>
+{# FIN BLOC CHANGELOG #}
+
 {% endblock %}
 
 {% block javascript %}
@@ -130,4 +364,41 @@
             displayVersionMessage();
         </script>
     {% endif %}
+
+    <script src="{{ asset('js/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('js/datatables/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ asset('js/datatables/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('js/datatables/responsive.bootstrap.min.js') }}"></script>
+
+    {# <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script> #}
+    <script type="text/javascript" src="https://momentjs.com/downloads/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.0/fullcalendar.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.0/locale/fr.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#calendar-holder").fullCalendar({
+                eventSources: [
+                    {
+                        url: "{{ path('fullcalendar_load_events') }}",
+                        type: "POST",
+                        data: {
+                            filters: {},
+                        },
+                        error: function () {
+                            // alert("There was an error while fetching FullCalendar!");
+                        }
+                    }
+                ],
+                header: {
+                    center: "title",
+                    left: "prev,next today",
+                    right: "month,agendaWeek,agendaDay"
+                },
+                lazyFetching: true,
+                locale: "fr",
+                navLinks: true, // can click day/week names to navigate views
+            });
+        });
+    </script>
 {% endblock %}

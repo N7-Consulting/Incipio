@@ -1,77 +1,171 @@
 {% extends "Project/layout.html.twig" %}
 
 {% block title %}
-    {{ 'suivi.suivi_qualite_etudes'|trans({}, 'project') }} - {{ parent() }}
+	{{ 'suivi.suivi_qualite_etudes'|trans({}, 'project') }}
+	{{ parent() }}
 {% endblock %}
 
 {% block content_bundle %}
-
-    <table id="control" class="table table-bordered">
-        <tr>
-            <th>{{ 'suivi.panneau_controle'|trans({}, 'project') }}</th>
-            <td><label for="checkbox-gantt">{{ 'suivi.gantt'|trans({}, 'project') }}</label>
-                <input id="checkbox-gantt" type="checkbox" onchange="$('#ganttChart').toggle();"/></td>
-            <td><label for="checkbox-encou">{{ 'suivi.etudes_en_cours'|trans({}, 'project') }}</label>
-                <input id="checkbox-encou" type="checkbox" checked="checked" onchange="$('#content-1').toggle();"/></td>
-            <td><label for="checkbox-termi">{{ 'suivi.etudes_terminees'|trans({}, 'project') }}</label>
-                <input id="checkbox-termi" type="checkbox" checked="checked" onchange="$('#content-2').toggle();"/></td>
-            <td><label for="checkbox-infos">{{ 'suivi.informations_qualites'|trans({}, 'project') }}</label>
-                <input id="checkbox-infos" type="checkbox" checked="checked" onchange="$('.rawInfos').toggle();"/></td>
-            <td><label for="checkbox-warns">{{ 'suivi.warnings'|trans({}, 'project') }}</label>
-                <input id="checkbox-warns" type="checkbox" checked="checked" onchange="$('.rawWarns').toggle();"/></td>
-            <td><label for="checkbox-error">{{ 'suivi.errors'|trans({}, 'project') }}</label>
-                <input id="checkbox-error" type="checkbox" checked="checked" onchange="$('.rawError').toggle();"/></td>
-        </tr>
-    </table>
-
-
-    <div id="ganttChart" style="width: 100%; display:none;"></div>
-
-    {% set typeEtude = {"Etude en cours" : etudesEnCours, "Etudes Terminees" : etudesTerminees } %}
-    {% for label,etudes in typeEtude %}
-        <table id="content-{{ loop.index }}" class="table table-bordered table-striped">
-            <tr>
-                <th>{{ label }}</th>
-                <th>{{ 'suivi.client'|trans({}, 'project') }}</th>
-                <th>{{ 'suivi.intervenants'|trans({}, 'project') }}</th>
-            </tr>
-            {% for etude in etudes %}
-                <tr>
-                    <th><a href="{{ path('project_etude_voir', {'nom': etude.nom}) }}">{{ etude.nom }}</a></th>
-                    <td></td>
-                    <td></td>
-                </tr>
-                {% if etude.stateDescription %}
-                    <tr class="rawInfos">
-                        <td colspan="3">
-                            <div class="alert alert-block alert-success alert-dismissable">
-                                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                <h4>{{ 'suivi.controle_qualite'|trans({}, 'project') }} :</h4>
-                                {{ etude.stateDescription | nl2br }}
-                            </div>
-                        </td>
-                    </tr>
-                {% endif %}
-                <tr class="rawError">
-                    <td colspan="3">{% include "Project/Etude/Infos/error.html.twig" with  {'etude':  etude} %}</td>
-                </tr>
-                <tr class="rawWarns">
-                    <td colspan="3">{% include "Project/Etude/Infos/warning.html.twig" with  {'etude':  etude} %}</td>
-                </tr>
-            {% endfor %}
-        </table>
-    {% endfor %}
+	<table id="control" class="table table-bordered">
+		<tr>
+			<td>
+				<label for="checkbox-audit">{{ 'suivi.audit'|trans({}, 'project') }}
+					{{ 'suivi.etudes_finies'|trans({}, 'project') }}</label>
+				<input id="checkbox-audit" type="checkbox" checked="checked" onchange="$('#content-audit').toggle();"/
+            </td>
+			<td>
+				<label for="checkbox-encou">{{ 'suivi.etudes_en_cours'|trans({}, 'project') }}</label>
+				<input id="checkbox-encou" type="checkbox" onchange="$('#content-1').toggle();"/>
+            </td>
+			<td>
+				<label for="checkbox-fini">{{ 'suivi.etudes_finies'|trans({}, 'project') }}</label>
+				<input id="checkbox-fini" type="checkbox" onchange="$('#content-2').toggle();"/>
+            </td>
+			<td>
+				<label for="checkbox-clotu">{{ 'suivi.etudes_cloturees'|trans({}, 'project') }}</label>
+				<input id="checkbox-clotu" type="checkbox" onchange="$('#content-3').toggle();"/>
+            </td>
+			<td>
+				<label for="checkbox-gantt">{{ 'suivi.gantt'|trans({}, 'project') }}</label>
+				<input id="checkbox-gantt" type="checkbox" onchange="$('#ganttChart').toggle();"/>
+            </td>
+			<td>
+				<label for="checkbox-infos">{{ 'suivi.informations_qualites'|trans({}, 'project') }}</label>
+				<input id="checkbox-infos" type="checkbox" checked="checked" onchange="$('.rawInfos').toggle();"/>
+            </td>
+			<td>
+				<label for="checkbox-warns">{{ 'suivi.warnings'|trans({}, 'project') }}</label>
+				<input id="checkbox-warns" type="checkbox" checked="checked" onchange="$('.rawWarns').toggle();"/>
+            </td>
+			<td>
+				<label for="checkbox-error">{{ 'suivi.errors'|trans({}, 'project') }}</label>
+				<input id="checkbox-error" type="checkbox" checked="checked" onchange="$('.rawError').toggle();"/>
+            </td>
+		</tr>
+	</table>
 
 
+	<div id="ganttChart" style="width: 100%; display:none;"></div>
+
+	{% for etudes in _etudes %}
+		{% set etu = etudes[0] ?? NULL %}
+		<table id="content-{{ loop.index }}" class="table table-bordered table-striped" style="display:none;">
+			<tr>
+				<th>{{ etu != NULL ? etu.getStateIDToString(etu.stateID) | trans({}, 'project') : '' }}</th>
+				<th>{{ 'suivi.client'|trans({}, 'project') }}</th>
+				<th>{{ 'suivi.suiveur'|trans({}, 'project') }}</th>
+				<th>{{ 'suivi.intervenants'|trans({}, 'project') }}</th>
+                <th>{{ 'suivi.documents_etude'|trans({}, 'project') }}</th>
+			</tr>
+			{% for etude in etudes %}
+				<tr>
+					<td>
+						<a href="{{ path('project_etude_voir', {'nom': etude.nom}) }}">{{ etude.nom }}</a>
+					</td>
+					<td>{% include "Project/Etude/Buttons/Prospect.html.twig" with  {'prospect':  etude.prospect} %}</td>
+					<td>{% include "Project/Etude/Buttons/Suiveur.html.twig" with  {'suiveur':  etude.suiveur} %}</td>
+					<td>
+						{% include "Project/Etude/Tools/Intervenants.html.twig" %}
+					</td>
+                    <td style="text-align: center;">
+                        {% include "Project/Etude/Tools/AffichageDocumentsLabels.html.twig" %}
+                    </td>
+				</tr>
+				{% if etude.stateDescription %}
+					<tr class="rawInfos">
+						<td colspan="5">
+							<div class="alert alert-block alert-success alert-dismissable">
+								<button type="button" class="close" data-dismiss="alert">&times;</button>
+								<h4>{{ 'suivi.controle_qualite'|trans({}, 'project') }}
+									:</h4>
+								{{ etude.stateDescription | nl2br }}
+							</div>
+						</td>
+					</tr>
+				{% endif %}
+				<tr class="rawError">
+					<td colspan="5">{% include "Project/Etude/Infos/error.html.twig" with  {'etude':  etude} %}</td>
+				</tr>
+				<tr class="rawWarns">
+					<td colspan="5">{% include "Project/Etude/Infos/warning.html.twig" with  {'etude':  etude} %}</td>
+				</tr>
+			{% endfor %}
+		</table>
+	{% endfor %}
+
+	{% if etudesAudit is not empty %}
+		<table id="content-audit" class="table table-bordered table-striped">
+			<thead>
+				<tr>
+					<th>
+						<div>{{ 'suivi.etude_nom'|trans({}, 'project') }}</div>
+					</th>
+					<th>
+						<div>{{ 'suivi.client'|trans({}, 'project') }}</div>
+						<div>{{ 'suivi.suiveur'|trans({}, 'project') }}</div>
+					</th>
+					<th>
+						<div>{{ 'suivi.date_lancement'|trans({}, 'project') }}</div>
+						<div>{{ 'suivi.date_fin'|trans({}, 'project') }}</div>
+					</th>
+					<th>
+						{{ 'suivi.audit_etat'|trans({}, 'project') }}
+					</th>
+					<th>
+						{{ 'suivi.audit_date'|trans({}, 'project') }}
+					</th>
+					<th>
+						{{ 'suivi.commentaries'|trans({}, 'project') }}
+					</th>
+					<th>
+						{{ 'suivi.documents_etude'|trans({}, 'project') }}
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for etude in etudesAudit %}
+					<tr>
+						<td>
+							{% include "Project/Etude/Tools/NomEtude.html.twig" %}
+						</td>
+						<td>
+							{% include "Project/Etude/Buttons/Prospect.html.twig" with {'prospect': etude.prospect} %}
+							<br/><br/>{% include "Project/Etude/Buttons/Suiveur.html.twig" with {'suiveur': etude.suiveur} %}
+						</td>
+						<td>
+							{% include "Project/Etude/Tools/DatesEtude.html.twig" %}
+						</td>
+						<td>
+							<a href="{{ path('audit_modifier',{'id': etude.id})}} ">
+								{{etude.getAuditTypeToString()| default("Non défini") }}
+							</a>
+						</td>
+						<td>
+							{% if etude.auditType != 0 %}
+								{{ etude.auditDate|date("d/m/Y")}}
+							{% endif %}
+						</td>
+						<td>
+							{{ etude.auditCommentaires  }}
+						</td>
+						<td style="text-align: center;">
+                            {% include "Project/Etude/Tools/AffichageDocumentsLabels.html.twig" %}
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	{% else %}
+		{{ 'suivi.aucune_etude_audit' | trans({}, 'project')}}
+	{% endif %}
 {% endblock %}
 
 {% block javascript %}
-    {{ parent() }}
-    <script src="{{ asset('js/highcharts.js') }}"></script>
-    <script src="{{ asset('js/highcharts-fr.js') }}"></script>
-    <script src="{{ asset('js/exporting.js') }}"></script>
+	{{ parent() }}
+	<script src="{{ asset('js/highcharts.js') }}"></script>
+	<script src="{{ asset('js/highcharts-fr.js') }}"></script>
+	<script src="{{ asset('js/exporting.js') }}"></script>
 
-    <script type="text/javascript">
-        {{ chart(chart) }}
-    </script>
+	<script type="text/javascript">
+		{{ chart(chart) }}</script>
 {% endblock %}

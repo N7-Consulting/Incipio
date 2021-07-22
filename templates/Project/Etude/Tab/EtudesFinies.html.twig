@@ -1,0 +1,109 @@
+<div class="table-responsive">
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>
+					<div>{{ 'suivi.etude_nom'|trans({}, 'project') }}</div>
+				</th>
+				<th>
+					<div>{{ 'suivi.date_lancement'|trans({}, 'project') }}</div>
+					<div>{{ 'suivi.date_fin'|trans({}, 'project') }}</div>
+				</th>
+				<th>
+					{{ 'suivi.audit'|trans({}, 'project') }}
+				</th>
+				<th>
+					<div>{{ 'suivi.client'|trans({}, 'project') }}</div>
+					<div>{{ 'suivi.suiveur'|trans({}, 'project') }}</div>
+				</th>
+				<th>
+					{{ 'suivi.intervenants'|trans({}, 'project') }}
+				</th>
+				<th>
+					{{ 'suivi.ce'|trans({}, 'project') }}
+				</th>
+				<th>
+					{{ 'suivi.bdc'|trans({}, 'project') }}
+				</th>
+				<th>
+					{{ 'suivi.fa'|trans({}, 'project') }}
+				</th>
+				<th>
+					{{ 'suivi.rm'|trans({}, 'project') }}
+				</th>
+				<th>
+					{{ 'suivi.pvi'|trans({}, 'project') }}
+				</th>
+				<th>
+					{{ 'suivi.pvr'|trans({}, 'project') }}
+				</th>
+				<th>
+					{{ 'suivi.fs'|trans({}, 'project') }}
+				</th>
+				<th>
+					{{ 'suivi.contacts_client'|trans({}, 'project') }}
+				</th>
+				<th>
+					{{ 'suivi.dernier_contact'|trans({}, 'project') }}
+				</th>
+				<th>
+					<div>{{ 'suivi.prix_ht'|trans({}, 'project') }}</div>
+					<div>{{ 'suivi.jeh_nombre'|trans({}, 'project') }}</div>
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for etude in etudesFinies | filter(etude => not confidentielRefus(etude, app.user, is_granted(role_voir_confidentiel))) %}
+				<tr>
+					<td>
+						{% include "Project/Etude/Tools/NomEtude.html.twig" %}
+					</td>
+					<td>
+						{% include "Project/Etude/Tools/DatesEtude.html.twig" %}
+					</td>
+					<td>
+						{{ etude.getAuditTypeChoice()[etude.auditType]}}
+					</td>
+					<td>
+						{% include "Project/Etude/Buttons/Prospect.html.twig" with {'prospect': etude.prospect} %}
+						<br/><br/>
+						{% include "Project/Etude/Buttons/Suiveur.html.twig" with {'suiveur': etude.suiveur} %}
+					</td>
+					<td>
+						{% include "Project/Etude/Tools/Intervenants.html.twig" %}
+					</td>
+					<td>
+						{% include "Project/Etude/Tools/EtatConventionEtude.html.twig" %}
+					</td>
+					<td>
+						{% include "Project/Etude/Tools/EtatBonDeCommande.html.twig" %}
+					</td>
+					<td>
+						{% include "Project/Etude/Tools/EtatFacture.html.twig" with {'facture': etude.fa} %}
+					</td>
+					<td>
+						{% include "Project/Etude/Tools/EtatDocuments.html.twig" with {'docs': etude.missions, 'title': 'intervenantPrenomNom'} %}
+					</td>
+					<td>
+						{% include "Project/Etude/Tools/EtatDocuments.html.twig" with {'docs': etude.pvis, 'title': 'date'} %}
+					</td>
+					<td>
+						{% include "Project/Etude/Tools/EtatDocument.html.twig" with {'doc': etude.pvr, 'title': 'date'} %}
+					</td>
+					<td>
+						{% include "Project/Etude/Tools/EtatFacture.html.twig" with {'facture': etude.fs} %}
+					</td>
+					<td>
+						{% include "Project/Etude/Tools/NombreContactsClient.html.twig" %}
+					</td>
+					<td>
+						{% include "Project/Etude/Tools/DateDernierContact.html.twig" %}
+					</td>
+					<td>
+						{% include "Project/Etude/Tools/PrixEtJEH.html.twig" %}
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>

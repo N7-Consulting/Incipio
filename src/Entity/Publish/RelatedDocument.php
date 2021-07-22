@@ -13,6 +13,8 @@ namespace App\Entity\Publish;
 
 use App\Entity\Formation\Formation;
 use App\Entity\Personne\Membre;
+use App\Entity\Processus\Processus;
+use App\Entity\Formation\Passation;
 use App\Entity\Personne\Prospect;
 use App\Entity\Project\Etude;
 use Doctrine\ORM\Mapping as ORM;
@@ -52,16 +54,28 @@ class RelatedDocument
     private $etude;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Formation\Formation", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Formation\Formation", cascade={"persist"}, inversedBy="relatedDocuments")
      * @ORM\JoinColumn(name="formation_id", referencedColumnName="id", nullable=true)
      */
     private $formation;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Formation\Passation", cascade={"persist"}, inversedBy="relatedDocuments")
+     * @ORM\JoinColumn(name="passation_id", referencedColumnName="id", nullable=true)
+     */
+    private $passation;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Personne\Prospect", cascade={"persist"})
      * @ORM\JoinColumn(name="prospect_id", referencedColumnName="id", nullable=true)
      */
     private $prospect;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Processus\Processus", cascade={"persist"}, inversedBy="relatedDocuments")
+     * @ORM\JoinColumn(name="processus_id", referencedColumnName="id", nullable=true)
+     */
+    private $processus;
 
     /**
      * Get id.
@@ -191,6 +205,54 @@ class RelatedDocument
     public function getProspect()
     {
         return $this->prospect;
+    }
+
+    /**
+     * Set processus.
+     *
+     * @param Processus $processus
+     *
+     * @return RelatedDocument
+     */
+    public function setProcessus(Processus $processus = null)
+    {
+        $this->processus = $processus;
+
+        return $this;
+    }
+
+    /**
+     * Get processus.
+     *
+     * @return Processus
+     */
+    public function getProcessus()
+    {
+        return $this->processus;
+    }
+
+    /**
+     * Set passation.
+     *
+     * @param Passation $passation
+     *
+     * @return RelatedDocument
+     */
+    public function setPassation(Passation $passation = null)
+    {
+        $this->passation = $passation;
+
+        return $this;
+    }
+
+    /**
+     * Get passation.
+     *
+     * @return Passation
+     */
+    public function getPassation()
+    {
+        return $this->passation;
     }
 
     public function __toString()

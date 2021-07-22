@@ -1,0 +1,42 @@
+{% extends "Formation/layout.html.twig" %}
+
+{% block content_title %}
+    {{ 'formation.book_passation'|trans({}, 'formation') }}
+{% endblock %}
+
+{% block content_bundle %}
+    <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab1" data-toggle="tab">{{ 'formation.gestion_asso'|trans({}, 'formation') }}</a></li>
+            <li><a href="#tab2" data-toggle="tab">{{ 'formation.rfp'|trans({}, 'formation') }}</a></li>
+            <li><a href="#tab3" data-toggle="tab">{{ 'formation.gestion_etude'|trans({}, 'formation') }}</a></li>
+            <li><a href="#tab4" data-toggle="tab">{{ 'formation.treso'|trans({}, 'formation') }}</a></li>
+            <li><a href="#tab5" data-toggle="tab">{{ 'formation.devco'|trans({}, 'formation') }}</a></li>
+            <li><a href="#tab6" data-toggle="tab">{{ 'formation.qualite'|trans({}, 'formation') }}</a></li>
+            <li><a href="#tab7" data-toggle="tab">{{ 'formation.autre'|trans({}, 'formation') }}</a></li>
+        </ul>
+    </div>
+    <div class="tab-content">
+        <div class="tab-pane active in" id="tab1" style="min-height: 400px;">
+            {% include "Formation/Passations/categorie.html.twig" with  {'passations':  passationGestionAsso } %}
+        </div>
+        <div class="tab-pane fade" id="tab2" style="min-height: 400px;">
+            {% include "Formation/Passations/categorie.html.twig" with  {'passations':  passationRFP } %}
+        </div>
+        <div class="tab-pane fade" id="tab3" style="min-height: 400px;">
+            {% include "Formation/Passations/categorie.html.twig" with  {'passations':  passationGestionEtude } %}
+        </div>
+        <div class="tab-pane fade" id="tab4" style="min-height: 400px;">
+            {% include "Formation/Passations/categorie.html.twig" with  {'passations':  passationTreso } %}
+        </div>
+        <div class="tab-pane fade" id="tab5" style="min-height: 400px;">
+            {% include "Formation/Passations/categorie.html.twig" with  {'passations':  passationDevCo } %}
+        </div>
+        <div class="tab-pane fade" id="tab6" style="min-height: 400px;">
+            {% include "Formation/Passations/categorie.html.twig" with  {'passations':  passationQualite } %}
+        </div>
+        <div class="tab-pane fade" id="tab7" style="min-height: 400px;">
+            {% include "Formation/Passations/categorie.html.twig" with  {'passations':  passationAutre } %}
+        </div>  
+    </div>
+{% endblock %}

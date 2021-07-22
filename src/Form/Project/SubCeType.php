@@ -23,28 +23,32 @@ class SubCeType extends DocTypeType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add(
+        $builder
+        ->add(
             'contact',
             Select2EntityType::class,
-            ['label' => "'En cas d’absence ou de problème, il est également possible de joindre ...' ex: Vice-Président",
-             'class' => Personne::class,
-             'choice_label' => 'prenomNom',
-             'attr' => ['title' => "'En cas d’absence ou de problème, il est également possible de joindre le ...'"],
-             'query_builder' => function (PersonneRepository $pr) {
-                 return $pr->getMembresByPoste('%vice-president%');
-             },
-             'required' => true,
+            [
+                'label' => "suivi.etude_form.contact_secondaire",
+                'translation_domain' => 'project',
+                'class' => Personne::class,
+                'choice_label' => 'prenomNom',
+                'query_builder' => function (PersonneRepository $pr) {
+                    return $pr->getMembresByPoste('%vice-president%');
+                },
+                'required' => false,
             ]
-        );
+        )
+            ->add(
+                'nbrDev',
+                IntegerType::class,
+                [
+                    'label' => 'suivi.nombre_dev_estime',
+                    'translation_domain' => 'project',
+                    'required' => false,
+                    'attr' => ['title' => 'Mettre 0 pour ne pas afficher la phrase indiquant le nombre d\'intervenant'],
+                ]
+            );
         DocTypeType::buildForm($builder, $options);
-        $builder->add(
-            'nbrDev',
-            IntegerType::class,
-            ['label' => 'Nombre d\'intervenants estimé',
-             'required' => false,
-             'attr' => ['title' => 'Mettre 0 pour ne pas afficher la phrase indiquant le nombre d\'intervenant'],
-            ]
-        );
     }
 
     public function getName()

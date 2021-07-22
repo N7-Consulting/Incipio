@@ -1,0 +1,25 @@
+{# Use these templates to display information throughout all Tabs (Négociation, Acceptées, en Cours...) #}
+
+{# Récupération date dernier contact #}
+{% set dernierContact = 0 %}
+
+{% for contact in etude.clientContacts %}
+	{% set dernierContact = dernierContact | date("U") < contact.date |date("U") ? contact.date : dernierContact %}
+{% endfor %}
+
+{# Couleur conditionnelle #}
+{% set dCU = dernierContact | date("U") %}
+
+{% if dCU | date('dmy') == "now" | date('dmy') %}
+  {% set color = 'success' %}
+{% elseif dCU > "now" | date_modify("-5 days") | date('U') %}
+  {% set color = 'info' %}
+{% elseif dCU > "now" | date_modify("-10 days") | date('U')  %}
+  {% set color = 'warning' %}
+{% else %}
+  {% set color = 'danger' %}
+{% endif %}
+
+<span class="label label-{{ color }}">
+  {{ dernierContact | date("d/m/Y") == "01/01/1970" ? "Jamais" : dernierContact | date("d/m/Y") }}
+</span>

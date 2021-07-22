@@ -1,7 +1,7 @@
 {% extends "Treso/layout.html.twig" %}
 
 {% block title %}
-    {{ 'treso.facture'|trans({}, 'treso') }} {{ facture.reference }} - {{ parent() }}
+    {{ 'treso.facture'|trans({}, 'treso') }} {{ facture.reference }} {{ parent() }}
 {% endblock %}
 
 {% block content_title %}

@@ -1,0 +1,58 @@
+{% extends "Formation/layout.html.twig" %}
+
+{% block content_title %}
+    {{ 'formation.passation_ajouter'|trans({}, 'formation') }}
+{% endblock %}
+
+{% block breadcrumb_active %}
+    {{ 'formation.passation_ajouter'|trans({}, 'formation') }}
+{% endblock %}
+
+{% block content_bundle %}
+    {{ form_start(form) }}
+<table class="table table-bordered table-striped standard">
+    <tr>
+        <th>{{ form_label(form.titre) }} {{ form_errors(form.titre) }}</th>
+        <td>{{ form_widget(form.titre) }}</td>
+    </tr>
+    <tr>
+        <th>{{ form_label(form.description) }} {{ form_errors(form.description) }}</th>
+        <td>{{ form_widget(form.description) }}</td>
+    </tr>
+    <tr>
+        <th>{{ form_label(form.categorie) }} {{ form_errors(form.categorie) }}</th>
+        <td>{{ form_widget(form.categorie, {'attr': {'style': 'width: 100%'}}) }}</td>
+    </tr>
+</table>
+
+<div class="row">
+    <div class="col-md-2 col-xs-4">
+
+        <button type="submit"
+                class="btn btn-success">{{ 'formation.passation_enregistrer'|trans({}, 'formation') }}</button>
+
+        {{ form_end(form) }}
+
+        {{ form_javascript(form) }}
+    </div>
+
+    {% if is_granted('ROLE_ADMIN') and delete_form is defined and delete_form is not none %}
+        <div class="col-md-2 col-xs-4">
+
+            <form class="bootbox-confirm inline"
+                  data-content="{{ 'formation.confirmation_supprimer_formation'|trans({}, 'formation') }}"
+                  action="{{ path('formation_supprimer', { 'id': delete_form.vars.value.id }) }}" method="post">
+                {{ form_widget(delete_form) }}
+                <button class="btn btn-danger">{{ 'formation.formation_supprimer'|trans({}, 'formation') }}</button>
+            </form>
+        </div>
+    {% endif %}
+</div>
+
+
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    {{ form_javascript(form) }}
+{% endblock %}

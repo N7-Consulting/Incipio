@@ -14,12 +14,12 @@ namespace App\Form\Project;
 use App\Entity\Project\GroupePhases;
 use App\Entity\Project\Phase;
 use App\Repository\Project\GroupePhasesRepository;
-use Genemu\Bundle\FormBundle\Form\JQuery\Type\DateType;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\Select2EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -57,20 +57,24 @@ class PhaseType extends AbstractType
             )
             ->add(
                 'nbrJEH',
-                IntegerType::class,
+                NumberType::class,
                 ['label' => 'Nombre de JEH', 'required' => false, 'disabled' => $readOnly, 'attr' => ['class' => 'nbrJEH']]
             )
             ->add(
                 'prixJEH',
-                IntegerType::class,
+                NumberType::class,
                 ['label' => 'Prix du JEH HT', 'required' => false, 'disabled' => $readOnly, 'attr' => ['class' => 'prixJEH']]
             )
             ->add(
                 'dateDebut',
                 DateType::class,
-                ['label' => 'Date de début', 'format' => 'd/MM/y', 'required' => false, 'disabled' => $readOnly, 'widget' => 'single_text']
+                [
+                    'label' => 'Date de début',
+                    'required' => false,
+                    'disabled' => $readOnly,
+                    'widget' => 'single_text']
             )
-            ->add('delai', IntegerType::class, ['disabled' => $readOnly, 'label' => 'Durée en nombre de jours', 'required' => false]);
+            ->add('delai', NumberType::class, ['disabled' => $readOnly, 'label' => 'Durée en nombre de jours', 'required' => false]);
         });
 
         if ($options['etude']) {

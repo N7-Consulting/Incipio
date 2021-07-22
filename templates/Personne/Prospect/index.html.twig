@@ -30,6 +30,8 @@
             <th>{{ 'prospect.champs.nom'|trans({}, 'personne') }}</th>
             <th>{{ 'prospect.champs.type'|trans({}, 'personne') }}</th>
             <th>{{ 'prospect.champs.adresse'|trans({}, 'personne') }}</th>
+            <th>{{ 'prospect.champs.mail'|trans({}, 'personne') }}</th>
+            <th>{{ 'prospect.secteur_activite'|trans({}, 'personne') }}</th>
             <th>{{ 'prospect.champs.nombre_employe'|trans({}, 'personne') }}</th>
         </tr>
         </thead>
@@ -40,6 +42,8 @@
                 </td>
                 <td>{{ prospect.entiteToString }}</td>
                 <td>{{ prospect.ville }}, {{ prospect.adresse }}</td>
+                <td>{{ prospect.mail }}</td>
+                <td>{{ prospect.secteurActivite }}</td>
                 <td>{{ prospect.employes | length }}</td>
             </tr>
         {% endfor %}

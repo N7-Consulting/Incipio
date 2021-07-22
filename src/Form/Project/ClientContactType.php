@@ -13,9 +13,9 @@ namespace App\Form\Project;
 
 use App\Entity\Personne\Personne;
 use App\Entity\Project\ClientContact;
-use Genemu\Bundle\FormBundle\Form\JQuery\Type\DateType;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\Select2EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType as TypeDateType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -29,15 +29,16 @@ class ClientContactType extends AbstractType
             ->add(
                 'faitPar',
                 Select2EntityType::class,
-                ['label' => 'Fait par',
-                 'class' => Personne::class,
-                 'choice_label' => 'prenomNom',
-                 'required' => true,
+                [
+                    'label' => 'Fait par',
+                    'class' => Personne::class,
+                    'choice_label' => 'prenomNom',
+                    'required' => true,
                 ]
             )
             ->add(
                 'date',
-                DateType::class,
+                TypeDateType::class,
                 ['label' => 'Date du contact', 'required' => true, 'widget' => 'single_text']
             )
             ->add('objet', TextType::class, ['label' => 'Objet'])

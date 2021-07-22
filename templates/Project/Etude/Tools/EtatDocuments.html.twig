@@ -1,0 +1,6 @@
+{# Use these templates to display information throughout all Tabs (Négociation, Acceptées, en Cours...) #}
+
+{% for doc in docs %}
+	{% include "Project/Etude/Tools/EtatDocument.html.twig" with {'doc': doc, 'title': title} %}
+	<br><br>
+{% endfor %}

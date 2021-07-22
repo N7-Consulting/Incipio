@@ -18,6 +18,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @ORM\Entity
  * @ORM\ChangeTrackingPolicy("DEFERRED_EXPLICIT")
+ * @ORM\Entity(repositoryClass="App\Repository\Comment\CommentRepository")
  */
 class Comment extends AbstractComment implements SignedCommentInterface
 {

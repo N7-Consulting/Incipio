@@ -58,6 +58,12 @@ class RepartitionJEH
      */
     private $avMission;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Phase::class, cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $phase;
+
     public function __toString()
     {
         return '(id :' . $this->id . ') ' . $this->nbrJEH . ' * ' . $this->prixJEH;
@@ -167,5 +173,17 @@ class RepartitionJEH
     public function getAvMission()
     {
         return $this->avMission;
+    }
+
+    public function getPhase(): ?Phase
+    {
+        return $this->phase;
+    }
+
+    public function setPhase(Phase $phase): self
+    {
+        $this->phase = $phase;
+
+        return $this;
     }
 }

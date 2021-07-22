@@ -69,6 +69,7 @@ class PosteController extends AbstractController
 
         $postes = $em->getRepository(Poste::class)->findAll();
         $filieres = $em->getRepository(Filiere::class)->findAll();
+        
 
         return $this->render('Personne/Poste/index.html.twig', [
             'postes' => $postes,

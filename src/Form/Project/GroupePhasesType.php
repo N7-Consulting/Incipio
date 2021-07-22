@@ -24,8 +24,8 @@ class GroupePhasesType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('numero', HiddenType::class, ['attr' => ['class' => 'position']])
-            ->add('titre', TextType::class)
-            ->add('description', TextareaType::class, ['label' => 'Description', 'required' => false]);
+            ->add('titre', TextType::class, ['attr'=> ['placeholder' => 'Titre'], 'required' => true])
+            ->add('description', TextareaType::class, ['attr' => ['placeholder' => 'Description']]);
     }
 
     public function getBlockPrefix()

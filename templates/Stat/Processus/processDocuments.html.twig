@@ -1,0 +1,52 @@
+{% extends "Stat/layout.html.twig" %}
+
+{% block title %}
+    {{ 'processus.documents'|trans({}, 'processus') }} - {{ parent() }}
+{% endblock %}
+
+{% block content_title %}
+    {{ 'processus.process'|trans({}, 'processus') }}: {{ processus.nom }}
+{% endblock %}
+
+{% block content_bundle %}
+
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>{{ 'processus.titre'|trans({}, 'processus') }}</th>
+            <th>{{ 'processus.date_upload'|trans({}, 'processus') }}</th>
+            {% if is_granted('ROLE_CA') %}
+                <th>{{ 'processus.supprimer'|trans({}, 'processus') }}</th>
+            {% endif %} 
+
+        </tr>
+
+        {% for relatedDocument in processus.relatedDocuments %}
+        {% set doc = relatedDocument.document %}
+        <tr>
+            <td><a href="{{ path('publish_document_voir', {'id': doc.id}) }} ">{{ doc.name}}</a></td>
+            <td>{{ doc.uptime ? doc.uptime | date('d/m/Y - H:i:s')}}</td>
+            {% if is_granted('ROLE_CA') %}
+            <td><form class="bootbox-confirm inline"
+                    data-content="{{ 'processus.supprimer_doc_confirm'|trans({}, 'processus') }}"
+                    action="{{ path('publish_document_delete', { 'id': doc.id}) }}" method="post">
+                <button class="fa fa-times"></button>
+                </form> </td>
+            {% endif %}
+            
+        </tr>
+        {% endfor %}
+    </table>
+    </br>
+    <div class="row">
+        {% if is_granted('ROLE_CA') %}
+        <div class="col-md-2 col-xs-4">
+                <a href="{{ path('modifier_processus', {'id': processus.id}) }}" class="btn btn-warning">
+                    {{ 'processus.modifier'|trans({}, 'processus') }}
+                </a>
+        </div>
+        {% endif %}
+        <div class="col-md-2 col-xs-4">
+                    <a href="{{ path('publish_document_uploadProcessus',{'nom': processus.nom}) }}" class="pull-right btn btn-primary">{{ 'processus.ajouter_doc'|trans({}, 'processus') }}</a>
+        </div>
+    </div>       
+{% endblock %}

@@ -1,0 +1,30 @@
+{# Layout principal pour la gestion des documents #}
+{% extends "base.html.twig" %}
+
+{% block content %}
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">
+                {% block content_title %}
+                    {{ 'dashboard.archivage_doc'| trans({}, 'dashboard') }}
+                {% endblock %}
+            </h3>
+            {% block breadcrumb %}
+                <ul class="breadcrumb no-margin pull-right">
+                    <li>{{ 'dashboard.archivage_doc'| trans({}, 'dashboard') }}</li>
+                    {% block breadcrumb_items %}{% endblock %}
+                    <li class="active">
+                        {% block breadcrumb_active %}{% endblock %}
+                    </li>
+                </ul>
+            {% endblock %}
+        </div>
+        <div class="box-body">
+            {# On définit un nouveau block, que les vues du bundle pourront remplir #}
+            {% block content_bundle %}
+            {% endblock %}
+        </div>
+        <div class="box-footer"></div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends "Project/layout.html.twig" %}
+
+{% block title %}
+    {{ 'suivi.cca_ajouter'|trans({}, 'project') }} {{ parent() }}
+{% endblock %}
+
+{% block content_title %}
+    {{ 'suivi.cca_ajouter'|trans({}, 'project') }}
+{% endblock %}
+
+{% block breadcrumb_items %}
+	{{parent()}}
+	<li>
+		<a href="{{ path('project_cca_voir') }}">{{ 'dashboard.cca'|trans({}, 'dashboard') }}</a>
+	</li>
+{% endblock %}
+
+{% block breadcrumb_active %}
+    {{ 'suivi.cca_ajouter'|trans({}, 'project') }}
+{% endblock %}
+
+
+{% block content_bundle %}
+{{ form_start(form) }}
+{% form_theme form 'Project/Form/fields.html.twig' %}
+
+<table class="table table-bordered table-striped standard">
+    <tr>
+        <th>{{ form_label(form.knownProspect) }} {{ form_errors(form.knownProspect) }}</th>
+        <td>{{ form_widget(form.knownProspect) }}</td>
+    </tr>
+    <tr>
+        <th id="{{ form.newProspect.vars.id }}_block" colspan="2" class="success">
+            {{ 'suivi.etude_form.prospect_nouveau'|trans({}, 'project') }}
+        </th>
+    </tr>
+    <tr>
+        <th>{{ form_label(form.newProspect.nom) }} {{ form_errors(form.newProspect.nom) }}</th>
+        <td>{{ form_widget(form.newProspect.nom) }}</td>
+    </tr>
+    <tr>
+        <th>{{ form_label(form.newProspect.entite) }} {{ form_errors(form.newProspect.entite) }}</th>
+        <td>{{ form_widget(form.newProspect.entite) }}</td>
+    </tr>
+    <tr>
+        <th>{{ form_label(form.newProspect.adresse) }} {{ form_errors(form.newProspect.adresse) }}</th>
+        <td>{{ form_widget(form.newProspect.adresse) }}</td>
+    </tr>
+    <tr>
+        <th>{{ form_label(form.newProspect.codepostal) }} {{ form_errors(form.newProspect.codepostal) }}</th>
+        <td>{{ form_widget(form.newProspect.codepostal) }}</td>
+    </tr>
+    <tr>
+        <th>{{ form_label(form.newProspect.ville) }} {{ form_errors(form.newProspect.ville) }}</th>
+        <td>{{ form_widget(form.newProspect.ville) }}</td>
+    </tr>
+    <tr>
+        <th>{{ form_label(form.newProspect.pays) }} {{ form_errors(form.newProspect.pays) }}</th>
+        <td>{{ form_widget(form.newProspect.pays) }}</td>
+    </tr>
+    <tr>
+        <th>{{ form_label(form.newProspect.mail) }} {{ form_errors(form.newProspect.mail) }}</th>
+        <td>{{ form_widget(form.newProspect.mail) }}</td>
+    </tr>
+    <tr>
+        <th>{{ form_label(form.newProspect.secteurActivite) }} {{ form_errors(form.newProspect.secteurActivite) }}</th>
+        <td>{{ form_widget(form.newProspect.secteurActivite) }}</td>
+    </tr>
+    <tr>
+        <th>{{ form_label(form.prospect) }} {{ form_errors(form.prospect) }}</th>
+        <td>{{ form_widget(form.prospect, {'attr': {'class': 'select2'}}) }}</td>
+    </tr>
+    <tr>
+        <th>{{ form_label(form.nom) }} {{ form_errors(form.nom) }}</th>
+        <td>{{ form_widget(form.nom) }}</td>
+    </tr>
+</table>
+{{ form_widget(form) }}
+
+<input type="submit" value="{{ 'suivi.suivant' | trans({}, 'project') }}" class="btn btn-default" />
+
+{{ form_end(form) }}
+
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    {{ form_javascript(form) }}
+    {% include "Project/DocType/selectOrNew.html.twig" with { known: form.knownProspect, knowned: form.prospect, newed: form.newProspect } %}
+{% endblock %}

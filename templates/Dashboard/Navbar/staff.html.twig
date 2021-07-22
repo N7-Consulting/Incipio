@@ -11,10 +11,10 @@
 <form action="{{ path('dashboard_search') }}" method="GET" class="sidebar-form">
     <div class="input-group">
         <input type="text" name="q" class="form-control"
-               placeholder="{{ 'dashboard.rechercher'| trans }}">
+            placeholder="{{ 'dashboard.rechercher'| trans }}">
         <span class="input-group-btn">
                 <button type="submit" class="btn btn-flat"><i class="fa fa-search"></i></button>
-              </span>
+            </span>
     </div>
 </form>
 <!-- sidebar menu start-->
@@ -68,15 +68,11 @@
                 <i class="fa fa-angle-left pull-right"></i>
             </a>
             <ul class="treeview-menu">
-                <li><a href="{{ path('project_etude_homepage') }}"><span
-                                class="fa fa-list"></span> {{ 'dashboard.etudes_voir'| trans }}</a></li>
-                <li><a href="{{ path('project_etude_ajouter') }}"><span
-                                class="fa fa-plus"></span> {{ 'dashboard.etude_creer'| trans }}</a></li>
+                <li><a href="{{ path('project_etude_homepage') }}"><span class="fa fa-list"></span> {{ 'dashboard.etudes_voir'| trans }}</a></li>
+                <li><a href="{{ path('project_etude_ajouter') }}"><span class="fa fa-plus"></span> {{ 'dashboard.etude_creer'| trans }}</a></li>
+                <li><a href="{{ path('project_cca_voir') }}"><span class="fa fa-briefcase"></span>{{ 'dashboard.cca_voir'| trans }}</a></li>
+
                 <li class="divider"></li>
-                <li class="dropdown-header">Qualité</li>
-                <li><a href="{{ path('project_etude_suiviQualite') }}"><span
-                                class="fa fa-exclamation-triangle"></span> {{ 'dashboard.problemes_suivi'| trans }}
-                    </a></li>
                 {% if is_granted('ROLE_CA') %}
                     <li class="divider"></li>
                     <li class="dropdown-header">{{ 'dashboard.administration'| trans }}</li>
@@ -86,11 +82,10 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ path('project_vu_ca') }}"><span
-                                    class="fa fa-eye"></span> {{ 'dashboard.vu_ca'| trans }}
+                        <a href="{{ path('project_vue_ca') }}"><span
+                                    class="fa fa-eye"></span> {{ 'dashboard.vue_ca'| trans }}
                         </a>
                     </li>
-                    <!--li><a href="{#{ path('project_etude_suivi') }#}"><span class="fa fa-tasks"></span> Récapitulatif</a></li-->
                 {% endif %}
             </ul>
         </li>
@@ -109,6 +104,10 @@
                 <li>
                     <a href="{{ path('personne_prospect_homepage') }}"><span
                                 class="fa fa-list"></span> {{ 'dashboard.prospects_voir'| trans }}</a>
+                </li>
+                <li>
+                    <a href="{{ path('secteur_activite_voir') }}"><span
+                                class="fa fa-list"></span> {{ 'dashboard.secteur_activite'| trans }}</a>
                 </li>
                 <li>
                     <a href="{{ path('personne_prospect_ajouter') }}"><span
@@ -135,10 +134,17 @@
     <!-- RESSOURCES HUMAINES -->
     {% if is_granted('ROLE_SUIVEUR') %}
         <li>
-            <a href="{{ path('hr_competence_homepage') }}">
-                <i class="icon-mini fa fa-users"></i>
+            <a href="#">
+                <i class="icon-mini fa fa-usd"></i>
                 <span class="nav-label">{{ 'dashboard.rh_competences'| trans }}</span>
+                <i class="fa fa-angle-left pull-right"></i>
             </a>
+            <ul class="treeview-menu">
+                <li><a href="{{ path('hr_competence_homepage') }}">
+                <span class="fa fa-globe"></span> {{ 'dashboard.gestion_consultant'| trans }}</a></li>
+                <li><a href="{{ path('gestion_alumni') }}">
+                <span class="fa fa-tasks"></span> {{ 'dashboard.gestion_alumni'| trans }}</a></li>
+            </ul>
         </li>
     {% endif %}
 
@@ -153,13 +159,14 @@
             </a>
             <ul class="treeview-menu">
                 <li class="dropdown-header">{{ 'dashboard.saisie_informations'| trans }}</li>
-                <li><a href="{{ path('treso_Facture_index') }}"><span
-                                class="fa fa-credit-card"></span> {{ 'dashboard.factures'| trans }}</a>
+                <li><a href="{{ path('treso_Facture_index') }}"><span class="fa fa-credit-card"></span> {{ 'dashboard.factures'| trans }}</a>
                 </li>
-                <li><a href="{{ path('treso_BV_index') }}"><span
-                                class="fa fa-id-card-o"></span> {{ 'dashboard.bv'| trans }}</a></li>
-                <li><a href="{{ path('treso_NoteDeFrais_index') }}"><span
-                                class="fa fa-sticky-note-o"></span> {{ 'dashboard.nf'| trans }}</a>
+                <li><a href="{{ path('treso_BV_index') }}"><span class="fa fa-id-card-o"></span> {{ 'dashboard.bv'| trans }}</a></li>
+                <li><a href="{{ path('treso_NoteDeFrais_index') }}"><span class="fa fa-sticky-note-o"></span> {{ 'dashboard.ndf'| trans }}</a>
+                <li><a href="{{ path('treso_Facture_ajouter') }}"><span class="fa fa-plus"></span> {{ 'dashboard.facture_ajouter'| trans }}</a>
+                <li><a href="{{ path('treso_BV_ajouter') }}"><span class="fa fa-plus"></span> {{ 'dashboard.bv_ajouter'| trans }}</a></li>
+                </li>
+                <li><a href="{{ path('treso_NoteDeFrais_ajouter') }}"><span class="fa fa-plus"></span> {{ 'dashboard.ndf_ajouter'| trans }}</a>
                 </li>
                 <li class="divider"></li>
                 <li class="dropdown-header">{{ 'dashboard.tableaux_suivi'| trans }}</li>
@@ -179,7 +186,7 @@
                 <li><a href="{{ path('treso_Compte_index') }}"><span
                                 class="fa fa-list"></span> {{ 'dashboard.comptes'| trans }}</a></li>
                 <li><a href="{{ path('treso_BaseURSSAF_index') }}"><span
-                                class="fa fa-list"></span> {{ 'dashboard.Base_urssaf'| trans }}</a></li>
+                                class="fa fa-list"></span> {{ 'dashboard.base_urssaf'| trans }}</a></li>
                 <li><a href="{{ path('treso_CotisationURSSAF_index') }}"><span
                                 class="fa fa-list"></span> {{ 'dashboard.cotisations'| trans }}</a></li>
             </ul>
@@ -192,42 +199,50 @@
         <li>
             <a href="#">
                 <i class="icon-mini fa fa-graduation-cap"></i>
-                <span class="nav-label">{{ 'dashboard.formations'| trans }} </span>
+                <span class="nav-label">{{ 'dashboard.rfp'| trans }} </span>
                 <i class="fa fa-angle-left pull-right"></i>
             </a>
             <ul class="treeview-menu">
-                <li class="dropdown-header">{{ 'dashboard.formations'| trans }}</li>
-                <li><a href="{{ path('formations_lister') }}"><span
-                                class="fa fa-book"></span> {{ 'dashboard.formations_voir'| trans }}</a>
+                <li class="dropdown-header">{{ 'dashboard.passation'| trans }}</li>
+                <li><a href="{{ path('passation_lister') }}"><span
+                                class="fa fa-book"></span> {{ 'dashboard.book_passation'| trans }}</a>
                 </li>
+                <li><a href="{{ path('passation_ajouter') }}"><span
+                                class="fa fa-plus"></span> {{ 'dashboard.passation_ajouter'| trans }}
+                </a></li>
+
+                <li class="divider"></li>
+                <li class="dropdown-header">{{ 'dashboard.formations'| trans }}</li>
+                <li><a href="{{ path('formations_index_admin') }}"><span
+                                class="fa fa-list"></span> {{ 'dashboard.formations_voir'| trans }}
+                    </a></li>
+                <li><a href="{{ path('formation_ajouter') }}"><span
+                                class="fa fa-plus"></span> {{ 'dashboard.formation_ajouter'| trans }}
+                    </a></li>
                 {% if is_granted('ROLE_CA') %}
-                    <li class="divider"></li>
-                    <li class="dropdown-header">{{ 'dashboard.administration'| trans }}</li>
-                    <li><a href="{{ path('formations_index_admin') }}"><span
-                                    class="fa fa-list"></span> {{ 'dashboard.formations_gerer'| trans }}
-                        </a></li>
-                    <li><a href="{{ path('formation_ajouter') }}"><span
-                                    class="fa fa-plus"></span> {{ 'dashboard.formation_ajouter'| trans }}
-                        </a></li>
-                    <li><a href="{{ path('formation_participation') }}"><span
-                                    class="fa fa-tasks"></span> {{ 'dashboard.particpants_voir'| trans }}
-                        </a></li>
+                <li><a href="{{ path('formation_participation') }}"><span
+                                class="fa fa-tasks"></span> {{ 'dashboard.particpants_voir'| trans }}
+                    </a></li>
                 {% endif %}
             </ul>
         </li>
     {% endif %}
 
-    <!-- PILOTAGE DE LA J.E. -->
-    {% if is_granted('ROLE_CA') %}
+    <!-- QUALITE -->
+    {% if is_granted('ROLE_SUIVEUR') %}
         <li>
             <a href="#">
                 <i class="icon-mini fa fa-paper-plane"></i>
-                <span class="nav-label">{{ 'dashboard.pilotage_je'| trans }}</span>
+                <span class="nav-label">{{ 'dashboard.qualite'| trans }}</span>
                 <i class="fa fa-angle-left pull-right"></i>
             </a>
             <ul class="treeview-menu">
                 <li><a href="{{ path('stat_index') }}"><span
                                 class="fa fa-globe"></span> {{ 'dashboard.indicateurs'| trans }}</a></li>
+                <li><a href="{{ path('tab_process') }}"><span
+                                class="fa fa-tasks"></span> {{ 'dashboard.gestion_proc'| trans }}</a></li>
+                <li><a href="{{ path('project_etude_suiviQualite') }}"><span
+                                class="fa fa-exclamation-triangle"></span> {{ 'dashboard.problemes_suivi'| trans }}</a></li>
             </ul>
         </li>
     {% endif %}
@@ -283,4 +298,27 @@
             </ul>
         </li>
     {% endif %}
+
+    <!-- ARCHIVAGE DE DOCUMENTS -->
+
+    {% if is_granted('ROLE_SUIVEUR') %}
+        <li>
+            <a href="#">
+                <i class="icon-mini fa fa-book"></i>
+                <span class="nav-label">{{ 'dashboard.archivage_doc'| trans }}</span>
+                <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+                <li><a href="{{ path('archivage_actico_index') }}"><span
+                                class="fa fa-list"></span> {{ 'dashboard.actico'| trans }}</a>
+                </li>
+                {% if is_granted('ROLE_TRESO') %}
+                    <li><a href="{{ path('archivage_treso_index') }}"><span
+                                    class="fa fa-list"></span> {{ 'dashboard.tresorerie'| trans }}</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </li>
+    {% endif %}
+
 </ul>

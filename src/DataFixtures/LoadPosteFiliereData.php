@@ -7,6 +7,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Personne\SecteurActivite;
 use App\Entity\Personne\Filiere;
 use App\Entity\Personne\Poste;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -51,6 +52,29 @@ class LoadPosteFiliereData extends Fixture
         $filiere = new Filiere();
         $filiere->setNom('Filière d\'exemple');
         $filiere->setDescription('Filière par défault, à éditer après l\'installation');
+
+        $secteurs = [
+            'Aeronautique',
+            'Spatial',
+            'BTP',
+            'Energies',
+            'Développement Durable',
+            'Loisir / Culture / Restauration / Hôtellerie',
+            'Conseil / Service',
+            'Finance / Banque',
+            'Informatique et Télécommunications',
+            'Commerce',
+            'Agro - Alimentaire',
+            'Enseignement',
+        ];
+
+        foreach ($secteurs as $secteur) {
+            $secteurActivite = new SecteurActivite();
+            $secteurActivite->setIntitule($secteur);
+            $secteurActivite->setDescription('a completer');
+
+            $manager->persist($secteurActivite);
+        }
 
         $manager->flush();
     }

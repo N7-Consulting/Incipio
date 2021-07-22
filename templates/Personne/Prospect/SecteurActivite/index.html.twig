@@ -1,0 +1,47 @@
+{% extends "Personne/layout.html.twig" %}
+
+{% block title %}
+    {{ 'prospect.secteur_activite'|trans({}, 'personne') }} {{ parent() }}
+{% endblock %}
+
+{% block breadcrumb %}
+    <ul class="breadcrumb no-margin pull-right">
+        <li class="active">{{ 'prospect.secteur_activite'|trans({}, 'personne') }}</li>
+    </ul>
+{% endblock %}
+
+{% block content_bundle %}        
+{# Liste of SecteurActivite #}
+<div>
+    <h2>{{ 'rh.secteur_activite'|trans({}, 'rh') }}</h2>
+    <a href="{{ path('secteur_activite_ajouter') }}" class="btn btn-info">{{ 'rh.secteur_activite_ajouter'|trans({}, 'rh') }}</a>
+</div>
+</br>
+
+            <table class="table table-striped">
+                <tbody>
+                {% for secteur in secteurActivite %}
+                    {% if loop.index0 % 2 == 0 or loop.first %}
+                        <tr>
+                    {% endif %}
+                    <td>
+                        <a href="{{ path('secteur_activite_modifier', {'id': secteur.id}) }}">
+                            <i class="fa fa-pencil"></i>
+                            {{ secteur.intitule }}
+                        </a>
+                    </td>
+                    {% if loop.index0 % 2 == 1 or loop.last %}
+                        </tr>
+                    {% endif %}
+                {% else %}
+                    <tr>
+                        <td>{{ 'rh.secteur_liste_vide'|trans({}, 'rh') }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+{% endblock %}
+

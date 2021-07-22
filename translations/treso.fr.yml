@@ -1,5 +1,6 @@
 treso:
   action: Action
+  acompte: Acompte
   ajouter_base_urssaf: Ajouter une base URSSAF
   applicable_au: Applicable au
   applicable_base: Applicable sur la base
@@ -49,7 +50,7 @@ treso:
   est_deductible: Est déductible ?
   etudiant: Etudiant
   facture: Facture
-  facture_achat: Facture d'Achat
+  facture_achat: Facture d'achat
   facture_ajouter: Ajouter une Facture
   facture_enregistrer: Enregistrer la Facture
   facture_generer: Générer la Facture
@@ -57,7 +58,7 @@ treso:
   facture_modifier_la: Modifier la facture
   facture_supprimer: Supprimer la Facture
   facture_supprimer_confirm: Etes-vous sûr de vouloir supprimer définitivement cette facture ?
-  facture_vente: Facture de Vente
+  facture_vente: Facture de vente
   facture_émise: Facture émise
   factures_liste: Liste des factures
   gestion_comptable_gestion: Gestion des comptes comptables

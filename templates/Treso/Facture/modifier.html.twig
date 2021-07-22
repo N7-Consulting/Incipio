@@ -5,7 +5,7 @@
         {{ 'treso.facture_ajouter'|trans({}, 'treso') }}
     {% else %}
         {{ 'treso.facture_modifier'|trans({}, 'treso') }}
-    {% endif %}- {{ parent() }}
+    {% endif %}{{ parent() }}
 {% endblock %}
 
 {% block content_title %}

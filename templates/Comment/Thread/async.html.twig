@@ -7,6 +7,7 @@
 
 <div id="fos_comment_thread"></div>
 
+{% block javascripts %}
 <script type="text/javascript">
     // thread id
     var fos_comment_thread_id = '{{ id }}';
@@ -21,3 +22,4 @@
         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(fos_comment_script);
     })();
 </script>
+{% endblock %}

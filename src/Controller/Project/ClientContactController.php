@@ -62,7 +62,7 @@ class ClientContactController extends AbstractController
         $formHandler = new ClientContactHandler($form, $request, $em);
 
         if ($formHandler->process()) {
-            return $this->redirectToRoute('project_clientcontact_voir', ['id' => $clientcontact->getId()]);
+            return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom(), '_fragment' => 'tab7']);
         }
 
         return $this->render('Project/ClientContact/ajouter.html.twig', [
@@ -78,31 +78,6 @@ class ClientContactController extends AbstractController
         } else {
             return ($a->getDate() < $b->getDate()) ? -1 : 1;
         }
-    }
-
-    /**
-     * @Security("has_role('ROLE_SUIVEUR')")
-     * @Route(name="project_clientcontact_voir", path="/suivi/clientcontact/voir/{id}", methods={"GET","HEAD"})
-     *
-     * @return Response
-     */
-    public function voir(ClientContact $clientContact, EtudePermissionChecker $permChecker)
-    {
-        $etude = $clientContact->getEtude();
-
-        if ($permChecker->confidentielRefus($etude, $this->getUser())) {
-            throw new AccessDeniedException('Cette étude est confidentielle');
-        }
-
-        $etude = $clientContact->getEtude();
-        $contactsClient = $etude->getClientContacts()->toArray();
-        usort($contactsClient, [$this, 'compareDate']);
-
-        return $this->render('Project/ClientContact/voir.html.twig', [
-            'contactsClient' => $contactsClient,
-            'selectedContactClient' => $clientContact,
-            'etude' => $etude,
-            ]);
     }
 
     /**
@@ -130,7 +105,7 @@ class ClientContactController extends AbstractController
                 $em->flush();
                 $this->addFlash('success', 'Contact client modifié');
 
-                return $this->redirectToRoute('project_clientcontact_voir', ['id' => $clientContact->getId()]);
+                return $this->redirectToRoute('project_etude_voir', ['nom' => $etude->getNom(), '_fragment' => 'tab7']);
             }
             $this->addFlash('danger', 'Le formulaire contient des erreurs.');
         }

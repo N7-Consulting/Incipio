@@ -1,101 +1,73 @@
-{% set valide    = asset('img/success.png') %}
-{% set nonValide = asset('img/cross.png') %}
-{% set enCours   = asset('img/progress.png') %}
-
 <div class="table-responsive">
-<table class="table table-striped" id="myTable">
-      <thead>
-          <tr>
-              <th>
-                  <div>{{ 'suivi.etude_nom'|trans({}, 'project') }}</div>
-              </th>
-              <th>
-                  <div>{{ 'suivi.date_lancement'|trans({}, 'project') }}</div>
-                  <div>{{ 'suivi.date_fin'|trans({}, 'project') }}</div>
-              </th>
-              <th>
-                  <div>{{ 'suivi.client'|trans({}, 'project') }}</div>
-                  <div>{{ 'suivi.suiveur'|trans({}, 'project') }}</div>
-              </th>
-              <th>
-                  {{ 'suivi.etat'|trans({}, 'project') }}
-              </th>
-              <th>
-                   {{ 'suivi.contacts_client'|trans({}, 'project') }}
-              </th>
-              <th>
-                  {{ 'suivi.dernier_contact'|trans({}, 'project') }}
-              </th>
-              <th>
-                  {{ 'suivi.ce'|trans({}, 'project') }}
-              </th>
-              <th>
-                   <div>{{ 'suivi.prix_ht'|trans({}, 'project') }}</div>
-                   <div>{{ 'suivi.jeh_nombre'|trans({}, 'project') }}</div>
-              </th>
-            </tr>
- 	 </thead>
- 	 <tbody>
-
-
-        {% for etude in etudesEnNegociation | filter(etude => not confidentielRefus(etude, app.user, is_granted('ROLE_CA'))) %}
-    <tr>
-        <td><div>
-                <a href="{{ path('project_etude_voir', {'nom': etude.nom}) }}">{{ etude.nom }}</a>
-                <!-- {{ etude.reference(param('namingConvention')) }} -->
-            </div>
-            <div>{{ etude.confidentiel ? '<span class="label label-danger">[CONFIDENTIEL]</span> ' }}</div>
-            <div>{{ etude.numero }}</div>
-        </td>
-        <td>
-            {% if etude.dateLancement != NULL %}<div>{{ etude.dateLancement|date("d/m/Y") }}</div>{% endif %}
-            <br/>
-            {% if etude.dateFin != NULL %}<div>{{ etude.dateFin|date("d/m/Y") }}</div>{% endif %}
-        </td>
-        <td>
-            {% include "Project/Etude/Buttons/Prospect.html.twig" with  {'prospect':  etude.prospect} %}
-            <br /><br />
-            {% include "Project/Etude/Buttons/Suiveur.html.twig" with  {'suiveur':  etude.suiveur} %}
-        </td>
-            <td>
-                {{etude.stateDescription }}
-            </td>
-            <td>
-            {% set dernierContact = 0 %}
-            {% for contact in etude.clientContacts%}
-                    {% set dernierContact = dernierContact | date("U") < contact.date |date("U") ? contact.date : dernierContact %}
-                    <a href="{{ path('project_clientcontact_voir', {'id' : contact.id }) }}">
-                    {% if contact.moyenContact == 'telephone'%}
-                        <i title="{{ contact.date | date("d/m/Y - ") ~ contact.faitPar.PrenomNom}}" class="fa fa-headphones"></i>
-                    {% elseif contact.moyenContact == 'mail'%}
-                        <i title="{{ contact.date | date("d/m/Y - ") ~ contact.faitPar.PrenomNom}}" class="fa fa-envelope"></i>
-                    {% else %}
-                        <i title="{{ contact.date | date("d/m/Y - ") ~ contact.faitPar.PrenomNom}}" class="fa fa-eye-open"></i>
-                    {% endif %}
-                    </a>
-            {% endfor %}
-            </td>
-            <td>
-                {% set dCU = dernierContact | date("U") %}
-                <span class="label label-{{ (dernierContact | date("dmy")) == ("now" | date("dmy")) ? "info" : (dCU > "now"|date("U") ? "important" : ( dCU > "now" |date_modify("-5 day")|date("U") ? "success" : (dCU > "now" |date_modify("-10 day")|date("U") ? "warning" : "important"))) }}">
-                    {{ dernierContact | date("d/m/Y") == "01/01/1970" ? "Jamais" : dernierContact | date("d/m/Y") }}
-                </span>
-            </td>
-            <td>
-                {% if getEtatDoc(etude.ce) == 1 %}
-                        <img src="{{ enCours }}" />
-                {% elseif getEtatDoc(etude.ce) == 2 %}
-                        <img src="{{ valide }}" />
-                {% else %}
-                        <img src="{{ nonValide }}" />
-                {% endif %}
-            </td>
-            <td>
-                <div>{{ etude.confidentiel ? '*' : etude.montantHT |default('') }} €</div>
-                <div>{{ etude.confidentiel ? '*' : etude.nbrJEH |default('') }} {{ 'suivi.jeh'|trans({}, 'project') }}</div>
-            </td>
-            </tr>
-        {% endfor %}
- 	 </tbody>
-</table>
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>
+					<div>{{ 'suivi.etude_nom'|trans({}, 'project') }}</div>
+				</th>
+				<th>
+					<div>{{ 'suivi.date_lancement'|trans({}, 'project') }}</div>
+					<div>{{ 'suivi.date_fin'|trans({}, 'project') }}</div>
+				</th>
+				<th>
+					<div>{{ 'suivi.client'|trans({}, 'project') }}</div>
+					<div>{{ 'suivi.suiveur'|trans({}, 'project') }}</div>
+				</th>
+				<th>
+					{{ 'suivi.etat'|trans({}, 'project') }}
+				</th>
+				<th>
+					{{ 'suivi.contacts_client'|trans({}, 'project') }}
+				</th>
+				<th>
+					{{ 'suivi.dernier_contact'|trans({}, 'project') }}
+				</th>
+				<th>
+					{{ 'suivi.ce'|trans({}, 'project') }}
+				</th>
+				<th>
+					{{ 'suivi.bdc'|trans({}, 'project') }}
+				</th>
+				<th>
+					<div>{{ 'suivi.prix_ht'|trans({}, 'project') }}</div>
+					<div>{{ 'suivi.jeh_nombre'|trans({}, 'project') }}</div>
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for etude in etudesEnNegociation | filter(etude => not confidentielRefus(etude, app.user, is_granted('ROLE_CA'))) %}
+				<tr>
+					<td>
+						{% include "Project/Etude/Tools/NomEtude.html.twig" %}
+					</td>
+					<td>
+						{% include "Project/Etude/Tools/DatesEtude.html.twig" %}
+					</td>
+					<td>
+						{% include "Project/Etude/Buttons/Prospect.html.twig" with {'prospect': etude.prospect} %}
+						<br/><br/>
+						{% include "Project/Etude/Buttons/Suiveur.html.twig" with {'suiveur': etude.suiveur} %}
+					</td>
+					<td>
+						{{ etude.stateDescription }}
+					</td>
+					<td>
+						{% include "Project/Etude/Tools/NombreContactsClient.html.twig" %}
+					</td>
+					<td>
+						{% include "Project/Etude/Tools/DateDernierContact.html.twig" %}
+					</td>
+					<td>
+						{% include "Project/Etude/Tools/EtatConventionEtude.html.twig" %}
+					</td>
+					<td>
+						{% include "Project/Etude/Tools/EtatBonDeCommande.html.twig" %}
+					</td>
+					<td>
+						{% include "Project/Etude/Tools/PrixEtJEH.html.twig" %}
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
 </div>

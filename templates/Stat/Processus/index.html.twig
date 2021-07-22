@@ -1,0 +1,41 @@
+{% extends "Stat/layout.html.twig" %}
+
+{% block title %}
+    {{ 'processus.tab_process'|trans({}, 'processus') }} - {{ parent() }}
+{% endblock %}
+
+{% block content_title %}
+    {{ 'processus.tab_process'|trans({}, 'processus') }}
+{% endblock %}
+
+{% block content_bundle %}
+    <div id="myTabContent" class="tab-content">
+    <div class="box-header with-border">
+        <a href="{{ path('ajouter_processus') }}" class="pull-right btn btn-primary">{{ 'processus.ajouter_process'|trans({}, 'processus') }}</a>
+    </div>
+
+            <table class="display dataTable table table-bordered table-striped dt-responsive" >
+                <thead>
+                <tr>
+                    <th>{{'processus.nom_process'|trans({}, 'processus')}}</th>
+                    <th>{{'processus.pilote'|trans({}, 'processus')}}</th>
+                    <th>{{'processus.description'|trans({}, 'processus')}}</th>
+                    <th>{{'processus.documents'|trans({}, 'processus')}}</th>
+                </tr>
+                </thead>
+                {% for process in processus %}
+                    <tr>
+                        {% if is_granted('ROLE_CA') %} 
+                            <td><a href="{{ path('modifier_processus',{'id': process.id})}} ">{{process.nom}}</a></td>
+                        {% else %} 
+                            <td>{{process.nom}}</a></td>
+                        {% endif %} 
+                        <td>{{process.pilote}} </td>
+                        <td>{{process.description}} </td>
+                        <td><a href="{{ path('voir_doc_processus',{'id': process.id})}} "><span class="fa fa-eye"> ({{ process.relatedDocuments | length }})</a></td>
+                    </tr>
+                {% endfor %}
+            </table>
+    </div>  
+    
+{% endblock %}

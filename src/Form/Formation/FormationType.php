@@ -41,21 +41,24 @@ class FormationType extends AbstractType
             ->add('categorie', Select2ChoiceType::class, [
                 'label' => 'formation.categories',
                 'translation_domain' => 'formation',
-                'multiple' => true,
                 'choices' => array_flip(Formation::getCategoriesChoice()),
-                'required' => false, ])
+                'required' => true, ])
             ->add('dateDebut', DateTimeType::class, [
-                'label' => 'formation.date_debut',
+                'label' => 'formation.date_heure_debut',
                 'translation_domain' => 'formation',
                 'format' => 'd/MM/y - HH:mm',
                 'required' => true,
-                'widget' => 'choice', ])
+                'date_widget' => 'single_text',
+                'time_widget' => 'single_text',
+                ])
             ->add('dateFin', DateTimeType::class, [
-                'label' => 'formation.date_fin',
+                'label' => 'formation.date_heure_fin',
                 'translation_domain' => 'formation',
                 'format' => 'd/MM/y - HH:mm',
                 'required' => true,
-                'widget' => 'choice', ])
+                'date_widget' => 'single_text',
+                'time_widget' => 'single_text',
+                ])
             ->add('mandat', IntegerType::class, [
                 'label' => 'formation.mandat',
                 'translation_domain' => 'formation',
@@ -87,11 +90,7 @@ class FormationType extends AbstractType
                     'required' => false, ],
                 'allow_add' => true,
                 'allow_delete' => true,
-                'by_reference' => false, ])
-            ->add('docPath', TextType::class, [
-                'label' => 'formation.lien_documents',
-                'translation_domain' => 'formation',
-                'required' => false, ]);
+                'by_reference' => false, ]);
     }
 
     public function getBlockPrefix()

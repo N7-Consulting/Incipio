@@ -1,0 +1,21 @@
+{# Use these templates to display information throughout all Tabs (Négociation, Acceptées, en Cours...) #}
+
+{% if etude.dateLancement != NULL %}
+	<div>{{ etude.dateLancement | date("d/m/Y") }}</div>
+{% endif %}
+<br>
+{% if etude.dateFin != NULL %}
+	<div>
+		{% if etude.avs | length > 0 %}
+			<s>
+				<b>
+				{% endif %}
+				{{ etude.dateFin | date("d/m/Y") }}
+				{% if etude.avs | length > 0 %}
+				</b>
+			</s>
+			<br>
+			{{ etude.dateFin(true) | date("d/m/Y") }}
+		{% endif %}
+	</div>
+{% endif %}

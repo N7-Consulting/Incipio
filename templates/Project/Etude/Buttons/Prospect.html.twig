@@ -7,8 +7,8 @@
     <a class="btn btn-warning dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
     <ul class="dropdown-menu">
         <li><a href="{{ path('personne_prospect_voir', {'id': prospect.id}) }}"><i class="fa fa-info-circle" ></i> {{ 'suivi.voir'|trans({}, 'project') }}</a></li>
-        <li><a href="#"><i class="fa fa-envelope" ></i> {{ 'suivi.contacter'|trans({}, 'project') }}</a></li>
-        <li><a href="#"><i class="fa fa-comment" ></i> {{ 'suivi.commenter'|trans({}, 'project') }}</a></li>
+        <li><a href="mailto:{{ mission.intervenant.personne.email | default("#") }}"><i class="fa fa-envelope"></i> {{ 'suivi.contacter'|trans({}, 'project') }}</a></li>
+        <li><a href="{{ path('personne_prospect_voir', {'id': prospect.id, '_fragment': 'tab4'}) }}"><i class="fa fa-comment" ></i> {{ 'suivi.commenter'|trans({}, 'project') }}</a></li>
         <li class="divider"></li>
         <li><a href="{{ path('personne_employe_ajouter', {'id': prospect.id}) }}"><i class="fa fa-plus" ></i> {{ 'suivi.employe_ajouter'|trans({}, 'project') }}</a></li>
         <li><a href="{{ path('personne_prospect_modifier', {'id': prospect.id}) }}"><i class="fa fa-pencil" ></i> {{ 'suivi.modifier'|trans({}, 'project') }}</a></li>

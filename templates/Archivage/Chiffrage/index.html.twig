@@ -1,0 +1,62 @@
+{% extends 'Archivage/layout.html.twig' %}
+
+{% block title %}
+    {{ 'dashboard.chiffrage'|trans({}, 'dashboard') }} {{ parent() }}
+{% endblock %}
+
+{% block content_title %}
+    {{ 'dashboard.chiffrage'|trans({}, 'dashboard') }}
+{% endblock %}
+
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/datatables/dataTables.bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/datatables/dataTables.fontAwesome.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/datatables/responsive.bootstrap.min.css') }}">
+{% endblock %}
+
+
+{% block content_bundle %}
+   <div id="myTabContent" class="tab-content">
+
+            <table class="display dataTable table table-bordered table-striped dt-responsive" id="chiffragetable">
+                <thead>
+                <tr>
+                    <th>{{ 'suivi.date_upload' | trans({}, 'project') }}</th>
+                    <th>{{ 'suivi.titre' | trans({}, 'project') }}</th>
+                    <th>{{ 'suivi.taille' | trans({}, 'project') }}</th>
+                    <th>{{ 'suivi.action' | trans({}, 'project') }}</th>
+                </tr>
+                </thead>
+             {% for doc in docs | filter(doc => doc.type =="devis")| reverse %}
+            <tr>
+                <td>{{ doc.uptime ? doc.uptime | date('d/m/Y - H:i:s') }}</td>
+                <td>
+                    <a href="{{ path('publish_document_voir', {'id': doc.id}) }}">{{ doc.name }}</a>
+                </td>
+                <td>{{ (doc.size / 1024) | number_format(2, ',', ' ') }} Ko</td>
+                <td><a href="{{ path('publish_document_delete', {'id' : doc.id }) }}"><i
+                                class="fa fa-times text-danger"></i></a></td>
+            </tr>
+            {% endfor %}
+            </table>
+
+
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    
+
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function () {
+            $('#chiffragetable').dataTable({
+                "bPaginate": true,
+                "iDisplayLength": 50,
+                "aaSorting": [[1, 'desc']],
+            });
+
+        });
+    </script>
+{% endblock %}

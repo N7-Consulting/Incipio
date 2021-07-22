@@ -1,0 +1,17 @@
+{# Use these templates to display information throughout all Tabs (Négociation, Acceptées, en Cours...) #}
+
+<div>
+	<a href="{{ path('project_etude_voir', {'nom': etude.nom}) }}">{{ etude.nom }}</a>
+</div>
+
+{% if etude.numero is not null %}
+  <div>
+    <span>n° {{ etude.numero }}</span>
+  </div>
+{% endif %}
+
+{% if etude.confidentiel %}
+  <div>
+    <span class="label label-danger">[CONFIDENTIEL]</span>
+  </div>
+{% endif %}

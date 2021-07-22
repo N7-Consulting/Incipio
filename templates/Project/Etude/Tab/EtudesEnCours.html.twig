@@ -1,195 +1,109 @@
-{% set valide    = asset('img/success.png') %}
-{% set nonValide = asset('img/cross.png') %}
-{% set enCours   = asset('img/progress.png') %}
-
 <div class="table-responsive">
-<table class="table table-striped" id="myTable">
-    <thead>
-    <tr>
-        <th>
-            <div>{{ 'suivi.etude_nom'|trans({}, 'project') }}</div>
-            <!--<div>{{ 'suivi.reference'|trans({}, 'project') }}</div>-->
-        </th>
-        <th>
-            <div>{{ 'suivi.date_lancement'|trans({}, 'project') }}</div>
-            <div>{{ 'suivi.date_fin'|trans({}, 'project') }}</div>
-        </th>
-        <th>
-            <div>{{ 'suivi.client'|trans({}, 'project') }}</div>
-            <div>{{ 'suivi.suiveur'|trans({}, 'project') }}</div>
-        </th>
-
-        <th>
-            {{ 'suivi.intervenants'|trans({}, 'project') }}
-        </th>
-        <th>
-            {{ 'suivi.ce'|trans({}, 'project') }}
-        </th>
-        <th>
-            {{ 'suivi.fa'|trans({}, 'project') }}
-        </th>
-        <th>
-            {{ 'suivi.rm'|trans({}, 'project') }}
-        </th>
-        <th>
-            {{ 'suivi.avancement'|trans({}, 'project') }}
-        </th>
-        <th>
-            {{ 'suivi.pvr'|trans({}, 'project') }}
-        </th>
-        <th>
-            {{ 'suivi.fs'|trans({}, 'project') }}
-        </th>
-        <th>
-            {{ 'suivi.rp'|trans({}, 'project') }}
-        </th>
-        <th>
-            {{ 'suivi.bv'|trans({}, 'project') }}
-        </th>
-        <th>
-            {{ 'suivi.dernier_contact'|trans({}, 'project') }}
-        </th>
-        <th>
-            <div>{{ 'suivi.prix_ht'|trans({}, 'project') }}</div>
-            <div>{{ 'suivi.jeh_nombre'|trans({}, 'project') }}</div>
-        </th>
-    </tr>
-    </thead>
-    <tbody>
-
-
-    {% for etude in etudesEnCours | filter(etude => not confidentielRefus(etude, app.user, is_granted(role_voir_confidentiel))) %}
-        <tr>
-            <td>
-                <div>
-                    <a href="{{ path('project_etude_voir', {'nom': etude.nom}) }}">{{ etude.nom }}</a>
-                    <!-- {{ etude.reference(param('namingConvention')) }} -->
-                </div>
-                <div>{{ etude.confidentiel ? '<span class="label label-danger">[CONFIDENTIEL]</span> ' }}</div>
-                <div>{{ etude.numero }}</div>
-            </td>
-            <td>
-                {% if etude.dateLancement != NULL %}
-                    <div>{{ etude.dateLancement|date("d/m/Y") }}</div>{% endif %}
-                <br/>
-                {% if etude.dateFin != NULL %}
-                    <div>{% if etude.avs | length > 0 %}
-                    <s><b>{% endif %}{{ etude.dateFin|date("d/m/Y") }}{% if etude.avs | length > 0 %}</b></s>
-                <br/>{{ etude.dateFin(true) |date("d/m/Y") }}{% endif %}</div>{% endif %}
-            </td>
-            <td>
-                {% include "Project/Etude/Buttons/Prospect.html.twig" with  {'prospect':  etude.prospect} %}
-                <br/><br/>
-                {% include "Project/Etude/Buttons/Suiveur.html.twig" with  {'suiveur':  etude.suiveur} %}
-            </td>
-
-            <td>
-                {% for mission in etude.missions %}
-                    {% include "Project/Etude/Buttons/Intervenant.html.twig" with  {'mission' : mission, 'etude': etude } %}
-                    {% if loop.index != loop.last %}
-                        <br/><br/>
-                    {% endif %}
-                {% endfor %}
-            </td>
-            <td>
-                {% if getEtatDoc(etude.ce) == 1 %}
-                    <img src="{{ enCours }}" title="{{ etude.ap is not null ? etude.ce.dateSignature | date("d/m/y") }}"/>
-                {% elseif getEtatDoc(etude.ce) == 2 %}
-                    <img src="{{ valide }}"
-                         title="{{ etude.ce is not null ? etude.ce.dateSignature | date("d/m/y") }}"/>
-                {% else %}
-                    <img src="{{ nonValide }}"
-                         title="{{ etude.ce is not null ? etude.ce.dateSignature | date("d/m/y") }}"/>
-                {% endif %}
-            </td>
-            <td>
-                {% if etude.fa is not null and etude.fa.dateEmission is not null and etude.fa.dateVersement is not null %}
-                    <img src="{{ valide }}" title="{{ etude.fa is not null ? etude.fa.dateEmission | date("d/m/y") }}"/>
-                {% elseif etude.fa is not null and etude.fa.dateEmission is not null %}
-                    <img src="{{ enCours }}"
-                         title="{{ etude.fa is not null ? etude.fa.dateEmission | date("d/m/y") }}"/>
-                {% else %}
-                    <img src="{{ nonValide }}"
-                         title="{{ etude.fa is not null ? etude.fa.dateEmission | date("d/m/y") }}"/>
-                {% endif %}
-            </td>
-            <td>
-                {% for mission in etude.missions %}
-                    {% if getEtatDoc(mission) == 1 %}
-                        <img title="{{ mission.intervenant.personne.prenomNom | default("") }}" src="{{ enCours }}"/>
-                    {% elseif getEtatDoc(mission) == 2 %}
-                        <img title="{{ mission.intervenant.personne.prenomNom | default("") }}" src="{{ valide }}"/>
-                    {% else %}
-                        <img title="{{ mission.intervenant.personne.prenomNom | default("") }}" src="{{ nonValide }}"/>
-                    {% endif %}
-                    <br><br>
-                {% endfor %}
-            </td>
-            <td>
-                <div class="progress">
-                    {# Calcul de l'avancement global a partir de l'iavancement individuel.#}
-                    {% set sommeAvancement = 0 %}
-                    {% for mission in etude.missions %}
-                        {% set sommeAvancement = sommeAvancement + mission.avancement %}
-                    {% endfor %}
-                    {% set avancementGlobal = sommeAvancement / max(etude.missions|length,1) %}
-                    <div class="progress-bar" style="width: {{ avancementGlobal ~ '%;'|default('0%;') }}" id="avancementBar-{{ etude.id}}">
-                        {{ avancementGlobal ~ '%'|default('0%') }}
-                    </div>
-                </div>
-            </td>
-            <td>
-                {% if getEtatDoc(etude.pvr) == 1 %}
-                    <img src="{{ enCours }}"
-                         title="{{ etude.pvr is not null ? etude.pvr.dateSignature | date("d/m/y") }}"/>
-                {% elseif getEtatDoc(etude.pvr) == 2 %}
-                    <img src="{{ valide }}"
-                         title="{{ etude.pvr is not null ? etude.pvr.dateSignature | date("d/m/y") }}"/>
-                {% else %}
-                    <img src="{{ nonValide }}"
-                         title="{{ etude.pvr is not null ? etude.pvr.dateSignature | date("d/m/y") }}"/>
-                {% endif %}
-            </td>
-            <td>
-                {% if etude.fs is not null and etude.fs.dateEmission is not null %}
-                    <img src="{{ enCours }}"
-                         title="{{ etude.fs is not null ? etude.fs.dateEmission | date("d/m/y") }}"/>
-                {% elseif etude.fs is not null and etude.fs.dateEmission is not null and etude.fs.dateVersement is not null %}
-                    <img src="{{ valide }}" title="{{ etude.fs is not null ? etude.fs.dateEmission | date("d/m/y") }}"/>
-                {% else %}
-                    <img src="{{ nonValide }}"
-                         title="{{ etude.fs is not null ? etude.fs.dateEmission | date("d/m/y") }}"/>
-                {% endif %}
-            </td>
-            <td>
-
-            </td>
-            <td>
-            </td>
-            <td>
-                {% set dernierContact = 0 %}
-                {% set contactId = 0 %}
-                {% for contact in etude.clientContacts | filter(etude => dernierContact |date("U") <= contact.date |date("U")) %}
-                    {% set dernierContact = contact.date %}
-                    {% set contactId = contact.id %}
-                {% endfor %}
-                {% set dCU = dernierContact | date("U") %}
-                {% if contactId != 0 %}
-                <a href="{{ path('project_clientcontact_voir', {'id' : contactId }) }}">
-                    {% endif %}
-                    <span class="label label-{{ (dernierContact | date("dmy")) == ("now" | date("dmy")) ? "info" : (dCU > "now"|date("U") ? "important" : ( dCU > "now" |date_modify("-7 day")|date("U") ? "success" : (dCU > "now" |date_modify("-15 day")|date("U") ? "warning" : "important"))) }}">
-                    {{ dernierContact | date("U") == 0 ? "Jamais" : dernierContact | date("d/m/Y") }}
-                </span>
-                    {% if contactId != 0 %}
-                </a>
-                {% endif %}
-            </td>
-            <td>
-                <div>{{ etude.confidentiel ? '*' : etude.montantHT|default('') }} €</div>
-                <div>{{ etude.confidentiel ? '*' : etude.nbrJEH|default('') }} JEH</div>
-            </td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>
+					<div>{{ 'suivi.etude_nom'|trans({}, 'project') }}</div>
+				</th>
+				<th>
+					<div>{{ 'suivi.date_lancement'|trans({}, 'project') }}</div>
+					<div>{{ 'suivi.date_fin'|trans({}, 'project') }}</div>
+				</th>
+				<th>
+					<div>{{ 'suivi.client'|trans({}, 'project') }}</div>
+					<div>{{ 'suivi.suiveur'|trans({}, 'project') }}</div>
+				</th>
+				<th>
+					{{ 'suivi.intervenants'|trans({}, 'project') }}
+				</th>
+				<th>
+					{{ 'suivi.ce'|trans({}, 'project') }}
+				</th>
+				<th>
+					{{ 'suivi.bdc'|trans({}, 'project') }}
+				</th>
+				<th>
+					{{ 'suivi.fa'|trans({}, 'project') }}
+				</th>
+				<th>
+					{{ 'suivi.rm'|trans({}, 'project') }}
+				</th>
+				<th>
+					{{ 'suivi.avancement'|trans({}, 'project') }}
+				</th>
+				<th>
+					{{ 'suivi.pvi'|trans({}, 'project') }}
+				</th>
+				<th>
+					{{ 'suivi.pvr'|trans({}, 'project') }}
+				</th>
+				<th>
+					{{ 'suivi.fs'|trans({}, 'project') }}
+				</th>
+				<th>
+					{{ 'suivi.contacts_client'|trans({}, 'project') }}
+				</th>
+				<th>
+					{{ 'suivi.dernier_contact'|trans({}, 'project') }}
+				</th>
+				<th>
+					<div>{{ 'suivi.prix_ht'|trans({}, 'project') }}</div>
+					<div>{{ 'suivi.jeh_nombre'|trans({}, 'project') }}</div>
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for etude in etudesEnCours | filter(etude => not confidentielRefus(etude, app.user, is_granted(role_voir_confidentiel))) %}
+				<tr>
+					<td>
+						{% include "Project/Etude/Tools/NomEtude.html.twig" %}
+					</td>
+					<td>
+						{% include "Project/Etude/Tools/DatesEtude.html.twig" %}
+					</td>
+					<td>
+						{% include "Project/Etude/Buttons/Prospect.html.twig" with {'prospect': etude.prospect} %}
+						<br/><br/>
+						{% include "Project/Etude/Buttons/Suiveur.html.twig" with {'suiveur': etude.suiveur} %}
+					</td>
+					<td>
+						{% include "Project/Etude/Tools/Intervenants.html.twig" %}
+					</td>
+					<td>
+						{% include "Project/Etude/Tools/EtatConventionEtude.html.twig" %}
+					</td>
+					<td>
+						{% include "Project/Etude/Tools/EtatBonDeCommande.html.twig" %}
+					</td>
+					<td>
+						{% include "Project/Etude/Tools/EtatFacture.html.twig" with {'facture': etude.fa} %}
+					</td>
+					<td>
+						{% include "Project/Etude/Tools/EtatDocuments.html.twig" with {'docs': etude.missions, 'title': 'intervenantPrenomNom'} %}
+					</td>
+					<td>
+						{% include "Project/Etude/Tools/AffichageAvancement.html.twig" %}
+					</td>
+					<td>
+						{% include "Project/Etude/Tools/EtatDocuments.html.twig" with {'docs': etude.pvis, 'title': 'date'} %}
+					</td>
+					<td>
+						{% include "Project/Etude/Tools/EtatDocument.html.twig" with {'doc': etude.pvr, 'title': 'date'} %}
+					</td>
+					<td>
+						{% include "Project/Etude/Tools/EtatFacture.html.twig" with {'facture': etude.fs} %}
+					</td>
+					<td>
+						{% include "Project/Etude/Tools/NombreContactsClient.html.twig" %}
+					</td>
+					<td>
+						{% include "Project/Etude/Tools/DateDernierContact.html.twig" %}
+					</td>
+					<td>
+						{% include "Project/Etude/Tools/PrixEtJEH.html.twig" %}
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
 </div>

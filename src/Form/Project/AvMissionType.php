@@ -14,14 +14,24 @@ namespace App\Form\Project;
 use App\Entity\Project\AvMission;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class AvMissionType extends DocTypeType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('numero', null, ['label' => 'Numéro'])
-            ->add('nouveauPourcentage', null, ['label' => 'Nouveau pourcentage'])
-            ->add('differentielDelai', null, ['label' => 'Différentiel délai']);
+        $builder->add('numero', IntegerType::class, [
+            'label' => 'Numéro de l\'avenant',
+            'required' => true,
+        ])
+            ->add('nouveauPourcentage', IntegerType::class, ['label' => 'Nouveau pourcentage'])
+            
+            ->add('differentielDelai', IntegerType::class, [
+                'label' => 'Modification du Délai (+/- x jours)',
+                'required' => true,
+                ]);
 
         DocTypeType::buildForm($builder, $options);
     }

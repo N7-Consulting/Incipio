@@ -26,9 +26,9 @@ class PersonneRepository extends EntityRepository
     {
         $qb = $this->_em->createQueryBuilder();
         $query = $qb->select('n')->from(Personne::class, 'n')
-          ->where('n.membre IS NOT NULL')
-          ->orderBy('n.prenom', 'ASC')
-          ->addOrderBy('n.nom', 'ASC');
+            ->where('n.membre IS NOT NULL')
+            ->orderBy('n.prenom', 'ASC')
+            ->addOrderBy('n.nom', 'ASC');
 
         return $query;
     }
@@ -93,8 +93,8 @@ class PersonneRepository extends EntityRepository
     {
         $qb = $this->_em->createQueryBuilder();
         $query = $qb->select('n')->from(Personne::class, 'n')
-          ->where('n.user IS NULL')
-          ->andWhere('n.membre IS NOT NULL');
+            ->where('n.user IS NULL')
+            ->andWhere('n.membre IS NOT NULL');
 
         if ($user) {
             $query->orWhere('n.user = :user')
@@ -117,7 +117,7 @@ class PersonneRepository extends EntityRepository
         $query = $qb->select('p')->from(Personne::class, 'p')
             ->leftJoin('p.employe', 'employe')
             ->addSelect('employe')
-             ->leftJoin('p.membre', 'membre')
+            ->leftJoin('p.membre', 'membre')
             ->addSelect('membre');
         if ($orderByNom) {
             $query->orderBy('p.nom', 'asc');

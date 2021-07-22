@@ -1,0 +1,24 @@
+{% extends "Hr/layout.html.twig" %}
+
+{% block title %}
+    {{ 'rh.alumnus_modifier'|trans({}, 'rh') }} {{ parent() }}
+{% endblock %}
+
+{% block breadcrumb_active %}
+    {{ 'rh.alumnus_modifier'|trans({}, 'rh') }}
+{% endblock %}
+
+{% block content_title %}
+    {{ 'rh.alumnus_modifier'|trans({}, 'rh') }}
+{% endblock %}
+
+{% block content_bundle %}
+
+    {% include "Hr/Alumni/formulaire.html.twig" %}
+
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    {{ form_javascript(form) }}
+{% endblock %}

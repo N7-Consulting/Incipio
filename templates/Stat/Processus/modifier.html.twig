@@ -1,0 +1,47 @@
+{% extends "Stat/layout.html.twig" %}
+
+{% block title %}
+    {{ 'processus.ajouter_process'|trans({}, 'processus') }} - {{ parent() }}
+{% endblock %}
+
+{% block content_title %}
+    {{ 'processus.ajouter_process'|trans({}, 'processus') }}
+{% endblock %}
+
+{% block content_bundle %}   
+            <div class="table-responsive content">
+                {{ form_start(form) }}
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>{{ form_label(form.nom) }}</th>
+                        <td>{{ form_widget(form.nom) }} {{ form_errors(form.nom) }}</td>
+                    </tr>
+                    <tr>
+                        <th>{{ form_label(form.pilote) }}</th>
+                        <td>{{ form_widget(form.pilote) }} {{ form_errors(form.pilote) }}</td>
+                    </tr>
+                    <tr>
+                        <th>{{ form_label(form.description) }}</th>
+                        <td>{{ form_widget(form.description) }} {{ form_errors(form.description) }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <div class="row">
+                                <div class="col-md-2 col-xs-4">
+                                    <button type="submit" class="btn btn-success">{{ 'generique.enregistrer'|trans({}, 'personne') }}</button>
+                                    {{ form_rest(form) }}
+                                    {{ form_end(form) }}
+                                </div>
+                                <form class="bootbox-confirm inline"
+                                    data-content="{{ 'processus.confirmation_supprimer_processus'|trans({}, 'processus') }}"
+                                    action="{{ path('processus_supprimer', { 'nom': processus.nom}) }}" method="post">
+                                    <button class="btn btn-danger">{{ 'processus.processus_supprimer'|trans({}, 'processus') }}</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+        </div>
+  
+            </div>
+{% endblock %}

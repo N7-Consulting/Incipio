@@ -1,0 +1,25 @@
+    {# <table class="display dataTable table table-bordered table-striped dt-responsive" > #}
+        <thead>
+            <tr>
+            {% for date in dates %}
+                <th>{{date}}</th>
+            {% endfor %}
+            </tr>
+        </thead>
+
+        <tbody>       
+            {% for donnees in tabDonnees %}
+                <tr>
+                {% for date in dates %}
+                    {% if date in donnees|keys %}
+                        <td>{{donnees[date]}}</td>
+                    {% else %}
+                        <td>0</td>
+                    {% endif %}
+                {% endfor %}   
+                </tr>
+            {% endfor %}
+        </tbody>
+    {# </table> #}
+
+

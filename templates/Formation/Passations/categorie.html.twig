@@ -1,0 +1,18 @@
+<table class="table table-bordered table-striped">
+        <tr>
+            <th>{{ 'formation.titre'|trans({}, 'formation') }}</th>
+            <th>{{ 'formation.documents'|trans({}, 'formation') }}</th>
+            <th>{{ 'formation.description'|trans({}, 'formation') }}</th>
+        </tr>
+        {% for passation in passations %}
+            <tr>
+                {% if is_granted('ROLE_CA') %}
+                    <td><a href="{{ path('passation_modifier', {'id': passation.id}) }}">{{ passation.titre | title }}</a>
+                {% else %}
+                    <td>{{ passation.titre | title }}</td>
+                {% endif %}
+                <td><a href="{{ path('passation_voir', {'id': passation.id}) }}"><span class="fa fa-eye"> ({{ passation.relatedDocuments | length }})</td>
+                <td>{{ passation.description }}</td>
+            </tr>
+        {% endfor %}
+    </table>

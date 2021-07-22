@@ -1,0 +1,5 @@
+<form method="post" action="{{ path('booking_delete', {'id': booking.id}) }}" onsubmit="return confirm('{{ 'dashboard.ev_confirme'|trans({}, 'dashboard') }}');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ booking.id) }}">
+    <br>
+    <button class="btn btn-danger">{{ 'dashboard.ev_supprimer'|trans({}, 'dashboard') }}</button>
+</form>

@@ -1,34 +1,62 @@
 {% extends "Formation/layout.html.twig" %}
 
 {% block content_title %}
-    {{ formation.titre }}
+    {{ 'formation.document_formation'|trans({}, 'formation') }}
 {% endblock %}
 
 {% block breadcrumb_active %}
-    {{ formation.titre }}
+    {{ 'formation.document_formation'|trans({}, 'formation') }}
 {% endblock %}
 
 {% block content_bundle %}
     <table class="table table-bordered table-striped">
         <tr>
-            <td>{{ formation.dateDebut | date("d/m/Y") }}</td>
+            <th>{{ 'formation.titre'|trans({}, 'formation') }}</th>
+            <th>{{ 'formation.description'|trans({}, 'formation') }}</th>
+        </tr>
+        <tr>
             <td>{{ formation.titre | title }}</td>
             <td>{{ formation.description }}</td>
-            <td>{% for membre in formation.formateurs %} {{ membre.prenomNom }};{% endfor %}</td>
-            <td>{{ (formation.dateFin | date("U") - formation.dateDebut | date("U")) / 60 }} {{ 'formation.minutes'|trans({}, 'formation') }}</td>
         </tr>
     </table>
     <br/>
+ 
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>{{ 'formation.documents'|trans({}, 'formation') }}</th>
+            <th>{{ 'formation.date_upload'|trans({}, 'formation') }}</th>
+            {% if is_granted('ROLE_CA') %} 
+                <th>{{ 'formation.documents'|trans({}, 'formation') }}</th>
+            {% endif %}
+        </tr>
+
+        {% for relatedDocument in formation.relatedDocuments %}
+        {% set doc = relatedDocument.document %}
+        <tr>
+            <td><a href="{{ path('publish_document_voir', {'id': doc.id}) }} ">{{ doc.name}}</a></td>
+            <td>{{ doc.uptime ? doc.uptime | date('d/m/Y - H:i:s')}}</td>
+            {% if is_granted('ROLE_CA') %} 
+                <td><form class="bootbox-confirm inline"
+                        data-content="{{ 'processus.supprimer_doc_confirm'|trans({}, 'processus') }}"
+                        action="{{ path('publish_document_delete', { 'id': doc.id}) }}" method="post">
+                    <button class="fa fa-times"></button>
+                    </form> </td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </table>
+    
+    <br/>
     <div class="row">
+        <div class="col-md-2 col-xs-4">
+            <a href="{{ path('publish_document_uploadFormation',{'id': formation.id}) }}" class="btn btn-primary">{{ 'processus.ajouter_doc'|trans({}, 'processus') }}</a>
+        </div>
         {% if is_granted('ROLE_CA') %}
             <div class="col-md-2 col-xs-4">
-                <a href="{{ path('formation_modifier', {'id': formation.id}) }}" class="btn btn-primary">
+                <a href="{{ path('formation_modifier', {'id': formation.id}) }}" class="btn btn-warning">
                     {{ 'formation.formation_modifier'|trans({}, 'formation') }}
                 </a>
             </div>
         {% endif %}
-        <div class="col-md-2 col-xs-4">
-            <button class="btn btn-success">{{ 'formation.documents_telecharger'|trans({}, 'formation') }}</button>
-        </div>
     </div>
 {% endblock %}

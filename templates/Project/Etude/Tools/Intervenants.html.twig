@@ -1,0 +1,9 @@
+{# Use these templates to display information throughout all Tabs (Négociation, Acceptées, en Cours...) #}
+
+{% for mission in etude.missions %}
+	{% include "Project/Etude/Buttons/Intervenant.html.twig" with  {'mission' : mission, 'etude': etude } %}
+	{% if loop.index != loop.last %}
+		<br>
+		<br>
+	{% endif %}
+{% endfor %}

@@ -1,0 +1,126 @@
+{% extends "Project/layout.html.twig" %}
+
+{% block title %}
+    {{ 'suivi.cca_ajouter'|trans({}, 'project') }} {{ parent() }}
+{% endblock %}
+
+{% block content_title %}
+    {{ 'suivi.cca_ajouter'|trans({}, 'project') }}
+{% endblock %}
+
+{% block breadcrumb_items %}
+	{{parent()}}
+	<li>
+		<a href="{{ path('project_cca_voir') }}">{{ 'dashboard.cca'|trans({}, 'dashboard') }}</a>
+	</li>
+{% endblock %}
+
+{% block breadcrumb_active %}
+    {{ 'suivi.cca_ajouter'|trans({}, 'project') }}
+{% endblock %}
+
+
+{% block content_bundle %}
+{{ form_start(form, {'attr': {'id': 'project_ccasubtype'}}) }}
+
+{% form_theme form 'Project/Form/fields.html.twig' %}
+
+<table class="table table-bordered table-striped standard">
+    <tr>
+        <th>{{ form_label(form.version) }} {{ form_errors(form.version) }}</th>
+        <td>{{ form_widget(form.version) }}</td>
+    </tr>
+    <tr>
+        <th>{{ form_label(form.signataire1) }} {{ form_errors(form.signataire1) }}</th>
+        <td>{{ form_widget(form.signataire1) }}</td>
+    </tr>
+    <tr>
+        <th>{{ form_label(form.knownSignataire2) }} {{ form_errors(form.knownSignataire2) }}</th>
+        <td>{{ form_widget(form.knownSignataire2) }}</td>
+    </tr>
+    <tr>
+        <th id="{{ form.newSignataire2.vars.id }}_block" colspan="2" class="success">
+            {{ 'suivi.signataire_client_ajouter'|trans({}, 'project') }}
+        </th>
+    </tr>
+    <tr>
+        <th>{{ form_label(form.newSignataire2.personne.prenom) }}</th>
+        <td>{{ form_widget(form.newSignataire2.personne.prenom) }}</td>
+    </tr>
+    <tr>
+        <th>{{ form_label(form.newSignataire2.personne.nom) }}</th>
+        <td>{{ form_widget(form.newSignataire2.personne.nom) }}</td>
+    </tr>
+    <tr>
+        <th>{{ form_label(form.newSignataire2.personne.sexe) }}</th>
+        <td>{{ form_widget(form.newSignataire2.personne.sexe) }}</td>
+    </tr>
+    <tr>
+        <th>{{ form_label(form.newSignataire2.personne.mobile) }}</th>
+        <td>{{ form_widget(form.newSignataire2.personne.mobile) }}</td>
+    </tr>
+    <tr>
+        <th>{{ form_label(form.newSignataire2.personne.email) }}</th>
+        <td>{{ form_widget(form.newSignataire2.personne.email) }}</td>
+    </tr>
+    <tr>
+        <th>{{ form_label(form.newSignataire2.personne.estAbonneNewsletter) }}</th>
+        <td>{{ form_widget(form.newSignataire2.personne.estAbonneNewsletter) }}</td>
+    </tr>
+    <tr>
+        <th>{{ form_label(form.newSignataire2.personne.emailEstValide) }}</th>
+        <td>{{ form_widget(form.newSignataire2.personne.emailEstValide) }}</td>
+    </tr>
+    <tr>
+        <th>{{ form_label(form.newSignataire2.poste) }}</th>
+        <td>{{ form_widget(form.newSignataire2.poste) }}</td>
+    </tr>
+    <tr>
+        <th id="{{ form.newSignataire2.vars.id }}_block" colspan="2" class="success">
+            {{ 'suivi.convention_cadre_agile'|trans({}, 'project') }}
+        </th>
+    </tr>
+    <tr>
+        <th>{{ form_label(form.signataire2) }} {{ form_errors(form.signataire2) }}</th>
+        <td>{{ form_widget(form.signataire2) }}</td>
+    </tr>
+    <tr>
+        <th>{{ form_label(form.dateSignature) }} {{ form_errors(form.dateSignature) }}</th>
+        <td>{{ form_widget(form.dateSignature) }}</td>
+    </tr>
+    <tr>
+        <th>{{ form_label(form.dateFin) }} {{ form_errors(form.dateFin) }}</th>
+        <td>{{ form_widget(form.dateFin) }}</td>
+    </tr>
+</table>
+
+{{ form_widget(form) }}
+
+{{ form_end(form) }}
+
+<div class="row">
+	<div class="col-md-3 col-xs-6">
+        <button type="submit" form="project_ccasubtype" class="btn btn-success">
+            {{ 'suivi.cca_enregistrer'|trans({}, 'project') }}
+		</button>
+	</div>
+{% if delete_form is defined %}
+	<div class="col-md-3 col-md-offset-3 col-xs-6">
+		<form class="bootbox-confirm inline" data-content="{{ 'suivi.cca_form.supprimer_confirm'|trans({}, 'project') }} ?" action="{{ path('project_cca_supprimer', { 'id': cca.id }) }}" method="post">
+			{{ form_widget(delete_form) }}
+			<button class="btn btn-danger">{{ 'suivi.cca_form.supprimer'|trans({}, 'project') }}</button>
+		</form>
+	</div>
+{% endif %}
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    {{ form_javascript(form) }}
+    <script type="text/javascript">
+        $(".select2-multiple").select2({width: '100%'});
+    </script>
+    {% include "Project/DocType/selectOrNew.html.twig" with { known: form.knownSignataire2, knowned: form.signataire2, newed: form.newSignataire2 } %}
+{% endblock %}

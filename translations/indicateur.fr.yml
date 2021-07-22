@@ -1,10 +1,15 @@
 indicateur:
+  autre: Autre
   indicateurs: Indicateurs
   indicateurs_vides: Pas de données
   donnees_brutes: Données brutes
   gestion_associative: Gestion associative
+  qualite: Qualité
   formations: Formations
   gestion_etudes: Gestion d'études
+  rfp: R.F.P
+  tabAnuel: Tableau annuel
+  tabMensuel: Tableau mensuel
   tresorerie: Trésorerie
   developpement_commercial: Développement Commercial
 

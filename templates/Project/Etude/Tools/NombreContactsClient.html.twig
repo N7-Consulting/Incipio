@@ -1,0 +1,5 @@
+{# Use these templates to display information throughout all Tabs (Négociation, Acceptées, en Cours...) #}
+
+<a href="{{ path('project_etude_voir', {'nom' : etude.nom, '_fragment': 'tab7'}) }}">{{ 'suivi.voir'|trans({}, 'project') }}
+	({{etude.clientContacts | length }})
+</a>

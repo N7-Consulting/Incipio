@@ -12,6 +12,7 @@
 namespace App\Entity\Formation;
 
 use App\Entity\Personne\Personne;
+use App\Entity\Publish\RelatedDocument;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -42,9 +43,9 @@ class Formation
     private $mandat;
 
     /**
-     * @var array
+     * @var int
      *
-     * @ORM\Column(name="categorie", type="array")
+     * @ORM\Column(name="categorie", type="integer")
      */
     private $categorie;
 
@@ -73,6 +74,11 @@ class Formation
     private $formateurs;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Publish\RelatedDocument", mappedBy="formation", cascade={"remove"})
+     */
+    private $relatedDocuments;
+
+    /**
      * @var Personne
      *
      * @ORM\ManyToMany(targetEntity="App\Entity\Personne\Personne")
@@ -95,37 +101,35 @@ class Formation
     private $dateFin;
 
     /**
-     * @var string
+     *  
      * @ORM\Column(name="doc", type="string", length=255, nullable=true)
      */
     private $docPath;
 
+    /**
+     * Get getCategoriesChoice.
+     *
+     * @return array
+     */
     public static function getCategoriesChoice()
     {
         return [
-            '0' => 'Junior-Entreprise - Généralité',
-            '1' => 'Suivi d\'études',
-            '2' => 'Gestion Associative',
-            '3' => 'Recrutement Formation Passation',
-            '4' => 'Trésorerie',
-            '5' => 'Développement Commercial',
-            '6' => 'Communication',
-            '7' => 'Intervenants',
-            '8' => 'Autre', ];
+            1 => 'Gestion Associative',
+            2 => 'R.F.P',
+            3 => 'Gestion d\'étude',
+            4 => 'Trésorerie',
+            5 => 'Développement Commercial',
+            6 => 'Qualité',
+            7 => 'Autre', ];
     }
 
-    public static function getCategoriesChoiceToString($choice = null)
+    public function getCategoriesChoiceToString()
     {
-        $choices = self::getCategoriesChoice();
+        $tab = $this->getCategoriesChoice();      
 
-        if (null === $choice) {
-            return $choices;
-        } elseif (array_key_exists($choice, $choices)) {
-            return $choices[$choice];
-        }
-
-        return '';
+        return $this->categorie ? $tab[$this->categorie] : '';
     }
+    
 
     /**
      * Get id.
@@ -137,7 +141,7 @@ class Formation
         return $this->id;
     }
 
-    /**
+        /**
      * Set categorie.
      *
      * @param int $categorie
@@ -154,7 +158,7 @@ class Formation
     /**
      * Get categorie.
      *
-     * @return array
+     * @return int
      */
     public function getCategorie()
     {
@@ -401,4 +405,35 @@ class Formation
     {
         return $this->mandat;
     }
+
+    /**
+     * Add relatedDocuments.
+     *
+     * @return Processus
+     */
+    public function addRelatedDocument(RelatedDocument $relatedDocuments)
+    {
+        $this->relatedDocuments[] = $relatedDocuments;
+
+        return $this;
+    }
+
+    /**
+     * Remove relatedDocuments.
+     */
+    public function removeRelatedDocument(RelatedDocument $relatedDocuments)
+    {
+        $this->relatedDocuments->removeElement($relatedDocuments);
+    }
+
+    /**
+     * Get relatedDocuments.
+     *
+     * @return Collection
+     */
+    public function getRelatedDocuments()
+    {
+        return $this->relatedDocuments;
+    }
+
 }

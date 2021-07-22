@@ -1,57 +1,54 @@
+{% include "Project/Etude/Infos/warning.html.twig" with  {'etude':  etude} %}
+
 <nav class="navbar" role="navigation">
     <div class="navbar-header">
+        {# Small screen toggle #}
         <button type="button" class="navbar-toggle text-black" data-toggle="collapse" data-target=".navbar-suivi">
             <span class="sr-only">Toggle navigation</span>
             <span class="fa fa-bars" ></span>
         </button>
         <span class="navbar-brand">{{ 'suivi.etude_suivi'|trans({}, 'project') }}</span>
     </div>
+    {# Bouton ajout suivi #}
     <div class="collapse navbar-collapse navbar-suivi">
-        <ul class="nav  navbar-nav">
-            <li><a href="{{ path('project_suivi_ajouter', {'id': etude.id}) }}"><span
-                            class="fa fa-pencil"></span> {{ 'suivi.suivi_ajouter'|trans({}, 'project') }}</a></li>
+        <ul class="nav navbar-nav">
+            <li><a href="{{ path('project_suivi_ajouter', {'id': etude.id}) }}"><span class="fa fa-pencil"></span> {{ 'suivi.suivi_ajouter'|trans({}, 'project') }}</a></li>
         </ul>
     </div>
 </nav>
 
-{{ form_start(formSuivi, {'action': path('project_etude_suivi_update', {'id': etude.id}) , 'attr': {'id': 'myForm' }}) }}
+{{ form_start(formSuivi, {'action': path('project_etude_suivi_update', {'id': etude.id}), 'attr': {'id': 'myForm' }}) }}
 
+{# Etat de l'étude #}
+<tr>
+	<th>{{ 'suivi.etude_etat'|trans({}, 'project') }}</th>
+</tr>
+<tr>
+	<td>{{ form_widget(formSuivi.stateID) }}</td>
+</tr>
 
-    <table class="table table-striped">
-        <tr>
-            <th>{{ 'suivi.etude_etat'|trans({}, 'project') }}</th>
-            <th>{{ 'suivi.auditée_le'|trans({}, 'project') }}</th>
-            <th>{{ 'suivi.type_audit'|trans({}, 'project') }}</th>
-        </tr>
-        <tr>
-            <td>{{ form_widget(formSuivi.stateID) }}</td>
-            <td>{{ form_widget(formSuivi.auditDate) }}</td>
-            <td>{{ form_widget(formSuivi.auditType) }}</td>
-        </tr>
-        <th colspan="3">{{ form_label(formSuivi.stateDescription) }}</th>
-        <tr>
-        </tr>
-        <tr>
-            <td colspan="3">{{ form_widget(formSuivi.stateDescription) }}</td>
-        </tr>
-        {% if etude.suivis is not empty %}
-            {% set lastSuivi = etude.suivis |last %}
-            <tr>
-                <th colspan="2"><a href="{{ path('project_suivi_voir', {'id' : lastSuivi.id}) }}"><span
-                                class="label {{ date(lastSuivi.date) > date('-7days') ? 'label-success' : 'label-danger' }}">{{ lastSuivi.date | date("d/m/y") }}</span> {{ 'suivi.etat'|trans({}, 'project') }}
-                    </a></th>
-                <th>{{ 'suivi.todo'|trans({}, 'project') }}</th>
-            </tr>
-            <tr>
-                <td colspan="2">{{ lastSuivi.etat | nl2br }}</td>
-                <td>{{ lastSuivi.todo | nl2br }}</td>
-            </tr>
-        {% endif %}
+{# Ensemble des suivis enregistrés #}
+<table class="table table-striped">
+{% if etude.suivis is not empty %}
+    {% set lastSuivi = etude.suivis | last %}
+    <tr>
+        <th colspan="2"><a href="{{ path('project_suivi_voir', {'id' : lastSuivi.id}) }}"><span
+                        class="label {{ date(lastSuivi.date) > date('-7days') ? 'label-success' : 'label-danger' }}">{{ lastSuivi.date | date("d/m/y") }}</span> {{ 'suivi.etat'|trans({}, 'project') }}
+            </a></th>
+        <th>{{ 'suivi.todo'|trans({}, 'project') }}</th>
+    </tr>
+    <tr>
+        <td colspan="2">{{ lastSuivi.etat | nl2br }}</td>
+        <td>{{ lastSuivi.todo | nl2br }}</td>
+    </tr>
+{% endif %}
+</table>
 
-    </table>
+{# Progression des documents #}
+{% set afficher = etude.ap or etude.cc or etude.ce or etude.cca or etude.bdc or (etude.missions is not empty or etude.avs is not empty or etude.procesVerbaux is not empty) %}
 
-
-    <table class="table table-striped table-bordered" onclick="docStateChange();">
+<table class="table table-striped table-bordered {{ afficher ? "" : "hidden" }}" onclick="docStateChange();">
+    <thead>
         <tr>
             <th>{{ 'suivi.document'|trans({}, 'project') }}</th>
             <th>{{ 'suivi.statut'|trans({}, 'project') }}</th>
@@ -60,18 +57,19 @@
             <th>{{ 'suivi.envoye'|trans({}, 'project') }}</th>
             <th>{{ 'suivi.recu_encaisse'|trans({}, 'project') }}</th>
         </tr>
+    </thead>
+    <tbody>
         <!-- AVANT PROJET -->
-            <tr class="docTabRow {{ (not etude.ceActive) or etude.ap is not none ? "": "hidden" }}">
+        <tr class="docTabRow {{ (not etude.ceActive and not etude.ccaActive) or etude.ap is not none ? "": "hidden" }}">
             <th>{{ 'suivi.avant_projet'|trans({}, 'project') }}</th>
             <td class="state">{{ 'suivi.incomplet'|trans({}, 'project') }}</td>
             <td>{{ form_widget(formSuivi.ap.redige) }}</td>
             <td>{{ form_widget(formSuivi.ap.relu) }}</td>
             <td>{{ form_widget(formSuivi.ap.envoye) }}</td>
             <td>{{ form_widget(formSuivi.ap.receptionne) }}</td>
-
         </tr>
-        <!-- CONVENTION CLIENT-->
-        <tr class="docTabRow {{ (not etude.ceActive) or etude.cc is not none ? "": "hidden" }}">
+        <!-- CONVENTION CLIENT -->
+        <tr class="docTabRow {{ (not etude.ceActive and not etude.ccaActive) or etude.cc is not none ? "": "hidden" }}">
             <th>{{ 'suivi.convention_client'|trans({}, 'project') }}</th>
             <td class="state">{{ 'suivi.incomplet'|trans({}, 'project') }}</td>
             <td>{{ form_widget(formSuivi.cc.redige) }}</td>
@@ -79,8 +77,8 @@
             <td>{{ form_widget(formSuivi.cc.envoye) }}</td>
             <td>{{ form_widget(formSuivi.cc.receptionne) }}</td>
         </tr>
-        <!-- CONVENTION ETUDE-->
-            <tr class="docTabRow {{ etude.ceActive or etude.ce is not none ? "": "hidden" }}">
+        <!-- CONVENTION ETUDE -->
+        <tr class="docTabRow {{ etude.ceActive and not etude.ccaActive and etude.ce is not null ? "": "hidden" }}">
             <th>{{ 'suivi.convention_etude'|trans({}, 'project') }}</th>
             <td class="state">{{ 'suivi.incomplet'|trans({}, 'project') }}</td>
             <td>{{ form_widget(formSuivi.ce.redige) }}</td>
@@ -88,8 +86,26 @@
             <td>{{ form_widget(formSuivi.ce.envoye) }}</td>
             <td>{{ form_widget(formSuivi.ce.receptionne) }}</td>
         </tr>
-
-        <!--RECAPITULATIFS DE MISSION-->
+        <!-- CONVENTION CADRE AGILE -->
+        <tr class="docTabRow {{ etude.ccaActive or etude.cca is not none ? "" : "hidden" }}">
+            <th>{{ 'suivi.convention_cadre_agile'|trans({}, 'project') }}</th>
+            <td class="state">{{ 'suivi.incomplet'|trans({}, 'project') }}</td>
+            <td>{{ form_widget(formSuivi.cca.redige) }}</td>
+            <td>{{ form_widget(formSuivi.cca.relu) }}</td>
+            <td>{{ form_widget(formSuivi.cca.envoye) }}</td>
+            <td>{{ form_widget(formSuivi.cca.receptionne) }}</td>
+        </tr>
+        <!-- BON DE COMMANDE -->
+        <tr class="docTabRow {{ etude.ccaActive and etude.bdc is not null ? "" : "hidden" }}">
+            <th>{{ 'suivi.bon_de_commande'|trans({}, 'project') }}</th>
+            <td class="state">{{ 'suivi.incomplet'|trans({}, 'project') }}</td>
+            <td>{{ form_widget(formSuivi.bdc.redige) }}</td>
+            <td>{{ form_widget(formSuivi.bdc.relu) }}</td>
+            <td>{{ form_widget(formSuivi.bdc.envoye) }}</td>
+            <td>{{ form_widget(formSuivi.bdc.receptionne) }}</td>
+        </tr>
+        <!--RECAPITULATIFS DE MISSION -->
+        {% if etude.missions is not empty %}
         <tr>
             <th colspan="8">{{ 'suivi.recapitulatif_mission'|trans({}, 'project') }}</th>
         </tr>
@@ -103,7 +119,10 @@
                 <td>{{ form_widget(mission.receptionne) }}</td>
             </tr>
         {% endfor %}
-        <!--Avenants Clients-->
+        {% endif %}
+
+        <!--Avenants Clients -->
+        {% if etude.avs is not empty %}
         <tr>
             <th colspan="8">{{ 'suivi.avenants_clients'|trans({}, 'project') }}</th>
         </tr>
@@ -117,7 +136,9 @@
                 <td>{{ form_widget(av.receptionne) }}</td>
             </tr>
         {% endfor %}
-        <!--PROCES VERBAUX-->
+        {% endif %}
+        <!--PROCES VERBAUX -->
+        {% if etude.pvis is not empty %}
         <tr>
             <th colspan="8">{{ 'suivi.proces_verbaux'|trans({}, 'project') }}</th>
         </tr>
@@ -131,7 +152,8 @@
                 <td>{{ form_widget(pvi.receptionne) }}</td>
             </tr>
         {% endfor %}
-        <tr class="docTabRow">
+        {% endif %}
+        <tr class="docTabRow {{ etude.pvr is not none ? "": "hidden" }}">
             <th>{{ 'suivi.pvr'|trans({}, 'project') }}</th>
             <td class="state">{{ 'suivi.incomplet'|trans({}, 'project') }}</td>
             <td>{{ form_widget(formSuivi.pvr.redige) }}</td>
@@ -139,6 +161,18 @@
             <td>{{ form_widget(formSuivi.pvr.envoye) }}</td>
             <td>{{ form_widget(formSuivi.pvr.receptionne) }}</td>
         </tr>
-    </table>
-    {{ form_rest(formSuivi) }}
-    {{ form_end(formSuivi) }}
+    </tbody>
+</table>
+
+{# Commentaires sur l'avancé de l'étude #}
+<table class="table table-striped">
+    <th colspan="3">{{ form_label(formSuivi.stateDescription) }}</th>
+    <tr>
+    </tr>
+    <tr>
+        <td colspan="3">{{ form_widget(formSuivi.stateDescription) }}</td>
+    </tr>
+</table>
+
+{{ form_rest(formSuivi) }}
+{{ form_end(formSuivi) }}

@@ -1,0 +1,60 @@
+{# Formulaire d'ajout d'un contact avec un alumnus #}
+
+{{ form_start(form) }}
+
+<table class="table table-bordered table-striped standard">
+    <tr>
+        <th>{{ form_label(form.faitPar) }}</th>
+        <td>{{ form_widget(form.faitPar) }}</td>
+    </tr>
+    <tr>
+        <th>{{ form_label(form.alumnus) }}
+        <span class="badge badge-default" data-toggle="tooltip" title="{{ 'rh.alumnnus_tooltip'|trans({}, 'rh') }}">?</span></th>
+        <td>{{ form_widget(form.alumnus) }}</td>
+    </tr>
+    <tr>
+        <th>{{ form_label(form.date) }}</th>
+        <td>{{ form_widget(form.date) }}</td>
+    </tr>
+    <tr>
+        <th>{{ form_label(form.objet) }}</th>
+        <td>{{ form_widget(form.objet) }}</td>
+    </tr>
+    <tr>
+        <th>{{ form_label(form.contenu) }}</th>
+        <td>{{ form_widget(form.contenu) }}</td>
+    </tr>
+    <tr>
+        <th>{{ form_label(form.moyenContact) }}</th>
+        <td>{{ form_widget(form.moyenContact) }}</td>
+    </tr>
+</table>
+{{ form_widget(form) }}
+
+<div class="row">
+    <div class="col-md-3 col-sm-5 col-xs-6">
+        <button type="submit" class="btn btn-success">
+            {% if form.vars.data.id %}
+                {{ 'rh.contact_enregistrer'|trans({}, 'rh') }}
+            {% else %}
+                {{ 'rh.contact_nouveau_enregistrer'|trans({}, 'rh') }}
+            {% endif %}
+        </button>
+        {{ form_end(form) }}
+    </div>
+
+    {% if delete_form is defined and delete_form is not none %}
+        <div class="col-md-3 col-sm-5 col-xs-6">
+            <form class="bootbox-confirm"
+                data-content="{{ 'rh.contact_client_supprimer_confirm'|trans({}, 'rh') }}"
+                action="{{ path('alumnus_contact_delete', { 'id': alumnusContact.id }) }}" method="post">
+                {{ form_widget(delete_form) }}
+                <button class="btn btn-danger">
+                    {{ 'rh.contact_client_supprimer' |trans({}, 'rh') }}
+                </button>
+            </form>
+        </div>
+    {% endif %}
+
+</div>
+

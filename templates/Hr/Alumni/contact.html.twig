@@ -1,0 +1,46 @@
+<div class="box-header with-border">
+        <a href="{{ path('project_alumnuscontact_ajouter') }}" class="pull-right btn btn-primary">{{ 'rh.contact_alumni_ajouter'|trans({}, 'rh') }}</a>
+</div>
+
+{% if contactsParAlumnus | length %}
+	{% for alumnus, contacts in contactsParAlumnus %}
+		<table class="display dataTable table table-bordered table-striped dt-responsive "> 
+            <thead>
+                <tr>
+                    <th>{{ 'rh.contact_avec_alumnus'|trans({}, 'rh') }} {{ alumnus }}</th>
+					<th>{{ 'rh.date'|trans({}, 'rh') }}</th>
+					<th>{{ 'rh.fait_par'|trans({}, 'rh') }}</th>
+					<th>{{ 'rh.objet'|trans({}, 'rh') }}</th>
+					<th>{{ 'rh.resume'|trans({}, 'rh') }}</th>
+					<th>{{ 'rh.type'|trans({}, 'rh') }}</th>
+                </tr>
+            </thead>
+	        <tbody>
+			{% for contact in contacts %}
+				<tr>
+					<td>
+						<a href="{{ path('alumni_contact_modifier', {'id': contact.id}) }}">{{ 'rh.contact'|trans({}, 'rh') }}
+								n°{{loop.index0 +1}}</a>
+					</td>
+					<td>
+						{{contact.date | date("d/m/Y") }}
+					</td>
+					<td>
+						{% include "Project/Etude/Buttons/Suiveur.html.twig" with  {'suiveur':  contact.faitPar} %}					</td>
+					<td>
+						{{ contact.objet }}
+					</td>
+					<td>
+						{{ contact.contenu  | nl2br }}
+					</td>
+					<td>
+						{{contact.moyenContact}}
+					</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+	</table>
+	{% endfor %}	
+{% else %}
+	{{ 'rh.pas_de_contact'|trans({}, 'rh') }}
+{% endif %}

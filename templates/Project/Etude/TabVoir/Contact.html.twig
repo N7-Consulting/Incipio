@@ -1,0 +1,60 @@
+<nav class="navbar" role="navigation">
+	<div class="navbar-header">
+		<button type="button" class="navbar-toggle text-black" data-toggle="collapse" data-target=".navbar-recap">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="fa fa-bars"></span>
+		</button>
+		<span class="navbar-brand">{{ 'suivi.contacts_client'|trans({}, 'project') }}</span>
+	</div>
+	<div class="collapse navbar-collapse navbar-recap">
+		<ul class="nav  navbar-nav">
+			<li>
+				<a href="{{ path('project_clientcontact_ajouter', {'id': etude.id}) }}">
+					<span class="fa fa-list-alt"></span>
+					{{ 'suivi.contact_client_ajouter'|trans({}, 'project') }}</a>
+			</li>
+		</ul>
+	</div>
+</nav>
+
+{% if etude.clientContacts | length %}
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>{{ 'suivi.contact'|trans({}, 'project') }}</th>
+				<th>{{ 'suivi.date'|trans({}, 'project') }}</th>
+				<th>{{ 'suivi.fait_par'|trans({}, 'project') }}</th>
+				<th>{{ 'suivi.objet'|trans({}, 'project') }}</th>
+				<th>{{ 'suivi.resume'|trans({}, 'project') }}</th>
+				<th>{{ 'suivi.type'|trans({}, 'project') }}</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for contact in clientContacts%}
+				<tr>
+					<td>
+						<a href="{{ path('project_clientcontact_modifier', {'id': contact.id}) }}">{{ 'suivi.contact'|trans({}, 'project') }}
+							n°{{etude.clientContacts | length - loop.index0}}</a>
+					</td>
+					<td>
+						{{contact.date | date("d/m/Y") }}
+					</td>
+					<td>
+						{{ contact.faitPar.PrenomNom }}
+					</td>
+					<td>
+						{{ contact.objet }}
+					</td>
+					<td>
+						{{ contact.contenu  | nl2br }}
+					</td>
+					<td>
+						{{contact.moyenContact}}
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% else %}
+	{{ 'suivi.pas_de_contact'|trans({}, 'project') }}
+{% endif %}

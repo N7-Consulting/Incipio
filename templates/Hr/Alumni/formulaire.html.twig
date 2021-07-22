@@ -1,0 +1,59 @@
+{# Formulaire d'ajout d'un alumnus #}
+
+{{ form_start(form) }}
+
+<table class="table table-bordered table-striped standard">
+    <tr>
+        <th>{{ form_label(form.personne) }}</th>
+        <td>{{ form_widget(form.personne) }} {{ form_errors(form.personne) }}</td>
+    </tr>
+    <tr>
+        <th>{{ form_label(form.lienLinkedIn) }}</th>
+        <td>{{ form_widget(form.lienLinkedIn) }} {{ form_errors(form.lienLinkedIn) }}</td>
+    </tr>
+    <tr>
+        <th>{{ form_label(form.secteurActuel) }}
+            <span class="badge badge-default" data-toggle="tooltip" title="{{ 'prospect.prospect_tooltip'|trans({}, 'personne') }}">?</span>
+        </th>
+        <td>{{ form_widget(form.secteurActuel) }}{{ form_errors(form.secteurActuel) }}</td>
+    </tr>
+    <tr>
+        <th>{{ form_label(form.posteActuel) }}</th>
+        <td>{{ form_widget(form.posteActuel) }}{{ form_errors(form.posteActuel) }}</td>
+    </tr>
+    <tr>
+        <th>{{ form_label(form.commentaire) }}</th>
+        <td>{{ form_widget(form.commentaire) }}{{ form_errors(form.commentaire) }}</td>
+    </tr>
+</table>
+{{ form_widget(form) }}
+
+
+<div class="row">
+    <div class="col-md-3 col-sm-5 col-xs-6">
+        <button type="submit" class="btn btn-success">
+            {% if form.vars.data.id %}
+                {{ 'rh.alumnus_enregistrer'|trans({}, 'rh') }}
+            {% else %}
+                {{ 'rh.alumnus_nouveau_enregistrer'|trans({}, 'rh') }}
+            {% endif %}
+        </button>
+        {{ form_rest(form) }}
+        {{ form_end(form) }}
+    </div>
+
+    {% if delete_form is defined and delete_form is not none %}
+        <div class="col-md-3 col-sm-5 col-xs-6">
+            <form class="bootbox-confirm"
+                data-content="{{ 'rh.alumnus_supprimer_confirm'|trans({}, 'rh') }}"
+                action="{{ path('alumnus_delete', { 'id': alumnus.id }) }}" method="post">
+                {{ form_widget(delete_form) }}
+                <button class="btn btn-danger">
+                    {{ 'rh.alumnus_supprimer' |trans({}, 'rh') }}
+                </button>
+            </form>
+        </div>
+    {% endif %}
+
+</div>
+

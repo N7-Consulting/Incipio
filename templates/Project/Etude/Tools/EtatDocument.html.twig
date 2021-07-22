@@ -1,0 +1,21 @@
+{# Use these templates to display information throughout all Tabs (Négociation, Acceptées, en Cours...) #}
+
+{% set valide    = asset('img/success.png') %}
+{% set nonValide = asset('img/cross.png') %}
+{% set enCours   = asset('img/progress.png') %}
+
+{% set etat = getEtatDoc(doc) %}
+
+{% if title == 'date' and etat != 0 %}
+	{% set title = doc.dateSignature | date("d/m/y") %}
+{% elseif title == 'intervenantPrenomNom' and etat != 0 %}
+	{% set title = doc.intervenant.personne.prenomNom %}
+{% endif %}
+
+{% if etat == 2 %}
+	<img src="{{ valide }}" title="{{ title }}"/>
+{% elseif etat == 1 %}
+	<img src="{{ enCours }}" title="{{ title }}"/>
+{% elseif etat == 0 %}
+	<img src="{{ nonValide }}"/>
+{% endif %}

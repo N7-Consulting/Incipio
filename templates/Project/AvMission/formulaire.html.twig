@@ -1,16 +1,69 @@
 {# Formulaire pour un AvMission #}
 
-{{ form_start(form) }}
-
-	{{ form_widget(form) }}
-
-<div class="row">
-    <div class="col-md-3 col-sm-5 col-xs-6">
-        <input type="submit" value="{{ 'suivi.avenant_mission_enregistrer'|trans({}, 'project') }}"
-               class="btn btn-default"/>
-        {{ form_end(form) }}
+{{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+<div class="form-group">
+    <div class="col-md-5 col-xs-12">
+        {{ form_label(form.numero) }}
+        {{ form_errors(form.numero) }}
     </div>
+    <div class="col-md-3 col-xs-12">
+        {{ form_widget(form.numero, {'attr': {'class': 'form-control'}}) }}
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-md-5 col-xs-12">
+        {{ form_label(form.nouveauPourcentage) }}
+        {{ form_errors(form.nouveauPourcentage) }}
+    </div>
+    <div class="col-md-3 col-xs-12">
+        {{ form_widget(form.nouveauPourcentage, {'attr': {'class': 'form-control'}}) }}
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-md-5 col-xs-12">
+        {{ form_label(form.differentielDelai) }}
+        {{ form_errors(form.differentielDelai) }}
+    </div>
+    <div class="col-md-3 col-xs-12">
+        {{ form_widget(form.differentielDelai, {'attr': {'class': 'form-control'}}) }}
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-md-5 col-xs-12">
+        {{ form_label(form.version) }}
+        {{ form_errors(form.version) }}
+    </div>
+    <div class="col-md-3 col-xs-12">
+        {{ form_widget(form.version, {'attr': {'class': 'form-control'}}) }}
+    </div>
+</div>
 
+<div class="form-group">
+    <div class="col-md-5 col-xs-12">
+        {{ form_label(form.dateSignature) }}
+        {{ form_errors(form.dateSignature) }}
+    </div>
+    <div class="col-md-3 col-xs-12">
+        {{ form_widget(form.dateSignature, {'attr': {'class': 'form-control'}}) }}
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-md-5 col-xs-12">
+        {{ form_label(form.signataire1) }}
+        {{ form_errors(form.signataire1) }}
+    </div>
+    <div class="col-md-3 col-xs-12">
+        {{ form_widget(form.signataire1, {'attr': {'class': 'form-control'}}) }}
+    </div>
+</div>
+<div class="col-md-3 col-sm-5 col-xs-6">
+<button type="submit" class="btn btn-success">{{ 'suivi.avenant_mission_enregistrer'|trans({}, 'project') }}</button>
+        {{ form_rest(form) }}
+        {{ form_end(form) }}
+</div>
+
+<div class="form-group">
     {% if delete_form is defined %}
         <div class="col-md-3 col-sm-5 col-xs-6">
             <form class="bootbox-confirm"

@@ -19,6 +19,10 @@
         } else {
             newed.find('input').attr('disabled', false);
             if (toggle) newed.show();
+            // Unfortunately, it's needed for correct display...
+            // With {'attr': {'class': 'select2'}} in widget, it's better, but not
+            // until user has first selected a CCA
+            newed.find('.select2').css('width', '90%');
 
             knowned.find('input').attr('disabled', true);
             if (toggle) knowned.hide();

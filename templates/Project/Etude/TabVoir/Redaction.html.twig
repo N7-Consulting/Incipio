@@ -9,6 +9,7 @@
 {% set activeAP = (( etude.ap and etude.ap.dateSignature and etude.ap.redige and etude.ap.relu and etude.ap.spt1 and etude.ap.spt2 and etude.ap.envoye and etude.ap.receptionne ) ? "" : "in") %}
 {% set activeCC = (( etude.cc and etude.cc.dateSignature and etude.cc.redige and etude.cc.relu and etude.cc.spt1 and etude.cc.spt2 and etude.cc.envoye and etude.cc.receptionne ) ? "" : "in") %}
 {% set activeCE = (( etude.ce and etude.ce.dateSignature and etude.ce.redige and etude.ce.relu and etude.ce.spt1 and etude.ce.spt2 and etude.ce.envoye and etude.ce.receptionne ) ? "" : "in") %}
+{% set activeBDC = (( etude.bdc and etude.bdc.dateSignature and etude.bdc.redige and etude.bdc.relu and etude.bdc.spt1 and etude.bdc.spt2 and etude.bdc.envoye and etude.bdc.receptionne ) ? "" : "in") %}
 {% set activeRM = (( activeAP or activeCC ) ? "in" : "") %}
 {% set activeFA = (( activeAP and activeCC ) ? "in" : "") %}
 
@@ -21,7 +22,7 @@
         </button>
         <span class="navbar-brand titre" data-toggle="collapse" data-target="#ap">
             <span class="fa fa-chevron-down"></span> {{ 'suivi.avant_projet'|trans({}, 'project') }}
-            - v{{ etude.ap.version | default('') }}
+            {{ etude.ap.version | default('') }}
         </span>
     </div>
     <div class="collapse navbar-collapse navbar-ap">
@@ -83,7 +84,7 @@
         </button>
         <span class="navbar-brand titre" data-toggle="collapse" data-target="#cc"><span
                     class="fa fa-chevron-down"></span> {{ 'suivi.convention_client'|trans({}, 'project') }}
-            - v{{ etude.cc.version | default('') }}</span>
+            {{ etude.cc.version | default('') }}</span>
     </div>
     <div class="collapse navbar-collapse navbar-cc">
         <ul class="nav navbar-nav">
@@ -120,7 +121,7 @@
 {% endif %}
 
 
-{% if etude.ceActive or etude.ce is not none %}
+{% if (etude.ceActive and not etude.ccaActive) or etude.ce is not none %}
     <nav class="navbar" role="navigation">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle text-black" data-toggle="collapse" data-target=".navbar-ce">
@@ -129,9 +130,9 @@
             </button>
             <span class="navbar-brand titre" data-toggle="collapse" data-target="#ce"><span
                         class="fa fa-chevron-down"></span> {{ 'suivi.convention_etude'|trans({}, 'project') }}
-            - v{{ etude.cc.version | default('') }}</span>
+            {{ etude.ce.version | default('') }}</span>
         </div>
-        <div class="collapse navbar-collapse navbar-cc">
+        <div class="collapse navbar-collapse navbar-ce">
             <ul class="nav navbar-nav">
                 <li><a href="{{ path('project_ce_rediger', {'id': etude.id}) }}"><span
                                 class="fa fa-pencil"></span> {{ 'suivi.rediger'|trans({}, 'project') }}</a></li>
@@ -173,6 +174,54 @@
     </div>
 {% endif %}
 
+{% if etude.ccaActive or etude.bdc is not none %}
+    <nav class="navbar" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle text-black" data-toggle="collapse" data-target=".navbar-bdc">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="fa fa-bars"></span>
+            </button>
+            <span class="navbar-brand titre" data-toggle="collapse" data-target="#bdc"><span
+                        class="fa fa-chevron-down"></span> {{ 'suivi.bon_de_commande'|trans({}, 'project') }}
+            {{ etude.bdc.version | default('') }}</span>
+        </div>
+        <div class="collapse navbar-collapse navbar-bdc">
+            <ul class="nav navbar-nav">
+                <li><a href="{{ path('project_bdc_rediger', {'id': etude.id}) }}"><span class="fa fa-pencil"></span> {{ 'suivi.rediger'|trans({}, 'project') }}</a></li>
+                <li><a href="{{ path('publish_publiposter', { 'templateName' : constant('\\App\\Controller\\Publish\\TraitementController::DOCTYPE_CONVENTION_CADRE_AGILE'),
+                        'rootName' : constant('\\App\\Controller\\Publish\\TraitementController::ROOTNAME_ETUDE'),
+                        'rootObject_id' : etude.id}) }}">
+                    <span class="fa fa-arrow-circle-down"></span> {{ 'suivi.generer_cca'|trans({}, 'project') }}
+                </a></li>
+                {% if etude.bdc.dateSignature | default('0') %}
+                    <li><a href="{{ path('publish_publiposter', { 'templateName' : constant('\\App\\Controller\\Publish\\TraitementController::DOCTYPE_BON_COMMANDE'), 'rootName' : constant('\\App\\Controller\\Publish\\TraitementController::ROOTNAME_ETUDE'),
+                            'rootObject_id' : etude.id}) }}">
+                        <span class="fa fa-arrow-circle-down"></span> {{ 'suivi.generer_bdc'|trans({}, 'project') }}
+                    </a></li>
+                {% endif %}
+                </tr>
+            </ul>
+        </div>
+    </nav>
+
+    <div id="bdc" class="collapse {{ activeBDC }}">
+        <table class="table table-striped table-bordered">
+            <tr>
+                <th>{{ 'suivi.date_signature'|trans({}, 'project') }}</th>
+                <th>{{ 'suivi.signataire_client'|trans({}, 'project') }}</th>
+                <th>{{ 'suivi.acompte'|trans({}, 'project') }}</th>
+                <th>{{ 'suivi.pourcentage_acompte'|trans({}, 'project') }}</th>
+            </tr>
+            <tr>
+                <td>{{ ( etude.bdc and etude.bdc.dateSignature ) ? etude.bdc.dateSignature | date("d/m/Y") : "Non signé" }}</td>
+                <td>{{ etude.bdc.signataire2.prenomnom | default('') }}</td>
+                <td>{{ etude.acompte | default(0) ? "Oui" : "Non" }}</td>
+                <td>{{ etude.pourcentageAcompte * 100 ~ "%" | default('') }}</td>
+            </tr>
+        </table>
+    </div>
+{% endif %}
+
 <nav class="navbar" role="navigation">
     <div class="navbar-header">
         <button type="button" class="navbar-toggle text-black" data-toggle="collapse" data-target=".navbar-rm">
@@ -185,7 +234,7 @@
     <div class="collapse navbar-collapse navbar-rm">
         <ul class="nav navbar-nav">
             <li><a href="{{ path('project_missions_modifier', {'id': etude.id}) }}"><span
-                            class="fa fa-pencil"></span> {{ 'suivi.intervenants'|trans({}, 'project') }}</a></li>
+                            class="fa fa-pencil"></span> {{ 'suivi.rediger'|trans({}, 'project') }}</a></li>
         </ul>
     </div>
 </nav>
@@ -408,7 +457,7 @@
             <span class="fa fa-bars"></span>
         </button>
         <span class="navbar-brand titre" data-toggle="collapse" data-target="#avs"><span
-                    class="fa fa-chevron-down"></span> {{ 'suivi.avenants'|trans({}, 'project') }}</span>
+                    class="fa fa-chevron-down"></span>{{ 'suivi.avenants_projet'|trans({}, 'project') }}</span>
     </div>
     <div class="collapse navbar-collapse navbar-avs">
         <ul class="nav navbar-nav">

@@ -24,8 +24,7 @@ class Av extends DocType
     const CLAUSES_CHOICES = ['Avenant de Délai' => 1,
         'Avenant de Méthodologie' => 2,
         'Avenant de Montant' => 3,
-        'Avenant de Mission' => 4,
-        'Avenant de Rupture' => 5, ];
+        'Avenant de Rupture' => 5 ];
 
     /**
      * @var int

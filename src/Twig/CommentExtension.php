@@ -14,13 +14,15 @@ use App\Entity\Comment\CommentInterface;
 use App\Entity\Comment\ThreadInterface;
 use App\Service\Comment\Acl\CommentAclInterface;
 use App\Service\Comment\Acl\ThreadAclInterface;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
 /**
  * Extends Twig to provide some helper functions for the CommentBundle.
  *
  * @author Tim Nagel <tim@nagel.com.au>
  */
-class CommentExtension extends \Twig_Extension
+class CommentExtension extends AbstractExtension
 {
     protected $commentAcl;
 
@@ -38,11 +40,11 @@ class CommentExtension extends \Twig_Extension
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('fos_comment_can_comment', [$this, 'canComment']),
-            new \Twig_SimpleFunction('fos_comment_can_delete_comment', [$this, 'canDeleteComment']),
-            new \Twig_SimpleFunction('fos_comment_can_edit_comment', [$this, 'canEditComment']),
-            new \Twig_SimpleFunction('fos_comment_can_edit_thread', [$this, 'canEditThread']),
-            new \Twig_SimpleFunction('fos_comment_can_comment_thread', [$this, 'canCommentThread']),
+            new TwigFunction('fos_comment_can_comment', [$this, 'canComment']),
+            new TwigFunction('fos_comment_can_delete_comment', [$this, 'canDeleteComment']),
+            new TwigFunction('fos_comment_can_edit_comment', [$this, 'canEditComment']),
+            new TwigFunction('fos_comment_can_edit_thread', [$this, 'canEditThread']),
+            new TwigFunction('fos_comment_can_comment_thread', [$this, 'canCommentThread']),
         ];
     }
 

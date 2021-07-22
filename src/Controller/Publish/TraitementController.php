@@ -23,6 +23,7 @@ use App\Entity\Treso\NoteDeFrais;
 use App\Form\Publish\DocTypeType;
 use App\Service\Project\ChartManager;
 use App\Service\Project\EtudePermissionChecker;
+use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\File;
@@ -74,6 +75,16 @@ class TraitementController extends AbstractController
     const DOCTYPE_BULLETIN_DE_VERSEMENT = 'BV';
 
     const DOCTYPE_AVENANT = 'AV';
+
+    const DOCTYPE_CAHIER_CHARGES = 'CDC';
+
+    const DOCTYPE_PROPOSITION_COMMERCIALE = 'PC';
+
+    const DOCTYPE_CONVENTION_CADRE_AGILE = 'CCA';
+
+    const DOCTYPE_BON_COMMANDE = 'BDC';
+
+    const DOCTYPE_QUESTIONNAIRE_SATISFACTION = 'QS';
 
     const ROOTNAME_ETUDE = 'etude';
 
@@ -131,18 +142,22 @@ class TraitementController extends AbstractController
 
     private $kernel;
 
+    private $em;
+
     public function __construct(
         ChartManager $chartManager,
         EtudePermissionChecker $permChecker,
         Environment $twigEnvironment,
         KeyValueStore $keyValueStore,
-        KernelInterface $kernel
+        KernelInterface $kernel,
+        ObjectManager $em
     ) {
         $this->chartManager = $chartManager;
         $this->permChecker = $permChecker;
         $this->twigEnvironment = $twigEnvironment;
         $this->keyValueStore = $keyValueStore;
         $this->kernel = $kernel;
+        $this->em = $em;
     }
 
     /**
@@ -164,14 +179,12 @@ class TraitementController extends AbstractController
 
     private function publipostage($templateName, $rootName, $rootObject_id, $debug = false)
     {
-        $em = $this->getDoctrine()->getManager();
-
         $errorRootObjectNotFound = $this->createNotFoundException('Le document ne peut être publiposté car l\'objet de référence n\'existe pas !');
         $errorEtudeConfidentielle = new AccessDeniedException('Cette étude est confidentielle');
 
         switch ($rootName) {
             case self::ROOTNAME_ETUDE:
-                if (!$rootObject = $em->getRepository(Etude::class)->find($rootObject_id)) {
+                if (!$rootObject = $this->em->getRepository(Etude::class)->find($rootObject_id)) {
                     throw $errorRootObjectNotFound;
                 }
                 if ($this->permChecker->confidentielRefus($rootObject, $this->getUser())) {
@@ -179,17 +192,17 @@ class TraitementController extends AbstractController
                 }
                 break;
             case self::ROOTNAME_ETUDIANT:
-                if (!$rootObject = $em->getRepository(Membre::class)->find($rootObject_id)) {
+                if (!$rootObject = $this->em->getRepository(Membre::class)->find($rootObject_id)) {
                     throw $errorRootObjectNotFound;
                 }
                 break;
             case self::ROOTNAME_MISSION:
-                if (!$rootObject = $em->getRepository(Mission::class)->find($rootObject_id)) {
+                if (!$rootObject = $this->em->getRepository(Mission::class)->find($rootObject_id)) {
                     throw $errorRootObjectNotFound;
                 }
                 break;
             case self::ROOTNAME_FACTURE:
-                if (!$rootObject = $em->getRepository(Facture::class)->find($rootObject_id)) {
+                if (!$rootObject = $this->em->getRepository(Facture::class)->find($rootObject_id)) {
                     throw $errorRootObjectNotFound;
                 }
                 if ($rootObject->getEtude() &&
@@ -199,12 +212,12 @@ class TraitementController extends AbstractController
                 }
                 break;
             case self::ROOTNAME_NOTE_DE_FRAIS:
-                if (!$rootObject = $em->getRepository(NoteDeFrais::class)->find($rootObject_id)) {
+                if (!$rootObject = $this->em->getRepository(NoteDeFrais::class)->find($rootObject_id)) {
                     throw $errorRootObjectNotFound;
                 }
                 break;
             case self::ROOTNAME_BULLETIN_DE_VERSEMENT:
-                if (!$rootObject = $em->getRepository(BV::class)->find($rootObject_id)) {
+                if (!$rootObject = $this->em->getRepository(BV::class)->find($rootObject_id)) {
                     throw $errorRootObjectNotFound;
                 }
                 if ($rootObject->getMission() && $rootObject->getMission()->getEtude() &&
@@ -214,7 +227,7 @@ class TraitementController extends AbstractController
                 }
                 break;
             case self::ROOTNAME_PROCES_VERBAL:
-                if (!$rootObject = $em->getRepository(ProcesVerbal::class)->find($rootObject_id)) {
+                if (!$rootObject = $this->em->getRepository(ProcesVerbal::class)->find($rootObject_id)) {
                     throw $errorRootObjectNotFound;
                 }
                 if ($rootObject->getEtude() &&
@@ -224,7 +237,7 @@ class TraitementController extends AbstractController
                 }
                 break;
             case self::ROOTNAME_AVENANT:
-                if (!$rootObject = $em->getRepository(Av::class)->find($rootObject_id)) {
+                if (!$rootObject = $this->em->getRepository(Av::class)->find($rootObject_id)) {
                     throw $errorRootObjectNotFound;
                 }
                 if ($rootObject->getEtude() &&
@@ -242,7 +255,7 @@ class TraitementController extends AbstractController
 
         $templatesXMLtraite = $this->traiterTemplates($chemin, $rootName, $rootObject);
 
-        //SI DM on prend la ref de RM et ont remplace RM par DM
+        // Si DM on prend la ref de RM et ont remplace RM par DM
         if (self::DOCTYPE_DESCRIPTIF_MISSION == $templateName) {
             $templateName = 'RM';
             $isDM = true;
@@ -365,14 +378,13 @@ class TraitementController extends AbstractController
 
     private function getDoctypeAbsolutePathFromName($doc, $debug = false)
     {
-        $em = $this->getDoctrine()->getManager();
 
         // Utilisé pour tester un template lors de l'upload d'un nouveau
         if ($debug) {
             return $doc;
         }
 
-        if (!$documenttype = $em->getRepository(Document::class)->findOneBy(['name' => $doc])) {
+        if (!$documenttype = $this->em->getRepository(Document::class)->findOneBy(['name' => $doc])) {
             throw $this->createNotFoundException('Le doctype ' . $doc . ' n\'existe pas... C\'est bien balo');
         } else {
             $chemin = $this->kernel->getProjectDir() . '' . Document::DOCUMENT_STORAGE_ROOT . '/' . $documenttype->getPath();
@@ -701,7 +713,6 @@ class TraitementController extends AbstractController
                 }
 
                 // Enregistrement du template
-                $em = $this->getDoctrine()->getManager();
                 $user = $this->getUser();
                 $personne = $user->getPersonne();
                 $file = new File($docxFullPath);
@@ -711,13 +722,13 @@ class TraitementController extends AbstractController
                     ->setName($data['name'])
                     ->setFile($file);
                 $doc->setProjectDir($this->kernel->getProjectDir());
-                $em->persist($doc);
-                $docs = $em->getRepository(Document::class)->findBy(['name' => $doc->getName()]);
+                $this->em->persist($doc);
+                $docs = $this->em->getRepository(Document::class)->findBy(['name' => $doc->getName()]);
                 foreach ($docs as $doc) {
                     $doc->setProjectDir($this->kernel->getProjectDir());
-                    $em->remove($doc);
+                    $this->em->remove($doc);
                 }
-                $em->flush();
+                $this->em->flush();
 
                 $session->getFlashBag()->add('success', 'Le document a été mis à jour');
 

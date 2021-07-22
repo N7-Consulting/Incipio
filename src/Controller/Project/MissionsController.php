@@ -12,8 +12,6 @@
 namespace App\Controller\Project;
 
 use App\Entity\Project\Etude;
-use App\Entity\Project\Mission;
-use App\Entity\Project\RepartitionJEH;
 use App\Form\Project\MissionsType;
 use App\Service\Project\EtudePermissionChecker;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -23,9 +21,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Webmozart\KeyValueStore\Api\KeyValueStore;
 
 class MissionsController extends AbstractController
 {
+
+    public $keyValueStore;
+
+    public function __construct(KeyValueStore $keyValueStore)
+    {
+        $this->keyValueStore = $keyValueStore;
+    }
+
     /**
      * @Security("has_role('ROLE_SUIVEUR')")
      * @Route(name="project_missions_modifier", path="/suivi/missions/modifier/{id}", methods={"GET","HEAD","POST"})
@@ -41,7 +48,11 @@ class MissionsController extends AbstractController
         }
 
         /* Form handling */
-        $form = $this->createForm(MissionsType::class, $etude, ['etude' => $etude]);
+
+        $pourcentageAcompte = $this->keyValueStore->get('pourcentageAcompteDefaut');
+
+        $form = $this->createForm(MissionsType::class, $etude, ['etude' => $etude, 'acompte' => $pourcentageAcompte]);
+
         if ('POST' == $request->getMethod()) {
             $form->handleRequest($request);
 
@@ -56,7 +67,6 @@ class MissionsController extends AbstractController
                     /* @var Mission $m */
                     $m->setEtude($etude);
                 }
-
                 $em->persist($etude);
                 $em->flush();
                 $this->addFlash('success', 'Mission enregistrée');

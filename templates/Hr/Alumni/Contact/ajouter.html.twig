@@ -1,0 +1,19 @@
+{% extends "Project/layout.html.twig" %}
+
+
+{% block title %}
+    {{ 'rh.contact_alumni_ajouter'|trans({}, 'rh') }}
+{% endblock %}
+
+{% block content_title %}
+    {{ 'rh.contact_alumni_ajouter'|trans({}, 'rh') }}
+{% endblock %}
+
+{% block content_bundle %}
+    {% include "Hr/Alumni/Contact/formulaire.html.twig" %}
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    {{ form_javascript(form) }}
+{% endblock %}

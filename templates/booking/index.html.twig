@@ -1,0 +1,40 @@
+{% extends 'Dashboard/layout.html.twig' %}
+
+{% block content_title %}
+    {{ 'dashboard.ev_liste'|trans({}, 'dashboard') }}
+{% endblock %}
+
+{% block content_bundle %}
+
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>{{ 'dashboard.ev_titre'|trans({}, 'dashboard') }}</th>
+                <th>{{ 'dashboard.ev_date_debut'|trans({}, 'dashboard') }}</th>
+                <th>{{ 'dashboard.ev_date_fin'|trans({}, 'dashboard') }}</th>
+                <th>{{ 'dashboard.ev_commentaires'|trans({}, 'dashboard') }}</th>
+                <th>{{ 'dashboard.ev_action'|trans({}, 'dashboard') }}</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for booking in bookings %}
+            <tr>
+                <td><a href="{{ path('booking_show', {'id': booking.id}) }}">{{ booking.title }}</td></a>
+                <td>{{ booking.dateDebut ? booking.dateDebut|date('d/m/Y H:i:s') : '' }}</td>
+                <td>{{ booking.dateFin ? booking.dateFin|date('d/m/Y H:i:s') : '' }}</td>
+                <td>{{ booking.commentaires}}</td>
+                <td>
+                    <a href="{{ path('booking_edit', {'id': booking.id}) }}">{{ 'dashboard.ev_modifier'|trans({}, 'dashboard') }}</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">{{ 'dashboard.ev_aucun'|trans({}, 'dashboard') }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <br>
+    <a href="{{ path('booking_new')}}" class="pull-right btn btn-primary">{{ 'dashboard.ev_ajouter'|trans({}, 'dashboard') }}</a>
+{% endblock %}

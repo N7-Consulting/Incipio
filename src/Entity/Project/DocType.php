@@ -11,7 +11,6 @@
 
 namespace App\Entity\Project;
 
-use App\Entity\Comment\Thread;
 use App\Entity\Personne\Personne;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -37,14 +36,6 @@ class DocType
      * @ORM\Column(name="version", type="integer", nullable=true)
      */
     private $version;
-
-    /**
-     * @var Thread
-     *
-     * @ORM\OneToOne(targetEntity="App\Entity\Comment\Thread", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=true)
-     */
-    private $thread;
 
     /**
      * @var bool
@@ -193,28 +184,6 @@ class DocType
     public function getVersion()
     {
         return $this->version;
-    }
-
-    /**
-     * Set thread.
-     *
-     * @return DocType
-     */
-    public function setThread(Thread $thread)
-    {
-        $this->thread = $thread;
-
-        return $this;
-    }
-
-    /**
-     * Get thread.
-     *
-     * @return Thread
-     */
-    public function getThread()
-    {
-        return $this->thread;
     }
 
     /**

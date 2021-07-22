@@ -1,0 +1,5 @@
+{# Use these templates to display information throughout all Tabs (Négociation, Acceptées, en Cours...) #}
+
+{% if (etude.ceActive and not etude.ccaActive) or etude.ce is not none %}
+  {% include "Project/Etude/Tools/EtatDocument.html.twig" with {'doc': etude.ce, 'title': 'date'} %}
+{% endif %}

@@ -1,17 +1,17 @@
 {% extends "Publish/layout.html.twig" %}
 
 {% block title %}
-    Liste des Documents - {{ parent() }}
+    {{ 'suivi.liste_doc' | trans({}, 'project') }} {{ parent() }}
 {% endblock %}
 
 {% block content_title %}
-    Liste des Documents
+    {{ 'suivi.liste_doc' | trans({}, 'project') }}
 {% endblock %}
 
 {% block content_bundle %}
 
 
-    <h4>Espace utilisé :</h4>
+    <h4>{{ 'suivi.espace_utilise' | trans({}, 'project') }} :</h4>
     {% set actualSize = (100 * totalSize / authorizedStorageSize) | round(2) %}
     <div class="row">
         <div class="col-md-10 col-xs-10">
@@ -29,11 +29,11 @@
 
     <table class="table table-bordered table-striped">
         <tr>
-            <th>Date d'upload</th>
-            <th>Mis en ligne par</th>
-            <th>Titre</th>
-            <th>Taille</th>
-            <th>Action</th>
+            <th>{{ 'suivi.date_upload' | trans({}, 'project') }}</th>
+            <th>{{ 'suivi.mis_en_ligne_par' | trans({}, 'project') }}</th>
+            <th>{{ 'suivi.titre' | trans({}, 'project') }}</th>
+            <th>{{ 'suivi.taille' | trans({}, 'project') }}</th>
+            <th>{{ 'suivi.action' | trans({}, 'project') }}</th>
         </tr>
         {% for doc in docs | reverse %}
             <tr>

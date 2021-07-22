@@ -30,7 +30,7 @@ class MissionsType extends AbstractType
 
         $builder->add('missions', CollectionType::class, [
             'entry_type' => MissionType::class,
-            'entry_options' => ['etude' => $this->etude],
+            'entry_options' => ['etude' => $this->etude, 'acompte' => $options['acompte']],
             'allow_add' => true,
             'allow_delete' => true,
             'prototype' => true,
@@ -47,6 +47,7 @@ class MissionsType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Etude::class,
+            'acompte' => '0',
         ]);
         $resolver->setRequired(['etude']);
         $resolver->addAllowedTypes('etude', Etude::class);

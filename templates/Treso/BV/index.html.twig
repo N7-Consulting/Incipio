@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block title %}
-    {{ 'treso.bv_liste'|trans({}, 'treso') }} - {{ parent() }}
+    {{ 'treso.bv_liste'|trans({}, 'treso') }} {{ parent() }}
 {% endblock %}
 
 {% block content_title %}
@@ -21,17 +21,6 @@
 
 
 {% block content_bundle %}
-    <div class="nav-tabs-custom">
-        <ul id="myTab" class="nav nav-tabs">
-            <li>
-                <a href="{{ path('treso_BV_ajouter') }}"> <span
-                            class="fa fa-plus"></span> {{ 'treso.bv_add'|trans({}, 'treso') }}</a>
-            </li>
-            <li class="active">
-                <a href="#">{{ 'treso.bv_liste'|trans({}, 'treso') }}</a>
-            </li>
-        </ul>
-    </div>
     <table class="display dataTable table table-bordered table-striped dt-responsive" id="listeBV">
         <thead>
         <tr>

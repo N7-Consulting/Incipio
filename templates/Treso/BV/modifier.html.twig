@@ -5,7 +5,7 @@
         {{ 'treso.bv_ajout'|trans({}, 'treso') }}
     {% else %}
         {{ 'treso.bv_modification'|trans({}, 'treso') }}
-    {% endif %}- {{ parent() }}
+    {% endif %}{{ parent() }}
 {% endblock %}
 
 {% block content_title %}

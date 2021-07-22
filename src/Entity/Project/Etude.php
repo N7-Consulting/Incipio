@@ -44,11 +44,19 @@ class Etude
 
     public const ETUDE_STATE_AVORTEE = 5;
 
+    // Etude non clôturée (entre en cours et clôturée)
+    public const ETUDE_STATE_FINIE = 6;
+
+    // Etude non commencée (entre en négociation et en cours)
+    public const ETUDE_STATE_ACCEPTEE = 7;
+
     public const ETUDE_STATE_ARRAY = [
         self::ETUDE_STATE_NEGOCIATION => 'suivi.en_negociation',
+        self::ETUDE_STATE_ACCEPTEE => 'suivi.acceptee',
         self::ETUDE_STATE_COURS => 'suivi.en_cours',
-        self::ETUDE_STATE_PAUSE => 'suivi.en_pause',
+        self::ETUDE_STATE_FINIE => 'suivi.finie',
         self::ETUDE_STATE_CLOTUREE => 'suivi.cloturee',
+        self::ETUDE_STATE_PAUSE => 'suivi.en_pause',
         self::ETUDE_STATE_AVORTEE => 'suivi.avortee',
     ];
 
@@ -110,7 +118,7 @@ class Etude
 
     /**
      * @var int
-     * @Assert\Choice({1,2,3,4,5})
+     * @Assert\Choice({1,2,3,4,5,6,7})
      * @ORM\Column(name="stateID", type="integer", nullable=false)
      */
     private $stateID;
@@ -121,6 +129,13 @@ class Etude
      * @ORM\Column(name="stateDescription", type="text", nullable=true)
      */
     private $stateDescription;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="auditCommentaires", type="text", nullable=true)
+     */
+    private $auditCommentaires;
 
     /**
      * @var bool
@@ -154,7 +169,7 @@ class Etude
      *           l'affichage de la CC et de l'AP si définit à false ou null
      *
      * @ORM\Column(name="ceActive", type="boolean", nullable=true)
-     */
+    */
     private $ceActive;
 
     /************************
@@ -205,6 +220,7 @@ class Etude
     private $suivis;
 
     /**
+     * @deprecated Only present for backward compatibility.
      * @var Ap Avant projet
      *
      * @ORM\OneToOne(targetEntity="Ap", inversedBy="etude", cascade={"persist", "remove"})
@@ -213,6 +229,7 @@ class Etude
     private $ap;
 
     /**
+     * @deprecated Only present for backward compatibility.
      * @var Cc Convention Client
      *
      * @ORM\OneToOne(targetEntity="Cc", inversedBy="etude", cascade={"persist", "remove"})
@@ -333,6 +350,26 @@ class Etude
     private $newProspect;
 
     /**
+     * @Assert\Valid()
+     * @ORM\OneToOne(targetEntity=Bdc::class, inversedBy="etude", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\JoinColumn(onDelete="SET NULL")
+     */
+    private $bdc;
+
+    /**
+     * @Assert\Valid()
+     * @ORM\ManyToOne(targetEntity=Cca::class, inversedBy="etudes", cascade={"persist"})
+     * @ORM\JoinColumn(onDelete="SET NULL")
+     */
+    private $cca;
+
+    /**
+     * @var bool est-ce que l'étude utilise la CCa/BdC ? Ce booléen sert à forcer
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $ccaActive;
+
+    /**
      * @ORM\PrePersist
      */
     public function prePersist()
@@ -446,6 +483,9 @@ class Etude
         if ($this->ce) {// Réel
             return $this->ce->getDateSignature();
         }
+        if ($this->bdc) {// Réel
+            return $this->bdc->getDateSignature();
+        }
         if ($this->cc) { // Réel
             return $this->cc->getDateSignature();
         }
@@ -502,9 +542,7 @@ class Etude
     public function getDelai($avecAvenant = false)
     {
         if ($this->getDateFin($avecAvenant)) {
-            if ($this->cc && $this->cc->getDateSignature()) { // Réel
-                return $this->getDateFin($avecAvenant)->diff($this->cc->getDateSignature());
-            } elseif ($this->getDateLancement()) {
+            if ($this->getDateLancement()) {
                 return $this->getDateFin($avecAvenant)->diff($this->getDateLancement());
             }
         }
@@ -754,7 +792,7 @@ class Etude
      */
     public function getAuditDate()
     {
-        return $this->auditDate;
+       return $this->auditDate;
     }
 
     /**
@@ -783,8 +821,13 @@ class Etude
 
     public static function getAuditTypeChoice()
     {
-        return ['1' => 'Déontologique',
-            '2' => 'Exhaustif',
+        return [
+            '' => 'Non défini',
+            '0' => 'Non auditée',
+            '1' => 'Validée',
+            '2' => 'Validée (documents manquants)',
+            '3' => 'Problème mineur',
+            '4' => 'Problème majeur',
         ];
     }
 
@@ -1471,6 +1514,30 @@ class Etude
     }
 
     /**
+     * Set auditCommentaires.
+     *
+     * @param string $auditCommentaires
+     *
+     * @return Etude
+     */
+    public function setAuditCommentaires($auditCommentaires)
+    {
+        $this->auditCommentaires = $auditCommentaires;
+
+        return $this;
+    }
+
+    /**
+     * Get auditCommentaires.
+     *
+     * @return string
+     */
+    public function getAuditCommentaires()
+    {
+        return $this->auditCommentaires;
+    }
+
+    /**
      * Set confidentiel.
      *
      * @param bool $confidentiel
@@ -1733,5 +1800,81 @@ class Etude
     public function __toString()
     {
         return $this->getNom();
+    }
+
+    public function getCdc(): ?string
+    {
+        return $this->cdc;
+    }
+
+    public function setCdc(?string $cdc): self
+    {
+        $this->cdc = $cdc;
+
+        return $this;
+    }
+
+    public function getPc(): ?string
+    {
+        return $this->pc;
+    }
+
+    public function setPc(?string $pc): self
+    {
+        $this->pc = $pc;
+
+        return $this;
+    }
+
+    public function getQs(): ?string
+    {
+        return $this->qs;
+    }
+
+    public function setQs(?string $qs): self
+    {
+        $this->qs = $qs;
+
+        return $this;
+    }
+
+    public function getBdc(): ?Bdc
+    {
+        return $this->bdc;
+    }
+
+    public function setBdc(?Bdc $bdc = null): self
+    {
+        if (null !== $bdc) {
+            $bdc->setEtude($this);
+        }
+
+        $this->bdc = $bdc;
+
+        return $this;
+    }
+
+    public function getCca(): ?Cca
+    {
+        return $this->cca;
+    }
+
+    public function setCca(?Cca $cca = null): self
+    {
+        $this->cca = $cca;
+
+        return $this;
+    }
+
+    public function getCcaActive(): ?bool
+    {
+        return $this->ccaActive;
+    }
+
+    public function setCcaActive(?bool $ccaActive): self
+    {
+        $this->ccaActive = $ccaActive;
+
+        return $this;
     }
 }

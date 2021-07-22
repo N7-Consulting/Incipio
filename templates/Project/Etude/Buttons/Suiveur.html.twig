@@ -3,9 +3,10 @@
  # use : {% include "Project/Etude/Buttons/Suiveur.html.twig" with  {'suiveur':  etude.suiveur} %}
  #}
 <div class="btn-group" style="width: auto; min-width: 220px; max-width:500px;">
-    <a class="btn btn-success" href="#" style="width : calc(100% - 26px); text-align: left; overflow: hidden;"><i class="icon-user icon-white"></i> {{suiveur.prenomNom| default("Pas de suiveur !")}}</a>
+    <a class="btn btn-success" href="{{path('personne_membre_voir', {'id': suiveur.membre.id|default('0')})}}" style="width : calc(100% - 26px); text-align: left; overflow: hidden;"><i class="icon-user icon-white"></i> {{suiveur.prenomNom| default("Pas de suiveur !")}}</a>
     <a class="btn btn-success dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
     <ul class="dropdown-menu">
-        <li><a href="#"><i class="fa fa-envelope"></i> {{ 'suivi.contacter'|trans({}, 'project') }}</a></li>
+        <li><a href="{{ path('personne_membre_voir', {'id': suiveur.membre.id|default('0')}) }}"><i class="fa fa-info-circle" ></i> {{ 'suivi.voir'|trans({}, 'project') }}</a></li> 
+    <li><a href="mailto:{{ suiveur.email | default("#") }}"><i class="fa fa-envelope"></i> {{ 'suivi.contacter'|trans({}, 'project') }}</a></li>
     </ul>
 </div>

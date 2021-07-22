@@ -1,0 +1,13 @@
+{# Use these templates to display information throughout all Tabs (Négociation, Acceptées, en Cours...) #}
+
+<div class="progress">
+	{# Calcul de l'avancement global a partir de l'avancement individuel.#}
+	{% set sommeAvancement = 0 %}
+	{% for mission in etude.missions %}
+		{% set sommeAvancement = sommeAvancement + mission.avancement %}
+	{% endfor %}
+	{% set avancementGlobal = sommeAvancement / max(etude.missions|length,1) %}
+	<div class="progress-bar" style="width: {{ avancementGlobal ~ '%;'|default('0%;') }}" id="avancementBar-{{ etude.id}}">
+		{{ avancementGlobal ~ '%'|default('0%') }}
+	</div>
+</div>

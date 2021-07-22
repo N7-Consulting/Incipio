@@ -1,0 +1,41 @@
+{% extends "Project/layout.html.twig" %}
+
+{% block title %}
+    {{ 'suivi.etude_affichage'|trans({}, 'project') }} {{ parent() }}
+{% endblock %}
+
+
+{% block content_bundle %}
+<div class="table-responsive content">
+    {{ form_start(formAudit, {'attr': {'id': 'audit_type'}}) }}
+    {% form_theme formAudit 'Project/Form/fields.html.twig' %}
+    <table class="table table-bordered table-striped standard">
+        <tr>
+            <th>{{ form_label(formAudit.auditType) }} {{ form_errors(formAudit.auditType) }}</th>
+            <td>{{ form_widget(formAudit.auditType) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form_label(formAudit.auditDate) }} {{ form_errors(formAudit.auditDate) }}</th>
+            <td>{{ form_widget(formAudit.auditDate) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form_label(formAudit.auditCommentaires) }} {{ form_errors(formAudit.auditCommentaires) }}</th>
+            <td>{{ form_widget(formAudit.auditCommentaires) }}</td>
+        </tr>
+        
+    </table>
+
+
+    <div class="row">
+        <div class="col-md-3 col-xs-6">
+            <button type="submit" formAudit="audit_type" class="btn btn-success">
+                {{ 'suivi.audit_enregistrer'|trans({}, 'project') }}
+                {{ form_rest(formAudit) }}
+                {# {{ form_widget(formAudit) }} #}
+                {{ form_end(formAudit) }}
+            </button>
+        </div>
+    </div>
+    {{ form_javascript(formAudit) }}
+</div>
+{% endblock %}

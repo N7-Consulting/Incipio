@@ -1,0 +1,61 @@
+{% extends "Hr/layout.html.twig" %}
+
+{% block title %}
+{{ 'rh.gestion_alumni'|trans({}, 'rh') }} - {{ parent() }}
+{% endblock %}
+
+{% block content_title %}
+    {{ 'rh.gestion_alumni'|trans({}, 'rh') }}
+{% endblock %}
+
+{% block content_bundle %}
+<div class="nav-tabs-custom">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#liste" data-toggle="tab">{{ 'rh.liste'|trans({}, 'rh') }}</a></li>
+            <li><a href="#contact" data-toggle="tab">{{ 'rh.contacts'|trans({}, 'rh')}}</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="liste">
+                {% include "Hr/Alumni/liste.html.twig"  with {'alumni': alumni, 'dernierContactsParAlumnus': dernierContactsParAlumnus} %}
+            </div>
+            <div class="tab-pane" id="contact">
+                {% include "Hr/Alumni/contact.html.twig" with {'contactsParAlumnus': contactsParAlumnus} %}
+            </div>
+        </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script>
+        // keep tab opened through refresh
+        $(document).ready(function () {
+            // show active tab on reload
+            if (location.hash !== '') {
+                var tabSelect = $('a[href="' + location.hash + '"]');
+                var url = tabSelect.attr('data-url');
+                var div = $(location.hash);
+                if (div !== undefined) {
+                    div.load(url, function (result) {
+                        return result
+                    });
+                }
+                tabSelect.tab('show');
+            }
+
+            // remember the hash in the URL without jumping
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                var url = $(this).attr("data-url");
+                var href = this.hash;
+
+                if (history.pushState) {
+                    history.pushState(null, null, '#' + $(e.target).attr('href').substr(1));
+                } else {
+                    location.hash = '#' + $(e.target).attr('href').substr(1);
+                }
+            });
+        });
+
+        {% include 'Project/Etude/Tools/Avancement.js.twig' %}
+    </script>
+{% endblock %}

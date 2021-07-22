@@ -1,0 +1,15 @@
+{# Use these templates to display information throughout all Tabs (Négociation, Acceptées, en Cours...) #}
+
+{% set valide    = asset('img/success.png') %}
+{% set nonValide = asset('img/cross.png') %}
+{% set enCours   = asset('img/progress.png') %}
+
+{% set etat = getEtatFacture(facture) %}
+
+{% if etat == 2 %}
+	<img src="{{ valide }}" title="{{ facture is not null ? facture.dateEmission | date("d/m/y") }}"/>
+{% elseif etat == 1 %}
+	<img src="{{ enCours }}" title="{{ facture is not null ? facture.dateEmission | date("d/m/y") }}"/>
+{% elseif etat == 0 %}
+	<img src="{{ nonValide }}" title="{{ facture is not null ? etude.fa.dateEmission | date("d/m/y") }}"/>
+{% endif %}

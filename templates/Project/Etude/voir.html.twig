@@ -1,7 +1,7 @@
 {% extends "Project/layout.html.twig" %}
 
 {% block title %}
-    {{ 'suivi.etude_affichage'|trans({}, 'project') }} - {{ parent() }}
+    {{ 'suivi.etude_affichage'|trans({}, 'project') }} {{ parent() }}
 {% endblock %}
 
 {% block content_bundle %}
@@ -15,6 +15,8 @@
             {% endif %}
             <li><a href="#tab5" data-toggle="tab">{{ 'suivi.document'|trans({}, 'project') }}</a></li>
             <li><a href="#tab6" data-toggle="tab">{{ 'suivi.commentaries'|trans({}, 'project') }}</a></li>
+            <li><a href="#tab7" data-toggle="tab">{{ 'suivi.contacts'|trans({}, 'project') }}</a></li>
+
         </ul>
         <div class="tab-content">
             <!-- ERRORS -->
@@ -45,11 +47,15 @@
                 {% include "Project/Etude/TabVoir/Documents.html.twig" with  {'etude':  etude} %}
             </div>
 
-            <!-- Commentaires sur les études -->
+            <!-- COMMENTAIRES SUR LES ETUDES -->
             <div class="tab-pane" id="tab6">
                 {% if etude.thread|default('0') %}
                     {% include 'Comment/Thread/async.html.twig' with {'id': etude.thread.id, 'view': 'flat'} %}
                 {% endif %}
+            </div>
+            <!-- CONTACT -->
+            <div class="tab-pane" id="tab7">
+               {% include "Project/Etude/TabVoir/Contact.html.twig" with  {'etude':  etude} %}
             </div>
         </div>
     </div>

@@ -3,26 +3,37 @@
 {% extends "Project/layout.html.twig" %}
 
 {% block title %}
-    {{ 'suivi.accueil'|trans({}, 'project') }} - {{ parent() }}
+    {{ 'suivi.accueil'|trans({}, 'project') }} {{ parent() }}
 {% endblock %}
 
 {% block content_bundle %}
 
     <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
-            {#% if etudesSuiveur | length %}
-            <li class="active"><a href="#tab1" data-toggle="tab">Etudes à suivre ({{app.user.personne.prenomnom|default('non connecté')}})</a></li>
-            {% endif %#}
-            <li class="active"><a href="#tab2" data-toggle="tab">{{ 'suivi.etudes_negociations'|trans({}, 'project') }}
+            {# En négociation #}
+            <li><a href="#nego" data-toggle="tab">{{ 'suivi.etudes_negociations'|trans({}, 'project') }}
                     ({{ etudesEnNegociation | length }})</a></li>
-            <li><a href="#tab3" data-toggle="tab">{{ 'suivi.etudes_en_cours'|trans({}, 'project') }}
+            {# Acceptées #}
+            {% if etudesAcceptees | length %}
+            <li><a href="#acceptees" data-toggle="tab">{{ 'suivi.etudes_acceptees'|trans({}, 'project') }}
+                    ({{ etudesAcceptees | length }})</a></li>
+            {% endif %}
+            {# En Cours #}
+            <li class="active"><a href="#cours" data-toggle="tab">{{ 'suivi.etudes_en_cours'|trans({}, 'project') }}
                     ({{ etudesEnCours | length }})</a></li>
+            {# Finies #}
+            {% if etudesFinies | length %}
+            <li><a href="#finies" data-toggle="tab">{{ 'suivi.etudes_finies'|trans({}, 'project') }}
+                    ({{ etudesFinies | length }})</a></li>
+            {% endif %}
+            {# En pause #}
             {% if etudesEnPause | length %}
-                <li><a href="#tab4" data-toggle="tab">{{ 'suivi.etudes_pause'|trans({}, 'project') }}
+                <li><a href="#pause" data-toggle="tab">{{ 'suivi.etudes_pause'|trans({}, 'project') }}
                         ({{ etudesEnPause | length }})</a></li>
             {% endif %}
-            <li><a href="#tab5" data-toggle="tab">{{ 'suivi.etudes_terminees'|trans({}, 'project') }}</a></li>
-            <li><a href="#tab6" data-toggle="tab">{{ 'suivi.etudes_avortees'|trans({}, 'project') }}
+            {# Intermandat #}
+            <li><a href="#terminees_ancien" data-toggle="tab">{{ 'suivi.etudes_cloturees'|trans({}, 'project') }}</a></li>
+            <li><a href="#avortees_ancien" data-toggle="tab">{{ 'suivi.etudes_avortees'|trans({}, 'project') }}
                     <span class="badge badge-default" title="{{ 'suivi.propales_non_abouties_texte'|trans({}, 'project') }}"
                  data-toggle="tooltip">?</span>
                 </a>
@@ -30,21 +41,27 @@
         </ul>
     </div>
     <div class="tab-content">
-        <div class="tab-pane active" id="tab2" style="min-height: 400px;">
+        <div class="tab-pane" id="nego" style="min-height: 400px;">
             {% include "Project/Etude/Tab/EtudesEnNegociation.html.twig" with  {'etudesEnNegociation':  etudesEnNegociation} %}
         </div>
-        <div class="tab-pane" id="tab3" style="min-height: 400px;">
+        <div class="tab-pane" id="acceptees" style="min-height: 400px;">
+            {% include "Project/Etude/Tab/EtudesAcceptees.html.twig" with  {'etudesAcceptees':  etudesAcceptees} %}
+        </div>
+        <div class="tab-pane active" id="cours" style="min-height: 400px;">
             {% include "Project/Etude/Tab/EtudesEnCours.html.twig" with  {'etudesEnCours':  etudesEnCours} %}
         </div>
+        <div class="tab-pane" id="finies" style="min-height: 400px;">
+            {% include "Project/Etude/Tab/EtudesFinies.html.twig" with  {'etudesFinies':  etudesFinies} %}
+        </div>
         {% if etudesEnPause | length %}
-            <div class="tab-pane" id="tab4" style="min-height: 400px;">
+            <div class="tab-pane" id="pause" style="min-height: 400px;">
                 {% include "Project/Etude/Tab/EtudesEnPause.html.twig" with  {'etudesEnPause':  etudesEnPause} %}
             </div>
         {% endif %}
-        <div class="tab-pane" id="tab5" style="min-height: 400px;">
+        <div class="tab-pane" id="terminees_ancien" style="min-height: 400px;">
             &nbsp;{% include "Project/Etude/Tab/EtudesParMandat.html.twig" with  {'etudesParMandat':  etudesTermineesParMandat, 'key' : '1'} %}
         </div>
-        <div class="tab-pane" id="tab6" style="min-height: 400px;">
+        <div class="tab-pane" id="avortees_ancien" style="min-height: 400px;">
             &nbsp;{% include "Project/Etude/Tab/EtudesParMandat.html.twig" with  {'etudesParMandat':  etudesAvorteesParMandat, 'key' : '2'} %}
         </div>
     </div>
@@ -63,7 +80,7 @@
                         console.log(data);
                     });
             }
-            
+
             $('.accordion-toggle').each(function () {
                 $(this).click(function () {
                     if ($(this).attr('data-loaded') == 'false') {

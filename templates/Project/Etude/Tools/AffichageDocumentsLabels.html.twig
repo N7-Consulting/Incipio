@@ -1,0 +1,21 @@
+{# Peut mieux se factoriser... #}
+
+{# CE / BDC #}
+{% if etude.ccaActive %}
+  <span class="label label-{{ getColorDoc(etude.bdc) }}">{{ 'suivi.bdc'|trans({}, 'project') }}</span>
+{% else %}
+  <span class="label label-{{ getColorDoc(etude.ce) }}">{{ 'suivi.ce'|trans({}, 'project') }}</span>
+{% endif %}
+{# FA #}
+<span class="label label-{{ getColorDoc(etude.fa) }}">{{ 'suivi.fa'|trans({}, 'project') }}</span>
+{# RMs #}
+{# We take the first one (arbitrary) to display a label color... #}
+<span class="label label-{{ getColorDoc(etude.missions[0]??NULL) }}">{{ 'suivi.rm'|trans({}, 'project') }}</span>&nbsp
+{% include "Project/Etude/Tools/EtatDocuments.html.twig" with {'docs': etude.missions, 'title': 'intervenantPrenomNom'} %}
+{# PVRIs #}
+<span class="label label-{{ getColorDoc(etude.pvis[0]??NULL) }}">{{ 'suivi.pvi'|trans({}, 'project') }}</span>&nbsp
+{% include "Project/Etude/Tools/EtatDocuments.html.twig" with {'docs': etude.pvis, 'title': 'date'} %}
+{# PVRF #}
+<span class="label label-{{ getColorDoc(etude.pvr) }}">{{ 'suivi.pvr'|trans({}, 'project') }}</span>
+{# FS #}
+<span class="label label-{{ getColorDoc(etude.fs) }}">{{ 'suivi.fs'|trans({}, 'project') }}</span>

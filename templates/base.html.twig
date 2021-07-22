@@ -1,4 +1,3 @@
-
 {#
 This file is part of Incipio.
 
@@ -21,188 +20,206 @@ along with Incipio as the file LICENSE.  If not, see <http://www.gnu.org/license
 
 <!DOCTYPE html>
 <html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-name" content="Jeyser CRM" />
+	<head>
+		<script>
+			window.markerConfig = {
+			destination: '60ed4aa58fdb9e6a406a27b2', 
+			source: 'snippet'
+		};
+		</script>
 
-    <title>{% block title %}{% endblock %} - Jeyser CRM</title>
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
-    <link rel="apple-touch-icon" href="{{ asset('jeyser-icon-192x192.png') }}"/>
-    <link rel="manifest" href="{{ asset('manifest.json') }}"/>
+		<script>
+		!function(e,r,a){if(!e.__Marker){e.__Marker={};var t=[],n={__cs:t};["show","hide","isVisible","capture","cancelCapture","unload","reload","isExtensionInstalled","setReporter","setCustomData","on","off"].forEach(function(e){n[e]=function(){var r=Array.prototype.slice.call(arguments);r.unshift(e),t.push(r)}}),e.Marker=n;var s=r.createElement("script");s.async=1,s.src="https://edge.marker.io/latest/shim.js";var i=r.getElementsByTagName("script")[0];i.parentNode.insertBefore(s,i)}}(window,document);
+		</script>
+    
 
-    {% block stylesheets %}
-        <link rel="stylesheet" href="{{ asset('css/jquery-ui-1.10.0.custom.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap.min.css') }}" type="text/css"/>
-        <link rel="stylesheet" href="{{ asset('css/AdminLTE.min.css') }}"/>
-        <link rel="stylesheet" href="{{ asset('css/skin-n7c.min.css') }}"/>
-        <link rel="stylesheet" href="{{ asset('css/select2.css') }}"/>
-        <link async href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="application-name" content="Jeyser CRM"/>
 
-    {% endblock %}
+		<title>
+			{% block title %}{% endblock %}
+			- Jeyser CRM</title>
+		<link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
+		<link rel="apple-touch-icon" href="{{ asset('jeyser-icon-192x192.png') }}"/>
+		<link rel="manifest" href="{{ asset('manifest.json') }}"/>
 
-    {% block head %}
-    {% endblock %}
-</head>
+		{% block stylesheets %}
+			<link rel="stylesheet" href="{{ asset('css/jquery-ui-1.10.0.custom.min.css') }}">
+			<link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap.min.css') }}" type="text/css"/>
+			<link rel="stylesheet" href="{{ asset('css/AdminLTE.min.css') }}"/>
+			<link rel="stylesheet" href="{{ asset('css/skin-n7c.min.css') }}"/>
+			<link rel="stylesheet" href="{{ asset('css/select2.css') }}"/>
+			<link async href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
 
-<body class="skin-yellow sidebar-mini">
-{% block javascript_quick %}
-    <script src="{{ asset('js/jquery-1.12.0.min.js') }}"></script>
-    <script src="{{ asset('bootstrap/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('js/jquery-ui-1.10.0.custom.min.js') }}"></script>
-    <script src="{{ asset('js/jquery.ui.datepicker-fr.js') }}"></script>
-    <script src="{{ asset('js/select2.min.js') }}"></script>
-    <script src="{{ asset('js/app.min.js') }}"></script>
-{% endblock %}
+		{% endblock %}
 
-{% block body %}
-    <div class="wrapper">
+		{% block head %}{% endblock %}
+	</head>
 
-        {% block main_header %}
-            <header class="main-header hidden-print">
-                {% if app.user is not empty and  is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-                    <a href="{{ path('dashboard_homepage') }}" class="logo">
-                        <span class="logo-mini"><b>{{ param('abbr') }}</b></span>
-                        <span class="logo-lg">My {{ param('abbr') }}</span>
-                    </a>
-                    <nav class="navbar navbar-static-top" role="navigation">
-                        <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-                            <span class="sr-only">Toggle navigation</span>
-                        </a>
-                        <div class="navbar-custom-menu">
-                            {% include "Dashboard/Navbar/compte.html.twig" %}
-                        </div>
-                    </nav>
-                {% else %}
-                    <a class="navbar-brand" href="#">{{ param('abbr') }}</a>
-                {% endif %}
-            </header>
-        {% endblock %}
+	<body class="skin-yellow sidebar-mini">
+		{% block javascript_quick %}
+			<script src="{{ asset('js/jquery-1.12.0.min.js') }}"></script>
+			<script src="{{ asset('bootstrap/js/bootstrap.min.js') }}"></script>
+			<script src="{{ asset('js/jquery-ui-1.10.0.custom.min.js') }}"></script>
+			<script src="{{ asset('js/jquery.ui.datepicker-fr.js') }}"></script>
+			<script src="{{ asset('js/select2.min.js') }}"></script>
+			<script src="{{ asset('js/app.min.js') }}"></script>
+		{% endblock %}
 
-        {% block menu_main %}
-            {% block menu %}
-                {% if app.user is not empty and  is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-                    {# L'utilisateur est connecté ! #}
-                    <aside class="main-sidebar">
-                        <section class="sidebar">
-                            {% include "Dashboard/Navbar/staff.html.twig" %}
-                        </section>
-                    </aside>
-                {% else %}
-                    {# L'utilisateur n'est pas connecté ! #}
-                    <aside></aside>
-                {% endif %}
-            {% endblock %}
-        {% endblock %}
+		{% block body %}
 
-        {% block content_main %}
-            <div class="content-wrapper">
-                <section class="content">
-                    <div class="row">
-                        <div class="col-lg-12 col-xs-12">
-                            {% for label, flashes in app.session.flashbag.all %}
-                                {% for flash in flashes %}
-                                    <div class="container text-center">
-                                        <div class="row">
-                                            <div class="col-md-6 col-md-offset-3 alert alert-{{ label }}">
-                                                {{ flash }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                {% endfor %}
-                            {% endfor %}
-                            {% block content %}
-                            {% endblock %}
-                        </div>
-                    </div>
-                </section>
-            </div>
-        {% endblock %}
+			<div class="wrapper">
 
-        {% block footer_main %}
-            <footer class="main-footer hidden-print">
-                {# Do not remove that copyright and link if you want some support. #}
-                {# It is illegal (cf licence) to remove the link to github #}
-                {# And dishonest to remove the reference to Jeyser's main contributors.#}
-                <p class="text-muted" style="text-align: center">
-                    <i>© Jeyser CRM 2020 &#124; M-GaTE & N7 Consulting</i>
-                    &#124;
-                    <a href="https://github.com/n7consulting/Incipio">Get it on Github</a>
-                </p>
-            </footer>
-        {% endblock %}
-    </div>
-{% endblock %}
+				{% block main_header %}
+					<header class="main-header hidden-print">
+						{% if app.user is not empty and  is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+							<a href="{{ path('dashboard_homepage') }}" class="logo navbar-left">
+								<span class="logo-mini"><img width="40px" src="{{ param('logo') }}"></img>
+							</span>
 
-{% block javascript %}
-    <script src="{{ asset('js/bootboxjs.min.js') }}"></script>
-    <script>
-        $(function () {
-            $(document).on("click", ".bootbox-confirm", function (e) {
-                e.preventDefault();
-                var _this = $(this);
-                return bootbox.confirm($(this).data('content'), function (result) {
-                    if (result) _this.closest('form').submit();
-                });
-            });
-        });
-        $(".loading").hide();
-    </script>
+							<span class="logo-lg">{{ param('nom') }}</span>
+						</a>
+						<nav class="navbar navbar-static-top" role="navigation">
+							<a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+								<span class="sr-only">Toggle navigation</span>
+							</a>
+							<div class="navbar-custom-menu">
+								{% include "Dashboard/Navbar/compte.html.twig" %}
+							</div>
+						</nav>
+					{% else %}
+						<a class="navbar-brand" href="#">{{ param('abbr') }}</a>
+					{% endif %}
+				</header>
+			{% endblock %}
 
-    <script>
-        $(function () {
-            function stripTrailingSlash(str) {
-                if (str.substr(-1) === '/') {
-                    return str.substr(0, str.length - 1);
-                }
-                return str;
-            }
+			{% block menu_main %}
+				{% block menu %}
+					{% if app.user is not empty and  is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+						{# L'utilisateur est connecté ! #}
+						<aside class="main-sidebar">
+							<section class="sidebar">
+								{% include "Dashboard/Navbar/staff.html.twig" %}
+							</section>
+						</aside>
+					{% else %}
+						{# L'utilisateur n'est pas connecté ! #}
+						<aside></aside>
+					{% endif %}
+				{% endblock %}
+			{% endblock %}
 
-            function addActiveClass(element){
-                if(element.is("li")){
-                    element.addClass('active');
-                    addActiveClass(element.parent().parent());
-                }
-            }
+			{% block content_main %}
+				<div class="content-wrapper">
+					<section class="content">
+						<div class="row">
+							<div class="col-lg-12 col-xs-12">
+								{% for label, flashes in app.session.flashbag.all %}
+									{% for flash in flashes %}
+										<div class="container text-center">
+											<div class="row">
+												<div class="col-md-6 col-md-offset-3 alert alert-{{ label }}">
+													{{ flash }}
+												</div>
+											</div>
+										</div>
+									{% endfor %}
+								{% endfor %}
+								{% block content %}{% endblock %}
+							</div>
+						</div>
+					</section>
+				</div>
+			{% endblock %}
 
-            let url = window.location.href;
-            let activePage = stripTrailingSlash(url);
-            let linkFound = false;
-            $('.sidebar-menu li a').each(function () {
-                let currentLink = stripTrailingSlash($(this).attr('href'));
-                if (activePage.endsWith(currentLink)) {
-                        addActiveClass($(this).parent());
-                        linkFound = true;
-                }
-            });
-            if(!linkFound){ // Less sensitive match
-                $('.sidebar-menu li a').each(function () {
-                    if(!linkFound){
-                        let currentLink = stripTrailingSlash($(this).attr('href'));
-                        if (activePage.indexOf(currentLink) !== -1) {
-                            addActiveClass($(this).parent());
-                            linkFound = true;
-                        }
-                    }
-                });
-            }
-        });
-    </script>
+			{% block footer_main %}
+				<footer class="main-footer hidden-print">
+					{# Do not remove that copyright and link if you want some support. #}
+					{# It is illegal (cf licence) to remove the link to github #}
+					{# And dishonest to remove the reference to Jeyser's main contributors.#}
+						<p class="text-muted" style="text-align: center"> <i>© Jeyser CRM 2021 &#124; M-GaTE & N7 Consulting</i>
+						&#124;
+						<a href="https://github.com/n7consulting/Incipio">Get it on Github</a>
+					</p>
+				</footer>
+			{% endblock %}
+		</body>
+	</html>
+</div>{% endblock %}{% block javascript %}
+<script src="{{ asset('js/bootboxjs.min.js') }}"></script>
+<script>
+	$(function () {
+$(document).on("click", ".bootbox-confirm", function (e) {
+e.preventDefault();
+var _this = $(this);
+return bootbox.confirm($(this).data('content'), function (result) {
+if (result)
+_this.closest('form').submit();
 
-    {% if param('gaTracking') is not null %}
-    <!-- GOOGLE ANALYTICS -->
-    <script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+});
+});
+});
+$(".loading").hide();
+</script>
 
-        ga('create', '{{ param('gaTracking') }}', 'auto');
-        ga('send', 'pageview');
+<script>
+	$(function () {
+function stripTrailingSlash(str) {
+if (str.substr(-1) === '/') {
+return str.substr(0, str.length - 1);
+}
+return str;
+}
 
-    </script>
-    {% endif %}
-{% endblock %}
+function addActiveClass(element) {
+if (element.is("li")) {
+element.addClass('active');
+addActiveClass(element.parent().parent());
+}
+}
 
-</body>
-</html>
+let url = window.location.href;
+let activePage = stripTrailingSlash(url);
+let linkFound = false;
+$('.sidebar-menu li a').each(function () {
+let currentLink = stripTrailingSlash($(this).attr('href'));
+if (activePage.endsWith(currentLink)) {
+addActiveClass($(this).parent());
+linkFound = true;
+}
+});
+if (! linkFound) { // Less sensitive match
+$('.sidebar-menu li a').each(function () {
+if (! linkFound) {
+let currentLink = stripTrailingSlash($(this).attr('href'));
+if (activePage.indexOf(currentLink) !== -1) {
+addActiveClass($(this).parent());
+linkFound = true;
+}
+}
+});
+}
+});
+</script>
+
+{% if param('gaTracking') is not null %}
+	<!-- GOOGLE ANALYTICS -->
+	<script>
+		(function (i, s, o, g, r, a, m) {
+i['GoogleAnalyticsObject'] = r;
+i[r] = i[r] || function () {
+(i[r].q = i[r].q || []).push(arguments)
+},
+i[r].l = 1 * new Date();
+a = s.createElement(o),
+m = s.getElementsByTagName(o)[0];
+a.async = 1;
+a.src = g;
+m.parentNode.insertBefore(a, m)
+})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+ga('create', '{{ param('gaTracking') }}', 'auto');
+ga('send', 'pageview');
+	</script>
+{% endif %}{% endblock %}</body></html>

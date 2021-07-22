@@ -1,15 +1,10 @@
 {% extends "Treso/layout.html.twig" %}
 
 {% block title %}
-    {{ 'treso.factures_liste'|trans({}, 'treso') }} - {{ parent() }}
+    {{ 'treso.factures_liste'|trans({}, 'treso') }} {{ parent() }}
 {% endblock %}
 
-{% block stylesheets %}
-    {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/datatables/dataTables.bootstrap.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/datatables/dataTables.fontAwesome.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/datatables/responsive.bootstrap.min.css') }}">
-{% endblock %}
+
 
 {% block content_title %}
     {{ 'treso.factures_liste'|trans({}, 'treso') }}
@@ -24,10 +19,6 @@
     <div class="nav-tabs-custom">
         <ul id="myTab" class="nav nav-tabs">
             <li>
-                <a href="{{ path('treso_Facture_ajouter') }}"> <span
-                            class="fa fa-plus"></span> {{ 'treso.facture_ajouter'|trans({}, 'treso') }}</a>
-            </li>
-            <li>
                 <a href="#FA" data-toggle="tab">{{ 'treso.facture_achat'|trans({}, 'treso') }}</a>
             </li>
             <li class="active">
@@ -35,6 +26,7 @@
             </li>
         </ul>
     </div>
+
     <div id="myTabContent" class="tab-content">
         <div class="tab-pane fade" id="FA">
             <table class="display dataTable table table-bordered table-striped dt-responsive" id="FAtable">

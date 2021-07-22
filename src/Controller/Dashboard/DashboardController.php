@@ -11,6 +11,7 @@
 
 namespace App\Controller\Dashboard;
 
+use App\Entity\Comment\Comment;
 use App\Controller\Project\EtudeController;
 use App\Entity\Personne\Personne;
 use App\Entity\Personne\Prospect;
@@ -21,6 +22,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Webmozart\KeyValueStore\Api\KeyValueStore;
+use App\Service\Comment\CommentManagerInterface;
+
 
 class DashboardController extends AbstractController
 {
@@ -36,8 +39,9 @@ class DashboardController extends AbstractController
     /**
      * @Route(name="dashboard_homepage", path="/", methods={"GET","HEAD"})
      */
-    public function index()
+    public function index(CommentManagerInterface $commentManager)
     {
+        $this->updateDashboardStats($this->statsStore);
         if (!$this->statsStore->exists('expiration') ||
             (
                 $this->statsStore->exists('expiration') &&
@@ -48,7 +52,13 @@ class DashboardController extends AbstractController
         }
         $stats = $this->statsStore->getMultiple(['ca_negociation', 'ca_encours', 'ca_cloture', 'ca_facture', 'ca_paye', 'expiration']);
 
-        return $this->render('Dashboard/Default/index.html.twig', ['stats' => (isset($stats) ? $stats : [])]);
+        $em = $this->getDoctrine()->getManager();
+        $commentsParEtude = $em->getRepository(Comment::class)->findAllByEtude($commentManager);
+
+        return $this->render('Dashboard/Default/index.html.twig',
+        ['stats' => (isset($stats) ? $stats : []),
+        'commentsParEtude' => $commentsParEtude,
+        ]);
     }
 
     /**
@@ -77,11 +87,17 @@ class DashboardController extends AbstractController
 
     private function updateDashboardStats(KeyValueStore $statsStore)
     {
-        $etudeRepository = $this->getDoctrine()
-            ->getRepository(Etude::class);
-        $statsStore->set('ca_negociation', $etudeRepository->getCaByState(EtudeController::STATE_ID_EN_NEGOCIATION));
-        $statsStore->set('ca_encours', $etudeRepository->getCaByState(EtudeController::STATE_ID_EN_COURS));
-        $statsStore->set('ca_cloture', $etudeRepository->getCaByState(EtudeController::STATE_ID_TERMINEE, date('Y')));
+        $etudeRepository = $this->getDoctrine()->getRepository(Etude::class);
+
+        $statsStore->set('ca_negociation', $etudeRepository->getCaByState(Etude::ETUDE_STATE_NEGOCIATION));
+
+        $caEnCours = $etudeRepository->getCaByState(Etude::ETUDE_STATE_ACCEPTEE)
+                    + $etudeRepository->getCaByState(Etude::ETUDE_STATE_COURS);
+        $statsStore->set('ca_encours', $caEnCours);
+
+        $caCloture = $etudeRepository->getCaByState(Etude::ETUDE_STATE_FINIE)
+            + $etudeRepository->getCaByState(Etude::ETUDE_STATE_CLOTUREE);
+        $statsStore->set('ca_cloture', $caCloture);
 
         $factureRepository = $this->getDoctrine()->getRepository(Facture::class);
         $statsStore->set('ca_facture', $factureRepository->getCAFacture(date('Y')));

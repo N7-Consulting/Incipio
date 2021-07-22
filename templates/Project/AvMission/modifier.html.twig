@@ -3,7 +3,7 @@
 {% set tab= "tab3" %}
 
 {% block title %}
-    {{ 'suivi.avenant_mission_modifier'|trans({}, 'project') }} - {{ parent() }}
+    {{ 'suivi.avenant_mission_modifier'|trans({}, 'project') }} {{ parent() }}
 {% endblock %}
 
 {% block content_title %}
@@ -24,4 +24,3 @@
     {{ parent() }}
     {{ form_javascript(form) }}
 {% endblock %}
-

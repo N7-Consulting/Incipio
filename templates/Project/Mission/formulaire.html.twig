@@ -54,14 +54,6 @@
                         {{ form_errors(form.signataire1) }}
                     </div>
                 </div>
-                <div class="row" style="margin-top: 25px">
-                    <div class="col-md-12 col-xs-12">
-                        {{ form_label(form.phases) }}
-                        {{ form_widget(form.phases, {'attr': {'style': 'width:100%'}}) }}
-                        {{ form_errors(form.phases) }}
-
-                    </div>
-                </div>
             </div>
             <div class="col-xs-12 col-md-4">
                 <table class="table table-striped table-bordered">
@@ -80,10 +72,12 @@
                             <td>
                                 <table class='table'>
                                     <tr>
+                                        <th>{{ form_label(form.repartitionsJEH.vars.prototype.phase) | e }}</th>
                                         <th>{{ form_label(form.repartitionsJEH.vars.prototype.nbrJEH) | e }}</th>
                                         <th>{{ form_label(form.repartitionsJEH.vars.prototype.prixJEH) | e }}</th>
                                     </tr>
                                     <tr>
+                                        <td>{{ form_widget(form.repartitionsJEH.vars.prototype.phase) | e }}</td>
                                         <td>{{ form_widget(form.repartitionsJEH.vars.prototype.nbrJEH) | e }}</td>
                                         <td>{{ form_widget(form.repartitionsJEH.vars.prototype.prixJEH) | e }}</td>
                                     </tr>
@@ -96,10 +90,13 @@
                             <td>
                                 <table class="table">
                                     <tr>
+                                        <th>{{ form_label(repartitionJEH.phase) }}</th>
                                         <th>{{ form_label(repartitionJEH.nbrJEH) }}</th>
                                         <th>{{ form_label(repartitionJEH.prixJEH) }}</th>
                                     </tr>
                                     <tr>
+                                        <td>{{ form_widget(repartitionJEH.phase) }}
+                                            {{ form_errors(repartitionJEH.phase) }}</td>
                                         <td>{{ form_widget(repartitionJEH.nbrJEH) }}
                                             {{ form_errors(repartitionJEH.nbrJEH) }}</td>
 

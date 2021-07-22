@@ -1,0 +1,47 @@
+rh:
+  alumni_ajouter: Ajouter un alumnus
+  alumnus_enregistrer: Enregistrer l'alumnus
+  alumnus_nouveau_enregistrer: Enregistrer un nouvel alumnus
+  alumnus_modifier: Modifier l'alumnus
+  alumnus_supprimer: Supprimer cet alumnus
+  alumnus_supprimer_confirm: Voulez-vous vraiment supprimer cet alumnus?
+  alumnnus_tooltip: Vous pouvez ajouter un alumnus depuis le sous-onglet "Liste des alumnis"
+  alumnus: Alumnus
+  ajouter_competence: Ajouter une compétence
+  aucune_competence: Pas (encore !) de competences
+  competnece_ajouter : Ajouter une compétence
+  contacts : Contacts
+  contact : Contact
+  contact_client_supprimer: Supprimer
+  contact_client_supprimer_confirm: Voulez-vous vraiment supprimer ce contact?
+  contact_client_modifier: Modifier le contact
+  contact_enregistrer: Enregistrer le contact
+  contact_nouveau_enregistrer: Enregistrer le nouveau contact
+  contact_alumni: Contacts avec les alumni
+  contact_alumni_ajouter: Ajouter un contact
+  contact_avec_alumnus: Contacts avec 
+  contact_voir: Voir le contact 
+  commentaires: Comentaires
+  dernier_contact: Dernier contact
+  date : Date
+  detail: Détails
+  fait_par: Fait par
+  gestion_alumni: Gestion des alumni
+  information: Fiche d'information
+  liste_competence: Liste des compétences
+  lien_linkedin: Lien LinkedIn
+  liste : Liste des alumni
+  objet: Objet
+  pas_de_contact : Aucun contact enregistré
+  poste_entreprise : Poste en entreprise actuel
+  secteur_entrepise: Secteur d'activité actuel
+  nom: Nom
+  resume : Résumé
+  secteur_activite: Secteurs d'activité
+  secteur_activite_ajouter : Ajouter un secteur d'activité
+  secteur_liste_vide: Aucun secteur d'activité de l'entreprise n'est enregistré
+  type: Type
+  voir_profil : Voir le profil
+
+
+

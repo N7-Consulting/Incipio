@@ -1,7 +1,7 @@
 {% extends "Treso/layout.html.twig" %}
 
 {% block title %}
-    {{ 'treso.note_frais'|trans({}, 'treso') }} {{ nf.reference }}- {{ parent() }}
+    {{ 'treso.note_frais'|trans({}, 'treso') }} {{ nf.reference }}{{ parent() }}
 {% endblock %}
 
 {% block content_title %}
@@ -111,4 +111,3 @@
     </div>
 
 {% endblock %}
-

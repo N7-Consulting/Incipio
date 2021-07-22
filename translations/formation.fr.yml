@@ -1,30 +1,54 @@
 formation:
+  actico: Activité Commerciale
+  annee: Année
+  autre: Autre
+  book_passation: Book de passation
   categories: Categories
+  categorie: Categorie
   chercher: Chercher
   confirmation_supprimer_formation: Etes-vous sûr de vouloir supprimer définitivement cette formation ?
+  confirmation_supprimer_passation: Etes-vous sûr de vouloir supprimer définitivement cette passation ?
+  communication: Communication
   date: Date
+  date_upload: Date de télechargement
   description: Description
+  devco: Développement commercial
   documents: Documents
+  document_formation : Documents relatifs à la formation
+  document_passation: Documents relatifs à la passation
   documents_telecharger: Télécharger les documents
+  dsi: DSI
   duree: Durée
   espace_admin: Espace Admin
   formateurs: Formateurs
-  formation_enregistrer: Enregistrer la Formation
+  formation_enregistrer: Enregistrer la formation
+  passation_enregistrer: Enregistrer la passation
   formation_modifier: Modifier la formation
-  formation_supprimer: Supprimer la Formation
+  formation_supprimer: Supprimer la formation
   formations: Formations
+  formations_rapports : Rapports des formations
   formations_presence: Présence aux formations
+  gestion_etude: Gestion d'études
+  gestion_asso: Gestion associative
+  num_mandat: Numéro du mandat
   mandat: Mandat
   membres: membres
   membres_present: Membres Présents
   minutes: minutes
   modifier: Modifier
+  passation_ajouter : Ajouter une passation
+  passation_modifier : Modifier la passation
+  passation_supprimer: Supprimer la passation
   personnes_presentes: Personnes présentes
   present: Présents
+  qualite: Qualité
+  rfp: R.F.P
+  rh: RH
   taux: Taux
   titre: Titre
+  treso: Trésorerie
   formations_liste: Liste des formations
   formation_ajouter: Ajouter une formation
-  date_debut: Date de début
-  date_fin: Date de fin
+  date_heure_debut: Date et heure de début
+  date_heure_fin: Date et heure de fin
   lien_documents: Lien vers des documents externes

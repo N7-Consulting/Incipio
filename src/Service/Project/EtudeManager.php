@@ -93,7 +93,8 @@ class EtudeManager
             if ($key < 0) {
                 return $name . '-' . $type;
             }
-            if (!$etude->getMissions()->get($key)
+            if (
+                !$etude->getMissions()->get($key)
                 || !$etude->getMissions()->get($key)->getIntervenant()
             ) {
                 return $name . '-' . $type . '- ERROR GETTING DEV ID - ERROR GETTING VERSION';
@@ -119,7 +120,8 @@ class EtudeManager
                 return $name . '-' . $type . '- ERROR GETTING VERSION';
             }
         } elseif ('CE' == $type) {
-            if (!$etude->getMissions()->get($key)
+            if (
+                !$etude->getMissions()->get($key)
                 || !$etude->getMissions()->get($key)->getIntervenant()
             ) {
                 return $etude->getMandat() . '-CE- ERROR GETTING DEV ID';
@@ -154,10 +156,10 @@ class EtudeManager
             ->orderBy('e.num', 'DESC');
 
         $value = $query->getQuery()->setMaxResults(1)->getOneOrNullResult();
-        if ($value) {
+        if ($value['num']) {
             return $value['num'] + 1;
         } else {
-            return 1;
+            return;
         }
     }
 
@@ -204,7 +206,7 @@ class EtudeManager
         if ($value) {
             return $value['mandat'];
         } else {
-            return 0;
+            return date('Y') - $this->anneeCreation;
         }
     }
 

@@ -1,0 +1,80 @@
+{% extends "Formation/layout.html.twig" %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/datatables/dataTables.bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/datatables/dataTables.fontAwesome.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/datatables/responsive.bootstrap.min.css') }}">
+{% endblock %}
+
+{% block title %}
+    {{ 'formation.formations_presence'|trans({}, 'formation') }} {{ parent() }}
+{% endblock %}
+
+{% block content_title %}
+    {{ 'formation.formations_presence'|trans({}, 'formation') }} {{ mandat }}
+{% endblock %}
+
+{% block breadcrumb_active %}
+    {{ 'formation.formations_presence'|trans({}, 'formation') }}
+{% endblock %}
+
+{% block content_bundle %}
+    <form>
+        {{ form_label(form.mandat) }} {{ form_widget(form.mandat) }}
+        {{ form_widget(form) }}
+        <button type="button" class="btn btn-primary"
+                onclick="window.location.href = '{{ path('formation_participation') }}/'+$('#form_mandat').val();">
+            {{ 'formation.chercher'|trans({}, 'formation') }}
+        </button>
+    </form>
+    <table class="dataTable table table-bordered table-striped" id="presence">
+        <thead>
+        <tr>
+            <th>{{ 'formation.present'|trans({}, 'formation') }}</th>
+            {% for formation in formations %}
+                <th>{{ formation.titre }}</th>
+            {% endfor %}
+            <th>{{ 'formation.taux'|trans({}, 'formation') }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for nom, present in presents %}
+            <tr style="text-align: center">
+                <td>{{ nom }}</td>
+                {% for formation in formations %}
+                    <td>
+                        {% if formation.id in present %}
+                            <span class="label label-success"><span class="fa fa-check"> 1</span></span>
+                        {% else %}
+                            <span class="label label-danger"><span class="fa fa-times">  0</span></span>
+                        {% endif %}
+                    </td>
+                {% endfor %}
+                <td>{{ present | length }} / {{ formations | length }} </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script src="{{ asset('js/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('js/datatables/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ asset('js/datatables/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('js/datatables/responsive.bootstrap.min.js') }}"></script>
+
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function () {
+            $('#presence').DataTable({
+                "paging": false,
+                "lengthChange": true,
+                "searching": false,
+                "ordering": true,
+                "info": true,
+                "aaSorting": [[0, 'asc']]
+            });
+        });
+    </script>
+{% endblock %}

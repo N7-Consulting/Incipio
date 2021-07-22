@@ -1,0 +1,13 @@
+{% extends 'booking/layout.html.twig' %}
+
+{% block content_title %}
+    {{ 'dashboard.ev_modifier'|trans({}, 'dashboard') }}
+{% endblock %}
+
+{% block content_bundle %}
+    <a href="{{ path('booking_index') }}" class="pull-right btn btn-primary">{{ 'dashboard.ev_voir'|trans({}, 'dashboard') }}</a>
+
+    {{ include('booking/_form.html.twig', {'button_label': 'Update'}) }}
+    <br>
+    {{ include('booking/_delete_form.html.twig') }}
+{% endblock %}

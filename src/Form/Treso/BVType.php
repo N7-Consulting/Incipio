@@ -14,7 +14,7 @@ namespace App\Form\Treso;
 use App\Entity\Project\Mission;
 use App\Entity\Treso\BV;
 use App\Repository\Project\MissionRepository;
-use Genemu\Bundle\FormBundle\Form\JQuery\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\Select2EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;

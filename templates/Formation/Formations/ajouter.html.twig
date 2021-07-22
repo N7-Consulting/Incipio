@@ -1,0 +1,18 @@
+{% extends "Formation/layout.html.twig" %}
+
+{% block content_title %}
+    {{ 'formation.formation_ajouter'|trans({}, 'formation') }}
+{% endblock %}
+
+{% block breadcrumb_active %}
+    {{ 'formation.formation_ajouter'|trans({}, 'formation') }}
+{% endblock %}
+
+{% block content_bundle %}
+    {% include "Formation/Formations/formulaire.html.twig" %}
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    {{ form_javascript(form) }}
+{% endblock %}

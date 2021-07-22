@@ -1,0 +1,37 @@
+{% extends 'Dashboard/layout.html.twig' %}
+
+{% block content_title %}
+    {{ 'dashboard.evenement'|trans({}, 'dashboard') }}
+{% endblock %}
+
+{% block content_bundle %}
+
+    <table class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <th>{{ 'dashboard.ev_titre'|trans({}, 'dashboard') }}</th>
+                <td>{{ booking.title }}</td>
+            </tr>
+            <tr>
+                <th>{{ 'dashboard.ev_date_debut'|trans({}, 'dashboard') }}</th>
+                <td>{{ booking.dateDebut ? booking.dateDebut|date('d/m/Y H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>{{ 'dashboard.ev_date_fin'|trans({}, 'dashboard') }}</th>
+                <td>{{ booking.dateFin ? booking.dateFin|date('d/m/Y H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>{{ 'dashboard.ev_commentaires'|trans({}, 'dashboard') }}</th>
+                <td>{{ booking.commentaires}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <br>
+
+    <a href="{{ path('booking_index') }}" class="pull-right btn btn-primary">{{ 'dashboard.ev_voir'|trans({}, 'dashboard') }}</a>
+    <a href="{{ path('booking_edit', {'id': booking.id}) }}" class="btn btn-warning">{{ 'dashboard.ev_modifier'|trans({}, 'dashboard') }}</a>
+    
+
+    {{ include('booking/_delete_form.html.twig') }}
+{% endblock %}

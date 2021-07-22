@@ -1,5 +1,12 @@
 {% extends "Stat/layout.html.twig" %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/datatables/dataTables.bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/datatables/dataTables.fontAwesome.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/datatables/responsive.bootstrap.min.css') }}">
+{% endblock %}
+
 {% block content_bundle %}
     <div class="nav-tabs-custom">
         <ul id="indicateursLink" class="nav nav-tabs">
@@ -8,7 +15,7 @@
             <li class=""><a href="#gestion" data-toggle="tab" data-loaded="false">
                     {{ 'indicateur.gestion_associative'|trans({}, 'indicateur') }}</a></li>
             <li class=""><a href="#formations" data-toggle="tab" data-loaded="false">
-                    {{ 'indicateur.formations'|trans({}, 'indicateur') }}</a></li>
+                    {{ 'indicateur.rfp'|trans({}, 'indicateur') }}</a></li>
             <li class=""><a href="#suivi" data-toggle="tab" data-loaded="false">
                     {{ 'indicateur.gestion_etudes'|trans({}, 'indicateur') }}</a></li>
             <li class=""><a href="#treso" data-toggle="tab" data-loaded="false">
@@ -18,13 +25,23 @@
         </ul>
     </div>
 
-    <div id="indicateursTabs" class="tab-content">
-        <div class="tab-pane active row" id="infos">
-            <div class="col-md-12">
-                {% for title, stat in stats %}
-                    {{ title }} : {{ stat }}<br/>
-                {% endfor %}
-            </div>
+    <div class="tab-content">
+        <div class="tab-pane active" id="infos">
+            <table id="control" class="table table-bordered">
+                <tr>
+                    <td><label for="checkbox-tabAnuel">{{ 'indicateur.tabAnuel'|trans({}, 'indicateur') }}</label>
+                        <input id="checkbox-tabAnuel" type="checkbox" checked="checked" onchange="$('#content-1').toggle();"/></td>
+                    <td><label for="checkbox-tabMensuel">{{ 'indicateur.tabMensuel'|trans({}, 'indicateur') }}</label>
+                        <input id="checkbox-tabMensuel" type="checkbox" onchange="$('#content-2').toggle();"/></td>
+                </tr>
+            </table>
+        
+            <table id="content-1" class="table table-bordered table-striped">
+                {% include 'Stat/Indicateurs/donneesBrutes.html.twig' with { "tabDonnees": tabDonneesAnnuel, "dates": annees} %}                 
+            </table> 
+            <table id="content-2" class="table table-bordered table-striped" style="display:none;">
+                {% include 'Stat/Indicateurs/donneesBrutes.html.twig' with { "tabDonnees": tabDonneesMensuel, "dates": mois} %}
+            </table> 
         </div>
 
         <div class="tab-pane row" id="gestion">
@@ -82,6 +99,27 @@
 {% block javascript %}
     {{ parent() }}
 
+    <script src="{{ asset('js/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('js/datatables/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ asset('js/datatables/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('js/datatables/responsive.bootstrap.min.js') }}"></script>
+
+
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function () {
+            $('#tab1').dataTable({
+                "bPaginate": true,
+                "iDisplayLength": 50,
+                "aaSorting": [[1, 'desc']],
+            });
+            $('#tab2').dataTable({
+                "bPaginate": true,
+                "iDisplayLength": 50,
+                "aaSorting": [[1, 'desc']],
+            });
+        });
+    </script>
+    
     <script src="{{ asset('js/highcharts.js') }}"></script>
     <script src="{{ asset('js/modules/drilldown.js') }}"></script>
     <script src="{{ asset('js/highcharts-fr.js') }}"></script>

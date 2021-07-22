@@ -14,13 +14,9 @@ namespace App\Form\Project;
 use App\Entity\Personne\Membre;
 use App\Entity\Project\Etude;
 use App\Entity\Project\Mission;
-use App\Entity\Project\Phase;
-use App\Entity\Project\RepartitionJEH;
-use App\Repository\Project\PhaseRepository;
-use Genemu\Bundle\FormBundle\Form\JQuery\Type\DateType;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\Select2EntityType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\PercentType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -41,27 +37,30 @@ class MissionType extends DocTypeType
                 'class' => Membre::class,
                 'choice_label' => 'personne.prenomNom',
                 'label' => 'Intervenant',
-                //'query_builder' => function(PersonneRepository $pr) { return $pr->getMembreOnly(); },
                 'required' => true,
             ])
             ->add(
                 'debutOm',
-                Datetype::class,
-                ['label' => 'Début du Récapitulatif de Mission',
-                 'required' => true, 'widget' => 'single_text', 'format' => 'dd/MM/yyyy',
+                DateType::class,
+                [
+                    'label' => 'Début du Récapitulatif de Mission',
+                    'required' => true,
+                    'widget' => 'single_text',
                 ]
             )
             ->add(
                 'finOm',
                 DateType::class,
-                ['label' => 'Fin du Récapitulatif de Mission',
-                 'required' => true, 'widget' => 'single_text', 'format' => 'dd/MM/yyyy',
+                [
+                    'label' => 'Fin du Récapitulatif de Mission',
+                    'required' => true,
+                    'widget' => 'single_text',
                 ]
             )
             ->add(
                 'pourcentageJunior',
                 PercentType::class,
-                ['label' => 'Pourcentage junior', 'required' => true, 'scale' => 2]
+                ['label' => 'Pourcentage junior', 'required' => true, 'scale' => 2, 'data' => $options['acompte']]
             )
             ->add('referentTechnique', Select2EntityType::class, [
                 'class' => Membre::class,
@@ -69,33 +68,14 @@ class MissionType extends DocTypeType
                 'label' => 'Référent Technique',
                 'required' => false,
             ])
-            ->add('phases', EntityType::class, [
-                'class' => Phase::class,
-                'query_builder' => function (PhaseRepository $pr) {
-                    return $pr->getByEtudeQuery($this->etude);
-                },
-                'required' => false,
-                'multiple' => true,
-                'by_reference' => false,
-                'attr' => ['class' => 'select2-multiple'],
-            ])
             ->add('repartitionsJEH', CollectionType::class, [
                 'entry_type' => RepartitionJEHType::class,
-                'entry_options' => [
-                    'data_class' => RepartitionJEH::class,
-                ],
+                'entry_options' => ['etude' => $this->etude],
                 'allow_add' => true,
                 'allow_delete' => true,
                 'prototype' => true,
                 'by_reference' => false,
             ]);
-
-        //->add('avancement','integer',array('label'=>'Avancement en %'))
-        //->add('rapportDemande','checkbox', array('label'=>'Rapport pédagogique demandé','required'=>false))
-        //->add('rapportRelu','checkbox', array('label'=>'Rapport pédagogique relu','required'=>false))
-        //->add('remunere','checkbox', array('label'=>'Intervenant rémunéré','required'=>false));
-
-        //->add('mission', new DocTypeType('mission'), array('label'=>' '));
         DocTypeType::buildForm($builder, $options);
     }
 
@@ -108,6 +88,8 @@ class MissionType extends DocTypeType
     {
         $resolver->setDefaults([
             'data_class' => Mission::class,
+            'acompte' => '0',
+
         ]);
         $resolver->setRequired(['etude']);
         $resolver->addAllowedTypes('etude', Etude::class);
